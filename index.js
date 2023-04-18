@@ -30,7 +30,7 @@ app.use('/api', indexRouter)
 app.use('/api/users', userRouter)
 
 
-//Montando la app en el servidor (utilizando la variable de entorno, "process.env")
+// Montando la app en el servidor (utilizando la variable de entorno, "process.env")
 const port = process.env.PORT
 app.listen(port, () => {
     console.log(`App listening on port ${port}!`)
