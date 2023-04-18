@@ -3,10 +3,13 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
-
-import userRouter from './routes/userRouter.js'
 import indexRouter from './routes/indexRouter.js'
-
+import spacesRouter from './routes/spacesRouter.js'
+import usersRouter from './routes/usersRouter.js'
+import bookingsRouter from './routes/bookingsRouter.js'
+import datesRouter from './routes/datesRouter.js'
+import preferencesRouter from './routes/preferencesRouter.js'
+import servicesRouter from './routes/servicesRouter.js'
 
 // dotenv.config()  sirve para poder usar las variables de entorno en el archivo .env  
 dotenv.config()
@@ -27,7 +30,12 @@ if (env === 'development') {
 
 // Routers
 app.use('/api', indexRouter)
-app.use('/api/users', userRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/spaces', spacesRouter)
+app.use('/api/bookings', bookingsRouter)
+app.use('/api/dates', datesRouter)
+app.use('/api/preferences', preferencesRouter)
+app.use('/api/services', servicesRouter)
 
 
 // Montando la app en el servidor (utilizando la variable de entorno, "process.env")
