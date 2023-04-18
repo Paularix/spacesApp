@@ -33,7 +33,7 @@ router.delete('/:id', (req, res) => {
 })
 
 // POST user
-// @desc borrar un usuario por su id
+// @desc guardar un usuario por su id
 router.post('/', (req, res) => {
     const user = req.body.user
     res.json({
