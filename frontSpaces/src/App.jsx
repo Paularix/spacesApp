@@ -4,11 +4,11 @@ import GlobalContext from "./context/GlobalContext"
 
 import Menu from './components/Menu'
 
-import Home from './pages/Home'
+import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
-import Spaces from './pages/Spaces'
+import Home from './pages/Home'
 
 
 function App() {
@@ -22,11 +22,11 @@ function App() {
 
         <Menu/>
         <Routes>
-          <Route path="/" element={<Home />}/>
+          <Route path="/" element={<Landing />}/>
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register />}/>
           <Route path="/profile" element={<Profile />}/>
-          <Route path="/spaces" element={<Spaces />}/>
+          <Route path="/spaces" element={<Home />}/>
         </Routes>
       </div>
     </GlobalContext.Provider>
