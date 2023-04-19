@@ -1,0 +1,90 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.landing-page-container {
+    margin-top: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.page-title {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 55px;
+}
+
+.colored {
+    color: #7879F1;
+}
+
+.landing-form {
+    position: absolute;
+    background-color: rgba(183, 183, 235, 0.75);
+    border-radius: 10px;
+    width: 900px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.shadow-landing-box {
+    position: absolute;
+    z-index: -1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+.shadow-landing-box-image {
+    width: 1200px;
+    border-radius: 10px;
+}
+
+.landing-inputs {
+    margin-top: 25px;
+}
+
+.header {
+    margin-top: 25px;
+}
+
+.introduction {
+    margin-top: 2rem;
+
+    display: flex;
+}
+
+.introduction-box {
+    display: flex;
+    flex-direction: column;
+    text-align: justify;
+    margin: 40px;
+}
+
+.introduction-box h1{
+    text-align: center;
+    font-size: 40px;
+}
+
+.introduction-inner-box {
+    margin-top: 15px;
+    font-size: 20px;
+    display: flex;
+    gap: 15px;
+}
+
