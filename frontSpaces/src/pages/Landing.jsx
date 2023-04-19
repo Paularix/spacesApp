@@ -29,9 +29,7 @@ export const Landing = () => {
   return (
 
     <div className='landing-page'>
-      <h1 className='page-title'>
-        <span className='colored'>S</span>pace <span className='colored'>A</span>pp
-      </h1>
+      
       <div className='landing-page-container'>
         <Box
           className='landing-form'
@@ -102,7 +100,6 @@ export const Landing = () => {
               <p>Eventos u otras actividades de forma autogestionada. </p>
             </div>
           </div>
-
         </div>
       </Box>
     </div>
