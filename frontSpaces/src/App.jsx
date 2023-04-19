@@ -15,11 +15,7 @@ function App() {
 
   return (
     <GlobalContext.Provider value={null}>
-
       <div className="app">
-
-        Spaces App
-
         <Menu/>
         <Routes>
           <Route path="/" element={<Landing />}/>

@@ -30,7 +30,6 @@ export const Landing = () => {
 
     <div className='landing-page'>
       <h1 className='page-title'>
-        <span className='colored'>S</span>pace <span className='colored'>A</span>pp
       </h1>
       <div className='landing-page-container'>
         <Box
