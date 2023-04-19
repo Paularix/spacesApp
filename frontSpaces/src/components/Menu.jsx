@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import BalconyIcon from '@mui/icons-material/Balcony';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const pages = [];
 const settings = ['Profile', 'Logout'];
@@ -36,18 +36,24 @@ function ResponsiveAppBar() {
         setAnchorElUser(null);
     };
 
+    const navigate = useNavigate()
+
     const authButton = {
         boxShadow: 'none',
         background: '#7879F1',
         marginRight: '18px'
     }
+
+    const goLanding = () => {
+        navigate("/")
+    }
     return (
         <AppBar position="static" elevation={0} style={{ backgroundColor: '#ffffff' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Link to="/" style={{ textDecoration: 'none'}}>
 
                         <Typography
+                            onClick={() => goLanding()}
                             variant="h6"
                             noWrap
                             component="a"
@@ -58,17 +64,17 @@ function ResponsiveAppBar() {
                                 color: 'black',
                                 fontSize: '32px',
                                 textDecoration: 'none',
+                                cursor: 'pointer'
                             }}
                         >
                             <span className='colored'>S</span> pace  <span className='colored'>A</span>pp
                         </Typography>
-                    </Link>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 
 
                     </Box>
-                    <BalconyIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                     <Typography
+                        onClick={() => goLanding()}
                         variant="h5"
                         noWrap
                         component="a"
@@ -78,11 +84,11 @@ function ResponsiveAppBar() {
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
+                            color: 'black',
                             textDecoration: 'none',
                         }}
                     >
-                        Space App
+                        <span className='colored'>S</span> pace  <span className='colored'>A</span>pp
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page, index) => (
