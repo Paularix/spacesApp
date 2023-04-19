@@ -22,7 +22,7 @@ function App() {
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register />}/>
           <Route path="/profile" element={<Profile />}/>
-          <Route path="/spaces" element={<Home />}/>
+          <Route path="/Home" element={<Home />}/>
         </Routes>
       </div>
     </GlobalContext.Provider>
