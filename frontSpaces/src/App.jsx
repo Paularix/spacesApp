@@ -19,18 +19,14 @@ function App() {
 
   return (
     <GlobalContext.Provider value={null}>
-
       <div className="app">
-
-        Spaces App
-
         <Menu/>
         <Routes>
           <Route path="/" element={<Landing />}/>
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register />}/>
           <Route path="/profile" element={<Profile />}/>
-          <Route path="/spaces" element={<Home />}/>
+          <Route path="/Home" element={<Home />}/>
         </Routes>
       </div>
     </GlobalContext.Provider>
