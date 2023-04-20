@@ -72,7 +72,7 @@ function Register() {
                 <CardContent>
                     <form className="register-form" onSubmit={submit} >
                         <Typography variant="h4" className='register-title register-sub'>Te damos la bienvenida</Typography >
-                        <Typography>Regístrate gratis y empieza a utilizar SpaceApp</Typography >
+                        <Typography className='register-title register-sub'>Regístrate gratis y empieza a utilizar SpaceApp</Typography >
                         <TextField
                             className="register-field register-text"
                             label="Nombre"
