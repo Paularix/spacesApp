@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../apiconfig';
 import { Button, Card, CardContent, TextField, Typography, FormControl, IconButton, 
-    OutlinedInput, InputLabel, InputAdornment, Visibility, VisibilityOff} from '@mui/material';
+    OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
+import {Visibility, VisibilityOff }from '@mui/icons-material';
 import './Register.css'
 
 
