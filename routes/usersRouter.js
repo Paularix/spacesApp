@@ -1,7 +1,11 @@
 import express from 'express';
 import multer from 'multer';
-import {sequelize} from "../loadSequelize.js";
-import {Users} from '../models/Models.js';
+import bcrypt from 'bcrypt';
+import jsonwebtoken from 'jsonwebtoken';
+import { sequelize } from "../loadSequelize.js";
+import { Users } from '../models/Models.js';
+import {authenticate, authError} from './middleware.js';
+
 
 
 const router = express.Router();
@@ -118,7 +122,85 @@ router.delete('/:id', function (req, res, next) {
 
 });
 
+// REGISTER user
+//@desc register a user 
+router.post("/register", (req, res, next) => {
 
+    if (req.body.password == req.body.repeatPassword) {
+        const hash = bcrypt.hashSync(req.body.password, 10)
+        req.body.password = hash
 
+        Users.create({
+            first_name: req.body.first_name,
+            last_names: req.body.last_names,
+            phone_number: req.body.phone_number,
+            email: req.body.email,
+            password: req.body.password
+        })
+            .then(item => {
+                res.json({
+                    ok: true,
+                    data: item
+                })
+            })
+            .catch((error) => {
+                res.json({
+                    ok: false,
+                    error
+                })
+            })
+    } else {
+        res.status(400).json({
+            ok: false,
+            error: "Passwords do not match"
+        })
+    }
+})
+
+// LOG IN a user
+//@desc LOG IN with a user and set Token
+router.post('/login', (req, res) => {
+    const response = {};
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ 
+            ok: false, 
+            msg: "email or password not received" 
+        });
+    }
+
+    Users.findOne({ where: { email } })
+        .then((user) => {
+            if (user && bcrypt.compareSync(password, user.password)) {
+                return user;
+            } else {
+                throw "wrong user/password";
+            }
+        })
+        .then(user => {            
+            response.token = jsonwebtoken.sign(
+                {
+                    expiredAt: new Date().getTime() + Number(process.env.EXPIRED_AFTER),
+                    email: user.email,
+                },
+                process.env.SECRET_KEY
+            );
+            response.ok = true;
+            res.json(response);
+        })
+        .catch(err => res.status(400).json({ 
+            ok: false, 
+            msg: err 
+        }))
+})
+
+// GET protected
+// @desc get info from a protected route
+router.get("/auth/protected", [authenticate, authError], (req, res) => {
+    res.status(200).json({
+        ok: true,
+        message: "Protected Route"
+    })
+})
 
 export default router;
