@@ -2,17 +2,9 @@ import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../apiconfig';
-import { Button, Card, CardContent, TextField, Typography, FormControl } from '@mui/material';
+import { Button, Card, CardContent, TextField, Typography, FormControl, IconButton, 
+    OutlinedInput, InputLabel, InputAdornment, Visibility, VisibilityOff} from '@mui/material';
 import './Register.css'
-
-
-import IconButton from '@mui/material/IconButton';
-
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 
 function Register() {
