@@ -169,7 +169,6 @@ router.post('/login', (req, res) => {
             msg: "email or password not received" 
         });
     }
-
     Users.findOne({ where: { email } })
         .then((user) => {
             if (user && bcrypt.compareSync(password, user.password)) {

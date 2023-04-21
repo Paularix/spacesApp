@@ -1,19 +1,18 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useContext} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../apiconfig';
 import { Button, Card, CardContent, TextField, Typography, FormControl, IconButton, 
     OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
 import {Visibility, VisibilityOff }from '@mui/icons-material';
+import GlobalContext from "../context/GlobalContext"
 import './Login.css'
+
 
 export const Login = () => {
     const goTo = useNavigate();
 
-    const [userFields, setUserFields] = useState({
-        email: '',
-        password: '',
-    })
+    const { user, setUser} = useContext(GlobalContext)
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -26,25 +25,29 @@ export const Login = () => {
     function submit(e) {
         e.preventDefault();
 
-        const opcions = {
+        const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: userFields.email,
-                password: userFields.password
+                email: user.email,
+                password: user.password
             })
         };
 
-        fetch(API_URL + "users", opcions)
+        fetch(API_URL + "users/login", options)
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(error => console.log(error))
+
         goTo('/users')
 
     }
     
     const setUserField = (field, value) => {
-        setUserFields({
-            ...userFields,
+        setUser({
+            ...user,
             [field]: value
         })
     }
@@ -57,7 +60,7 @@ export const Login = () => {
                         <TextField
                             className="register-field register-text"
                             label="Email"
-                            value={userFields.email}
+                            value={user.email}
                             onInput={(e) => setUserField("email", e.target.value)}
                             size="small"
                             required
@@ -65,7 +68,7 @@ export const Login = () => {
                         <FormControl className="register-field register-text" size="small" required>
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
-                                value={userFields.password}
+                                value={user.password}
                                 id="outlined-adornment-password"
                                 type={showPassword ? 'text' : 'password'}
                                 endAdornment={

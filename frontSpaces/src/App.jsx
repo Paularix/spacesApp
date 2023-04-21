@@ -26,7 +26,12 @@ function App() {
     phone: '',
 })
 
-const context = { newUser, setNewUser }
+const [user, setUser] = useState({
+  email: '',
+  password: '',
+})
+
+const context = { newUser, setNewUser, user, setUser }
 
   return (
     <GlobalContext.Provider value={context}>
