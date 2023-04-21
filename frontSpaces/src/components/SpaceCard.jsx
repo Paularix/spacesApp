@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
 
 
 const SpaceCard = () => {
@@ -31,8 +32,13 @@ const SpaceCard = () => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Info</Button>
+        <Link to="/spaceInfo" >
+        <Button size="small" >Share</Button>
+        </Link>
+        <Link to="/spaceInfo" >
+        <Button size="small" >Info</Button>
+        </Link>
+       
       </CardActions>
     </Card>
 
