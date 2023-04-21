@@ -9,6 +9,7 @@ import ForumIcon from '@mui/icons-material/Forum'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
 
 import './Landing.css'
+import { Link } from 'react-router-dom'
 
 
 export const Landing = () => {
@@ -66,7 +67,9 @@ export const Landing = () => {
             />
 
             <div>
+              <Link to="/Home">
               <Chip style={landingButton} label="Search" onClick={handleClick} />
+              </Link>
             </div>
           </div>
         </Box>
