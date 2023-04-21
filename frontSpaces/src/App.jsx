@@ -34,6 +34,7 @@ const [user, setUser] = useState({
 const logout = () => {
   setUser({
     ...user,
+    email: '',
     token: ''
   })
   navigate("/")

@@ -18,7 +18,6 @@ import GlobalContext from "../context/GlobalContext"
 
 
 const pages = [];
-const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
 
@@ -121,6 +120,7 @@ function ResponsiveAppBar() {
                                 : (
                                     <>
                                         <Link to="/login" style={{ textDecoration: 'none' }}>
+                                        <Button variant="contained" style={authButton}>Login</Button>
                                         </Link>
                                         <Link to="/register" style={{ textDecoration: 'none' }}>
                                             <Button variant="contained" style={authButton}>Register</Button>

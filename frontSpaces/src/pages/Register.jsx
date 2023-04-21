@@ -47,10 +47,12 @@ function Register() {
         fetch(API_URL + "users/register", options)
         .then(res => res.json())
         .then(res => console.log(res))
+        .then(res=> {
+            goTo('/profile')
+        })
         .catch(error => {
             console.log(error)
         })
-        goTo('/users')
 
     }
 
