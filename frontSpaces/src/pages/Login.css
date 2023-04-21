@@ -1,0 +1,42 @@
+.register-form {
+	align-items: center;
+	display: flex;
+    flex-direction: column;
+}
+
+.register-field.register-text {
+	margin: 14px;
+	max-width: 400px;
+    min-width: 400px;
+}
+
+.register-card {
+	display: flex;
+	justify-content: center;
+	width: 500px;
+}
+
+.register-container {
+	display: flex;
+	justify-content: center;
+	padding: 15px;
+    align-items: center;
+    background-color:#fafafa ;
+}
+
+.register-title.register-sub {
+	margin: 20px;
+}
+
+
+@media screen and (max-width: 600px) {
+	.register-field.register-text {
+	  max-width: 100%;
+	  min-width: 100%;
+	}
+  
+	.register-card {
+	  width: 100%;
+	}
+  }
+
