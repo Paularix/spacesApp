@@ -4,7 +4,7 @@ import './App.css'
 //import '@fontsource/roboto/400.css';
 //import '@fontsource/roboto/500.css';
 //import '@fontsource/roboto/700.css';
-import {Route, Routes} from "react-router-dom"
+import {Route, Routes, useNavigate} from "react-router-dom"
 import GlobalContext from "./context/GlobalContext"
 
 import Menu from './components/Menu'
@@ -17,7 +17,7 @@ import Home from './pages/Home'
 
 
 function App() {
-
+  const navigate = useNavigate()
   const [newUser, setNewUser] = useState({
     name: '',
     lastName: '',
@@ -31,7 +31,15 @@ const [user, setUser] = useState({
   password: '',
 })
 
-const context = { newUser, setNewUser, user, setUser }
+const logout = () => {
+  setUser({
+    ...user,
+    token: ''
+  })
+  navigate("/")
+}
+
+const context = { newUser, setNewUser, user, setUser, logout }
 
   return (
     <GlobalContext.Provider value={context}>

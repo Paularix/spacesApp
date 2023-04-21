@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material'
 import Toolbar from '@mui/material/Toolbar';
@@ -13,11 +14,15 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import BalconyIcon from '@mui/icons-material/Balcony';
 import { Link, useNavigate } from 'react-router-dom';
+import GlobalContext from "../context/GlobalContext"
+
 
 const pages = [];
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
+
+    const { user, setUser, logout } = useContext(GlobalContext)
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -52,23 +57,23 @@ function ResponsiveAppBar() {
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
 
-                        <Typography
-                            onClick={() => goLanding()}
-                            variant="h6"
-                            noWrap
-                            component="a"
-                            sx={{
-                                mr: 2,
-                                display: { xs: 'none', md: 'flex' },
-                                letterSpacing: '.3rem',
-                                color: 'black',
-                                fontSize: '32px',
-                                textDecoration: 'none',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            <span className='colored'>S</span> pace  <span className='colored'>A</span>pp
-                        </Typography>
+                    <Typography
+                        onClick={() => goLanding()}
+                        variant="h6"
+                        noWrap
+                        component="a"
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            letterSpacing: '.3rem',
+                            color: 'black',
+                            fontSize: '32px',
+                            textDecoration: 'none',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <span className='colored'>S</span> pace  <span className='colored'>A</span>pp
+                    </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 
 
@@ -103,17 +108,27 @@ function ResponsiveAppBar() {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Link to="/login" style={{ textDecoration: 'none'}}>
-                            <Button variant="contained" style={authButton}>Login</Button>
-                        </Link>
-                        <Link to="/register" style={{ textDecoration: 'none'}}>
-                            <Button variant="contained" style={authButton}>Register</Button>
-                        </Link>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" />
-                            </IconButton>
-                        </Tooltip>
+
+                        {
+                            user.token
+                                ? (
+                                    <Tooltip title="Open settings">
+                                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                            <Avatar alt="Remy Sharp" />
+                                        </IconButton>
+                                    </Tooltip>
+                                )
+                                : (
+                                    <>
+                                        <Link to="/login" style={{ textDecoration: 'none' }}>
+                                        </Link>
+                                        <Link to="/register" style={{ textDecoration: 'none' }}>
+                                            <Button variant="contained" style={authButton}>Register</Button>
+                                        </Link>
+                                    </>
+                                )
+                        }
+
                         <Menu
                             sx={{ mt: '45px' }}
                             id="menu-appbar"
@@ -130,22 +145,14 @@ function ResponsiveAppBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting, index) => (
-                                setting == "Profile"
-                                    ? (
-                                        <Link key={setting} style={{ textDecoration: 'none', color: 'black' }} to="/profile">
-                                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                                <Typography textAlign="center">{setting}</Typography>
-                                            </MenuItem>
-                                        </Link>
-                                    )
-                                    : (
-                                        <MenuItem key={index} onClick={handleCloseUserMenu}>
-                                            <Typography textAlign="center">{setting}</Typography>
-                                        </MenuItem>
-                                    )
-
-                            ))}
+                            <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    <Typography textAlign="center">Profile</Typography>
+                                </MenuItem>
+                            </Link>
+                            <MenuItem onClick={logout}>
+                                <Typography textAlign="center">Logout</Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
                 </Toolbar>

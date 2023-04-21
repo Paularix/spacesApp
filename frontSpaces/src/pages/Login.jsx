@@ -5,6 +5,7 @@ import { API_URL } from '../apiconfig';
 import { Button, Card, CardContent, TextField, Typography, FormControl, IconButton, 
     OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
 import {Visibility, VisibilityOff }from '@mui/icons-material';
+import jwt_decode from 'jwt-decode'
 import GlobalContext from "../context/GlobalContext"
 import './Login.css'
 
@@ -38,10 +39,20 @@ export const Login = () => {
 
         fetch(API_URL + "users/login", options)
         .then(res => res.json())
-        .then(res => console.log(res))
+        .then(res => {
+            const decoded = jwt_decode(res.token)
+            setUser({
+                ...user,
+                email: decoded.email,
+                password: '',
+                token: res.token
+            })
+        })
+        .then(res => {
+            goTo('/home')
+        })
         .catch(error => console.log(error))
 
-        goTo('/users')
 
     }
     
