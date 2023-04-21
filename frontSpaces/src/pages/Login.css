@@ -14,7 +14,6 @@
 	display: flex;
 	justify-content: center;
 	width: 500px;
-	height: calc(100vh - 64px);
 }
 
 .register-container {
@@ -22,12 +21,13 @@
 	justify-content: center;
 	padding: 15px;
     align-items: center;
-	background-color:#fafafa ;
+    background-color:#fafafa ;
 }
 
 .register-title.register-sub {
 	margin: 20px;
 }
+
 
 @media screen and (max-width: 600px) {
 	.register-field.register-text {

@@ -1,10 +1,12 @@
 import React from 'react'
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link} from 'react-router-dom';
 import { API_URL } from '../apiconfig';
-import { Button, Card, CardContent, TextField, Typography, FormControl, IconButton, 
-    OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
-import {Visibility, VisibilityOff }from '@mui/icons-material';
+import {
+    Button, Card, CardContent, TextField, Typography, FormControl, IconButton,
+    OutlinedInput, InputLabel, InputAdornment
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import './Register.css'
 
 
@@ -99,12 +101,10 @@ function Register() {
                             size="small"
                             required
                         />
-                        <FormControl>
+                        <FormControl size="small" className="register-field register-text" required>
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
-                                className="register-field register-text"
                                 value={userFields.password}
-                                size="small"
                                 required
                                 id="outlined-adornment-password"
                                 type={showPassword ? 'text' : 'password'}
@@ -128,6 +128,7 @@ function Register() {
                         <Button variant="contained" type="submit">
                             Registrarse
                         </Button>
+                        <Typography className='register-title register-sub'>¿Ya tienes una cuenta? <Link to='/login'>Inicia sesión</Link></Typography >
                     </form>
                 </CardContent>
             </Card>
