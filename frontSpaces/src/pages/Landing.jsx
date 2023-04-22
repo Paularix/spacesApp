@@ -9,6 +9,7 @@ import ForumIcon from '@mui/icons-material/Forum'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
 
 import './Landing.css'
+import { Link } from 'react-router-dom'
 
 
 export const Landing = () => {
@@ -46,12 +47,14 @@ export const Landing = () => {
           <div className='landing-inputs'>
 
             <TextField
+              size="small"
               id="input-location"
               label="Ciudad"
               defaultValue="¿Dónde?"
             />
 
             <TextField
+              size="small"
               type="date"
               id="input-date"
               label="Desde"
@@ -59,6 +62,7 @@ export const Landing = () => {
             />
 
             <TextField
+              size="small"
               type="date"
               id="input-date"
               label="Hasta"
@@ -66,7 +70,9 @@ export const Landing = () => {
             />
 
             <div>
-              <Chip style={landingButton} label="Search" onClick={handleClick} />
+              <Link to="/Home"  style={{ textDecoration: 'none', color: 'black' }}>
+                <Chip style={landingButton} label="Search" onClick={handleClick} />
+              </Link>
             </div>
           </div>
         </Box>
