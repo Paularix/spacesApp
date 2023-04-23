@@ -47,7 +47,7 @@ function Register() {
             })
         };
 
-        fetch(API_URL + "users", opcions)
+        fetch(API_URL + "users/register", opcions)
         goTo('/users')
 
     }

@@ -126,9 +126,9 @@ router.delete('/:id', function (req, res, next) {
 //@desc register a user 
 router.post("/register", (req, res, next) => {
 
-    if (req.body.password == req.body.repeatPassword) {
-        const hash = bcrypt.hashSync(req.body.password, 10)
-        req.body.password = hash
+    // if (req.body.password == req.body.repeatPassword) {
+    //     const hash = bcrypt.hashSync(req.body.password, 10)
+    //     req.body.password = hash
 
         Users.create({
             first_name: req.body.first_name,
@@ -149,12 +149,13 @@ router.post("/register", (req, res, next) => {
                     error
                 })
             })
-    } else {
-        res.status(400).json({
-            ok: false,
-            error: "Passwords do not match"
-        })
-    }
+    //} 
+    // else {
+    //     res.status(400).json({
+    //         ok: false,
+    //         error: "Passwords do not match"
+    //     })
+    // }
 })
 
 // LOG IN a user
