@@ -82,7 +82,6 @@ function ResponsiveAppBar() {
                         variant="h5"
                         noWrap
                         component="a"
-                        href=""
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -90,6 +89,7 @@ function ResponsiveAppBar() {
                             letterSpacing: '.3rem',
                             color: 'black',
                             textDecoration: 'none',
+                            cursor: 'pointer'
                         }}
                     >
                         <span className='colored'>S</span> pace  <span className='colored'>A</span>pp

@@ -29,7 +29,7 @@ function App() {
     phone: '',
 })
 
-const [error, serError]  = useState("")
+const [error, setError]  = useState("")
 const [user, setUser] = useState({
   email: '',
   password: '',
@@ -47,7 +47,7 @@ const logout = () => {
 const context = { 
   newUser, setNewUser, 
   user, setUser, 
-  error, serError, 
+  error, setError, 
   logout 
 }
 

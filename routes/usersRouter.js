@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import { sequelize } from "../loadSequelize.js";
 import { Users } from '../models/Models.js';
-import {authenticate, authError} from './middleware.js';
+import { authenticate, authError } from './middleware.js';
 
 
 
@@ -130,25 +130,25 @@ router.post("/register", (req, res, next) => {
     //     const hash = bcrypt.hashSync(req.body.password, 10)
     //     req.body.password = hash
 
-        Users.create({
-            first_name: req.body.first_name,
-            last_names: req.body.last_names,
-            phone_number: req.body.phone_number,
-            email: req.body.email,
-            password: req.body.password
+    Users.create({
+        first_name: req.body.first_name,
+        last_names: req.body.last_names,
+        phone_number: req.body.phone_number,
+        email: req.body.email,
+        password: req.body.password
+    })
+        .then(item => {
+            res.json({
+                ok: true,
+                data: item
+            })
         })
-            .then(item => {
-                res.json({
-                    ok: true,
-                    data: item
-                })
+        .catch((error) => {
+            res.json({
+                ok: false,
+                error
             })
-            .catch((error) => {
-                res.json({
-                    ok: false,
-                    error
-                })
-            })
+        })
     //} 
     // else {
     //     res.status(400).json({
@@ -164,9 +164,9 @@ router.post('/login', (req, res) => {
     const response = {};
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ 
-            ok: false, 
-            msg: "email or password not received" 
+        return res.status(400).json({
+            ok: false,
+            msg: "email or password not received"
         });
     }
     Users.findOne({ where: { email } })
@@ -177,22 +177,93 @@ router.post('/login', (req, res) => {
                 throw "Correo electrónico o contraseña incorrectos.";
             }
         })
-        .then(user => {            
+        .then(user => {
             response.token = jsonwebtoken.sign(
                 {
                     expiredAt: new Date().getTime() + Number(process.env.EXPIRED_AFTER),
                     email: user.email,
+                    id: user.id
                 },
                 process.env.SECRET_KEY
             );
             response.ok = true;
             res.json(response);
         })
-        .catch(err => res.status(400).json({ 
-            ok: false, 
-            error: err 
+        .catch(err => res.status(400).json({
+            ok: false,
+            error: err
         }))
 })
+
+// GET información protegida del perfil de usuario
+// @desc ruta protegida perfil de usuario
+router.get("/auth/profile", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        sequelize.sync().then(() => {
+            Users.findOne({ where: { email: decoded.email } })
+                .then(user => {
+                    res.status(200).json({
+                        ok: true,
+                        data: user
+                    })
+                })
+                .catch((error) => {
+                    res.status(400).json({
+                        ok: false,
+                        error
+                    })
+                })
+        })
+            .catch((error) => {
+                res.status(400).json({
+                    ok: false,
+                    error
+                })
+            })
+
+    }
+})
+
+// PUT información protegida del perfil de usuario
+// @desc ruta protegida ACTUALIZAR perfil de usuario
+router.put("/auth/profile", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    console.log(req.body)
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        console.log(decoded)
+        sequelize.sync().then(() => {
+            console.log(decoded.id)
+            Users.findOne({ where: { id: decoded.id } })
+                .then(user => {         
+                    user.update(req.body)
+                    return user
+                })
+                .then(user => {
+                    console.log(user)
+                    res.status(200).json({
+                        ok: true,
+                        data: user
+                    })
+                })
+                .catch((error) => {
+                    res.status(400).json({
+                        ok: false,
+                        error
+                    })
+                })
+        })
+            .catch((error) => {
+                res.status(400).json({
+                    ok: false,
+                    error
+                })
+            })
+    }
+})
+
 
 // GET protected
 // @desc get info from a protected route
