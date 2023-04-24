@@ -49,20 +49,20 @@ export const Login = () => {
         })
     }
     return (
-        <div className='register-container'>
-            <Card className='register-card'>
+        <div className='login-container'>
+            <Card className='login-card'>
                 <CardContent>
-                    <form className="register-form" onSubmit={submit} >
-                        <Typography variant="h4" className='register-title register-sub'>Bienvenido</Typography >
+                    <form className="login-form" onSubmit={submit} >
+                        <Typography variant="h4" className='login-title login-sub'>Bienvenido</Typography >
                         <TextField
-                            className="register-field register-text"
+                            className="login-field login-text"
                             label="Email"
                             value={userFields.email}
                             onInput={(e) => setUserField("email", e.target.value)}
                             size="small"
                             required
                         />
-                        <FormControl className="register-field register-text" size="small" required>
+                        <FormControl className="login-field login-text" size="small" required>
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
                                 value={userFields.password}
@@ -88,7 +88,7 @@ export const Login = () => {
                         <Button variant="contained" type="submit">
                             Iniciar sesión
                         </Button>
-                        <Typography className='register-title register-sub'>¿No tienes una cuenta? <Link to='/Register'>Registrarse</Link></Typography >
+                        <Typography className='login-title login-sub'>¿No tienes una cuenta? <Link to='/Register'>Registrarse</Link></Typography >
                     </form>
                 </CardContent>
             </Card>
