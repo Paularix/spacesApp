@@ -204,4 +204,38 @@ router.get("/auth/protected", [authenticate, authError], (req, res) => {
     })
 })
 
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'photos-profile')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+
+const upload = multer({ storage: storage }).single('file');
+
+
+router.put('/photo/:id', (req, res, next) => {
+
+    upload(req, res, function (err) {
+        if (err) {
+            return res.status(500).json(err)
+        }
+        Users.findOne({ where: { id: req.params.id } })
+            .then(user =>
+                user.update({
+                    profile_picture: req.file.originalname
+                })
+                .catch(error => res.json({
+                    ok: false,
+                    error: error.message
+                }))
+            )
+        return res.status(200).send(req.file)
+    })
+
+});
+
 export default router;
