@@ -22,7 +22,8 @@
 	padding: 15px;
     align-items: center;
     background-color:#fafafa ;
-	height: calc(100vh - 64px);
+	height: calc(100vh - 124px);
+	overflow: auto;
 }
 
 .login-title.login-sub {
