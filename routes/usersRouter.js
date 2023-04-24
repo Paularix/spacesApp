@@ -10,6 +10,17 @@ import { authenticate, authError } from './middleware.js';
 
 const router = express.Router();
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'photos-profile')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+
+const upload = multer({ storage: storage }).single('file');
+
 // GET users
 // @desc obtener todos los users de BD
 router.get('/', function (req, res, next) {
@@ -122,8 +133,8 @@ router.delete('/:id', function (req, res, next) {
 
 });
 
-// REGISTER user
-//@desc register a user 
+// POST 
+//@desc Registrar usuario
 router.post("/register", (req, res, next) => {
 
     // if (req.body.password == req.body.repeatPassword) {
@@ -158,8 +169,8 @@ router.post("/register", (req, res, next) => {
     // }
 })
 
-// LOG IN a user
-//@desc LOG IN with a user and set Token
+// LOG IN un usuario
+//@desc LOG IN con un usuario y enviar Token
 router.post('/login', (req, res) => {
     const response = {};
     const { email, password } = req.body;
@@ -264,6 +275,38 @@ router.put("/auth/profile", [authenticate, authError], (req, res) => {
     }
 })
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'photos-profile')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+
+const upload = multer({ storage: storage }).single('file');
+
+
+router.put('/photo/:id', (req, res, next) => {
+
+    upload(req, res, function (err) {
+        if (err) {
+            return res.status(500).json(err)
+        }
+        Users.findOne({ where: { id: req.params.id } })
+            .then(user =>
+                user.update({
+                    profile_picture: req.file.originalname
+                })
+                .catch(error => res.json({
+                    ok: false,
+                    error: error.message
+                }))
+            )
+        return res.status(200).send(req.file)
+    })
+
+});
 
 // GET protected
 // @desc get info from a protected route
