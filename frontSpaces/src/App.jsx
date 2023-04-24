@@ -7,10 +7,12 @@ import './App.css'
 import {Route, Routes, useNavigate} from "react-router-dom"
 import GlobalContext from "./context/GlobalContext"
 
-import Menu from './components/Menu'
+import Menu from './components/Menu';
 import Footer from './components/Footer';
-import Landing from './pages/Landing'
-import Login from './pages/Login'
+import Error from './pages/Error';
+
+import Landing from './pages/Landing';
+import Login from './pages/Login';
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 import { Home } from './pages/Home'; 
@@ -27,6 +29,7 @@ function App() {
     phone: '',
 })
 
+const [error, serError]  = useState("")
 const [user, setUser] = useState({
   email: '',
   password: '',
@@ -41,7 +44,12 @@ const logout = () => {
   navigate("/")
 }
 
-const context = { newUser, setNewUser, user, setUser, logout }
+const context = { 
+  newUser, setNewUser, 
+  user, setUser, 
+  error, serError, 
+  logout 
+}
 
   return (
     <GlobalContext.Provider value={context}>
@@ -54,6 +62,7 @@ const context = { newUser, setNewUser, user, setUser, logout }
           <Route path="/profile" element={<Profile />}/>
           <Route path="/Home" element={<Home />}/>
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
+          <Route path="/error" element={<Error />} />
 
         </Routes>
         <Footer />

@@ -1,10 +1,12 @@
 import React from 'react'
-import { useState, useContext} from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../apiconfig';
-import { Button, Card, CardContent, TextField, Typography, FormControl, IconButton, 
-    OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
-import {Visibility, VisibilityOff }from '@mui/icons-material';
+import {
+    Button, Card, CardContent, TextField, Typography, FormControl, IconButton,
+    OutlinedInput, InputLabel, InputAdornment
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import jwt_decode from 'jwt-decode'
 import GlobalContext from "../context/GlobalContext"
 import './Login.css'
@@ -13,7 +15,7 @@ import './Login.css'
 export const Login = () => {
     const goTo = useNavigate();
 
-    const { user, setUser} = useContext(GlobalContext)
+    const { user, setUser, error, setError } = useContext(GlobalContext)
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -23,8 +25,13 @@ export const Login = () => {
         event.preventDefault();
     };
 
-    function submit(e) {
-        e.preventDefault();
+    useEffect(() => {
+        if (user.token) {
+            goTo("/home")
+        } 
+    }, [user])
+
+    const login = () => {
 
         const options = {
             method: 'POST',
@@ -38,24 +45,32 @@ export const Login = () => {
         };
 
         fetch(API_URL + "users/login", options)
-        .then(res => res.json())
-        .then(res => {
-            const decoded = jwt_decode(res.token)
-            setUser({
-                ...user,
-                email: decoded.email,
-                password: '',
-                token: res.token
+            .then(res => res.json())
+            .then(res => {
+                if (res.ok === true) {
+                    const decoded = jwt_decode(res.token)
+                    setUser({
+                        ...user,
+                        email: decoded.email,
+                        password: '',
+                        token: res.token
+                    })
+                } else {
+                    setUser({
+                        ...user,
+                        password: '',
+                        error: res.error
+                    })
+                }
             })
-        })
-        .then(res => {
-            goTo('/home')
-        })
-        .catch(error => console.log(error))
-
-
+            .catch(error => {
+                console.log(error)
+                setError(error)
+                goTo("error")
+            })
     }
-    
+
+
     const setUserField = (field, value) => {
         setUser({
             ...user,
@@ -66,7 +81,7 @@ export const Login = () => {
         <div className='register-container'>
             <Card className='register-card'>
                 <CardContent>
-                    <form className="register-form" onSubmit={submit} >
+                    <form className="register-form" >
                         <Typography variant="h4" className='register-title register-sub'>Bienvenido</Typography >
                         <TextField
                             className="register-field register-text"
@@ -98,8 +113,17 @@ export const Login = () => {
                                 label="Password"
                             />
                         </FormControl>
+                        { 
+                        user.error && 
+                        <Typography sx={{
+                            color: 'red',
+                        }} className='register-title register-sub'>
+                            {user.error}
+                        </Typography >
+                        }
+
                         <br />
-                        <Button variant="contained" type="submit">
+                        <Button variant="contained" onClick={() => login()}>
                             Iniciar sesión
                         </Button>
                         <Typography className='register-title register-sub'>¿No tienes una cuenta? <Link to='/Register'>Registrarse</Link></Typography >

@@ -174,7 +174,7 @@ router.post('/login', (req, res) => {
             if (user && bcrypt.compareSync(password, user.password)) {
                 return user;
             } else {
-                throw "wrong user/password";
+                throw "Correo electrónico o contraseña incorrectos.";
             }
         })
         .then(user => {            
@@ -190,7 +190,7 @@ router.post('/login', (req, res) => {
         })
         .catch(err => res.status(400).json({ 
             ok: false, 
-            msg: err 
+            error: err 
         }))
 })
 
