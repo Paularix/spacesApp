@@ -16,6 +16,8 @@ import BalconyIcon from '@mui/icons-material/Balcony';
 import { Link, useNavigate } from 'react-router-dom';
 import GlobalContext from "../context/GlobalContext"
 import Divider from '@mui/material/Divider';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 
@@ -41,6 +43,10 @@ function ResponsiveAppBar() {
         boxShadow: 'none',
         background: '#7879F1',
         marginRight: '18px'
+    }
+
+    const menuItem = {
+        width: '160px'
     }
 
     const goLanding = () => {
@@ -105,8 +111,6 @@ function ResponsiveAppBar() {
                                         </Tooltip>
                                         <Menu
                                             sx={{ 
-                                                width: 400,
-                                                maxWidth: '100%',
                                                 mt: '45px', 
                                             }}
                                             id="menu-appbar"
@@ -130,13 +134,15 @@ function ResponsiveAppBar() {
                                                 }}
                                                 to="/profile"
                                             >
-                                                <MenuItem onClick={toggleUserMenu}>
-                                                    <Typography textAlign="center">Profile</Typography>
+                                                <MenuItem style={menuItem} onClick={toggleUserMenu}>
+                                                    <AccountCircleIcon/>
+                                                    <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">Profile</Typography>
                                                 </MenuItem>
                                             </Link>
                                             <Divider />
-                                            <MenuItem onClick={logout}>
-                                                <Typography textAlign="center">Logout</Typography>
+                                            <MenuItem style={menuItem} onClick={logout}>
+                                                <LogoutIcon />
+                                                <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">Logout</Typography>
                                             </MenuItem>
                                         </Menu>
                                     </>
