@@ -10,6 +10,8 @@ import { authenticate, authError } from './middleware.js';
 
 const router = express.Router();
 
+
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'photos-profile')
@@ -19,7 +21,8 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ storage: storage }).single('file');
+const upload = multer({ storage: storage, debug: true }).single('file');
+
 
 // GET users
 // @desc obtener todos los users de BD
@@ -241,14 +244,12 @@ router.get("/auth/profile", [authenticate, authError], (req, res) => {
 // @desc ruta protegida ACTUALIZAR perfil de usuario
 router.put("/auth/profile", [authenticate, authError], (req, res) => {
     const token = req.headers.authorization || ''
-    console.log(req.body)
     if (token) {
         const decoded = jsonwebtoken.decode(token)
-        console.log(decoded)
         sequelize.sync().then(() => {
             console.log(decoded.id)
             Users.findOne({ where: { id: decoded.id } })
-                .then(user => {         
+                .then(user => {
                     user.update(req.body)
                     return user
                 })
@@ -275,36 +276,41 @@ router.put("/auth/profile", [authenticate, authError], (req, res) => {
     }
 })
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'photos-profile')
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname)
+
+router.put('/auth/profilepicture', [authenticate, authError], (req, res, next) => {
+    const token = req.headers.authorization || ''
+    console.log(req.body)
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+
+        upload(req, res, function (err) {
+            if (err) {
+                console.log("error uploading the file")
+                return res.status(500).send("Error uploading file")
+            } else {
+                console.log("file uploaded")
+                Users.findOne({ where: { id: decoded.id } })
+                    .then(user => {
+
+                        user.update({
+                            profile_picture: req.file.originalname
+                        })
+                        console.log("filename saved")
+
+                    })
+                    .catch(error => {
+                        console.log("error saving filename")
+
+                        res.json({
+                            ok: false,
+                            error: error.message
+                        })
+                    })
+                return res.status(200).send(req.file)
+            }
+
+        })
     }
-})
-
-const upload = multer({ storage: storage }).single('file');
-
-
-router.put('/photo/:id', (req, res, next) => {
-
-    upload(req, res, function (err) {
-        if (err) {
-            return res.status(500).json(err)
-        }
-        Users.findOne({ where: { id: req.params.id } })
-            .then(user =>
-                user.update({
-                    profile_picture: req.file.originalname
-                })
-                .catch(error => res.json({
-                    ok: false,
-                    error: error.message
-                }))
-            )
-        return res.status(200).send(req.file)
-    })
 
 });
 

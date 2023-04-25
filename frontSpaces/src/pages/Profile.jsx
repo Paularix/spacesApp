@@ -48,7 +48,6 @@ export const Profile = () => {
     fetch(API_URL + "users/auth/profile", options)
       .then(res => res.json())
       .then(res => {
-        console.log(res.data)
         if (res.ok === true) {
           setUser({
             ...user,
@@ -56,7 +55,7 @@ export const Profile = () => {
             last_names: res.data.last_names,
             email: res.data.email,
             phone_number: res.data.phone_number,
-            picture: res.data.picture,
+            profile_picture: res.data.profile_picture,
             bio: res.data.bio,
           })
         } else {
@@ -79,7 +78,7 @@ export const Profile = () => {
         'authorization': user.token
       },
       body: JSON.stringify({
-        first_name: user.name,
+        first_name: user.first_name,
         last_names: user.last_names,
         email: user.email,
         phone_number: user.phone_number,
@@ -127,18 +126,17 @@ export const Profile = () => {
     } else {
       setEditing(!editing)
     }
-
   }
 
 
-  async function sendPhoto(e) {
+  const sendPhoto = (e) => {
+    console.log("heu")
     const image = e.target.files[0]
     const data = new FormData()
     data.append('file', image);
     const options = {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
         'authorization': user.token
       },
       body: data
@@ -148,6 +146,7 @@ export const Profile = () => {
       res.json()
     })
     .then(res => {
+      console.log(res)
       if (res.ok == true) {
         setUser({
           ...user,
@@ -168,11 +167,16 @@ export const Profile = () => {
           <img
             className='profile-image'
             src={user.profile_picture ?
-              API_URL + 'photos/users/' + userFields.profile_picture : avatar}
+              ("http://localhost:3080/" + user.profile_picture) : (avatar)}
             alt=""
           />
           <Button className='profile-image-button img-button' size="small"><AddAPhotoIcon />&nbsp;Subir foto</Button>
-          <input className="profile-image-input" type="file" name="file" onChange={sendPhoto} />
+          <input 
+            className="profile-image-input" 
+            type="file" 
+            name="file" 
+            onChange={(e) => sendPhoto(e)} 
+          />
         </div>
       </div>
       <div className='profile-form-container'>
