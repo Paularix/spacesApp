@@ -75,7 +75,6 @@ function ResponsiveAppBar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 
-
                     </Box>
                     <Typography
                         onClick={() => goLanding()}
@@ -95,15 +94,7 @@ function ResponsiveAppBar() {
                         <span className='colored'>S</span> pace  <span className='colored'>A</span>pp
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page, index) => (
-                            <Button
-                                key={index}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
+
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
@@ -111,16 +102,44 @@ function ResponsiveAppBar() {
                         {
                             user.token
                                 ? (
-                                    <Tooltip title="Open settings">
-                                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                            <Avatar alt="Remy Sharp" />
-                                        </IconButton>
-                                    </Tooltip>
+                                    <>
+
+                                        <Tooltip title="Open settings">
+                                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                                <Avatar alt="Remy Sharp" />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Menu
+                                            sx={{ mt: '45px' }}
+                                            id="menu-appbar"
+                                            anchorEl={anchorElUser}
+                                            anchorOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right',
+                                            }}
+                                            keepMounted
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right',
+                                            }}
+                                            open={Boolean(anchorElUser)}
+                                            onClose={handleCloseUserMenu}
+                                        >
+                                            <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">
+                                                <MenuItem onClick={handleCloseUserMenu}>
+                                                    <Typography textAlign="center">Profile</Typography>
+                                                </MenuItem>
+                                            </Link>
+                                            <MenuItem onClick={logout}>
+                                                <Typography textAlign="center">Logout</Typography>
+                                            </MenuItem>
+                                        </Menu>
+                                    </>
                                 )
                                 : (
                                     <>
                                         <Link to="/login" style={{ textDecoration: 'none' }}>
-                                        <Button variant="contained" style={authButton}>Login</Button>
+                                            <Button variant="contained" style={authButton}>Login</Button>
                                         </Link>
                                         <Link to="/register" style={{ textDecoration: 'none' }}>
                                             <Button variant="contained" style={authButton}>Register</Button>
@@ -129,31 +148,7 @@ function ResponsiveAppBar() {
                                 )
                         }
 
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">
-                                <MenuItem onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">Profile</Typography>
-                                </MenuItem>
-                            </Link>
-                            <MenuItem onClick={logout}>
-                                <Typography textAlign="center">Logout</Typography>
-                            </MenuItem>
-                        </Menu>
+
                     </Box>
                 </Toolbar>
             </Container>
