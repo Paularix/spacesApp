@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext } from 'react';
+import { useContext,useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material'
 import Toolbar from '@mui/material/Toolbar';
@@ -22,22 +22,15 @@ const pages = [];
 function ResponsiveAppBar() {
 
     const { user, setUser, logout } = useContext(GlobalContext)
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(false);
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event) => {
+   
+    const openUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
+    const toggleUserMenu = () => {
+        setAnchorElUser(!anchorElUser);
     };
 
     const navigate = useNavigate()
@@ -55,7 +48,6 @@ function ResponsiveAppBar() {
         <AppBar position="static" elevation={0} style={{ backgroundColor: '#ffffff' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-
                     <Typography
                         onClick={() => goLanding()}
                         variant="h6"
@@ -105,7 +97,7 @@ function ResponsiveAppBar() {
                                     <>
 
                                         <Tooltip title="Open settings">
-                                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                            <IconButton onClick={openUserMenu} sx={{ p: 0 }}>
                                                 <Avatar alt="Remy Sharp" />
                                             </IconButton>
                                         </Tooltip>
@@ -122,11 +114,17 @@ function ResponsiveAppBar() {
                                                 vertical: 'top',
                                                 horizontal: 'right',
                                             }}
-                                            open={Boolean(anchorElUser)}
-                                            onClose={handleCloseUserMenu}
+                                            open={anchorElUser}
+                                            onClick={toggleUserMenu}
                                         >
-                                            <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">
-                                                <MenuItem onClick={handleCloseUserMenu}>
+                                            <Link 
+                                                style={{ 
+                                                    textDecoration: 'none', 
+                                                    color: 'black' 
+                                                }} 
+                                                to="/profile"
+                                            >
+                                                <MenuItem onClick={toggleUserMenu}>
                                                     <Typography textAlign="center">Profile</Typography>
                                                 </MenuItem>
                                             </Link>
@@ -147,8 +145,6 @@ function ResponsiveAppBar() {
                                     </>
                                 )
                         }
-
-
                     </Box>
                 </Toolbar>
             </Container>
