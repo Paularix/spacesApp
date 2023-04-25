@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext,useState } from 'react';
+import { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material'
 import Toolbar from '@mui/material/Toolbar';
@@ -15,6 +15,8 @@ import MenuItem from '@mui/material/MenuItem';
 import BalconyIcon from '@mui/icons-material/Balcony';
 import { Link, useNavigate } from 'react-router-dom';
 import GlobalContext from "../context/GlobalContext"
+import Divider from '@mui/material/Divider';
+
 
 
 const pages = [];
@@ -24,7 +26,7 @@ function ResponsiveAppBar() {
     const { user, setUser, logout } = useContext(GlobalContext)
     const [anchorElUser, setAnchorElUser] = useState(false);
 
-   
+
     const openUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -102,7 +104,11 @@ function ResponsiveAppBar() {
                                             </IconButton>
                                         </Tooltip>
                                         <Menu
-                                            sx={{ mt: '45px' }}
+                                            sx={{ 
+                                                width: 400,
+                                                maxWidth: '100%',
+                                                mt: '45px', 
+                                            }}
                                             id="menu-appbar"
                                             anchorEl={anchorElUser}
                                             anchorOrigin={{
@@ -114,20 +120,21 @@ function ResponsiveAppBar() {
                                                 vertical: 'top',
                                                 horizontal: 'right',
                                             }}
-                                            open={anchorElUser}
+                                            open={Boolean(anchorElUser)}
                                             onClick={toggleUserMenu}
                                         >
-                                            <Link 
-                                                style={{ 
-                                                    textDecoration: 'none', 
-                                                    color: 'black' 
-                                                }} 
+                                            <Link
+                                                style={{
+                                                    textDecoration: 'none',
+                                                    color: 'black'
+                                                }}
                                                 to="/profile"
                                             >
                                                 <MenuItem onClick={toggleUserMenu}>
                                                     <Typography textAlign="center">Profile</Typography>
                                                 </MenuItem>
                                             </Link>
+                                            <Divider />
                                             <MenuItem onClick={logout}>
                                                 <Typography textAlign="center">Logout</Typography>
                                             </MenuItem>
@@ -139,6 +146,7 @@ function ResponsiveAppBar() {
                                         <Link to="/login" style={{ textDecoration: 'none' }}>
                                             <Button variant="contained" style={authButton}>Login</Button>
                                         </Link>
+
                                         <Link to="/register" style={{ textDecoration: 'none' }}>
                                             <Button variant="contained" style={authButton}>Register</Button>
                                         </Link>
