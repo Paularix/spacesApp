@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../apiconfig';
 import { TextField, Typography, IconButton, Button } from '@mui/material';
@@ -8,26 +8,24 @@ import SaveIcon from '@mui/icons-material/Save';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import './Profile.css'
 import avatar from './images/avatar.png'
+import GlobalContext from "../context/GlobalContext"
+
 
 
 export const Profile = () => {
   const goTo = useNavigate();
 
-  const [userFields, setUserFields] = useState({
-    name: '',
-    lastName: '',
-    email: '',
-    password: '',
-    phone: '',
-    picture: '',
-    bio: '',
-
-  })
+  const { user, setUser, error, setError } = useContext(GlobalContext)
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getUser();
+    if (user.token) {
+      getUser()
+    } else {
+      setError("Not authentified.")
+      goTo("/error")
+    }
   }, []);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -38,82 +36,128 @@ export const Profile = () => {
     event.preventDefault();
   };
 
-  const getUser = async () => {
-    const opcions = {
+  const getUser = () => {
+    const options = {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': user.token
       }
     };
-    const result = await fetch(API_URL + "users/3", opcions)
-    const user = await result.json();
 
-    const userFields = {
-      name: user.data.first_name,
-      lastName: user.data.last_names,
-      email: user.data.email,
-      phone: user.data.phone_number,
-      picture: user.data.profile_picture,
-      bio: user.data.bio,
-    }
-    setUserFields(userFields)
-
+    fetch(API_URL + "users/auth/profile", options)
+      .then(res => res.json())
+      .then(res => {
+        if (res.ok === true) {
+          setUser({
+            ...user,
+            first_name: res.data.first_name,
+            last_names: res.data.last_names,
+            email: res.data.email,
+            phone_number: res.data.phone_number,
+            profile_picture: res.data.profile_picture,
+            bio: res.data.bio,
+          })
+        } else {
+          setError(res.error)
+          goTo("/error")
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
 
-  async function submit () {
-    const opcions = {
+  const saveUserProfile = () => {
+    console.log("updating")
+    const options = {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': user.token
       },
       body: JSON.stringify({
-        first_name: userFields.name,
-        last_names: userFields.lastName,
-        email: userFields.email,
-        phone_number: userFields.phone,
-        profile_picture: userFields.picture,
-        bio: userFields.bio,
+        first_name: user.first_name,
+        last_names: user.last_names,
+        email: user.email,
+        phone_number: user.phone_number,
+        profile_picture: user.picture,
+        bio: user.bio,
       })
     };
-      
-    setLoading(true);
-    await fetch(API_URL + "users/3", opcions);
-    setLoading(false);
-    setEditing(false)
+    setLoading(false)
+    fetch(API_URL + "users/auth/profile", options)
+      .then(res => res.json())
+      .then(res => {
+        if (res.ok == true) {
+          setUser({
+            ...user,
+            first_name: res.data.first_name,
+            last_names: res.data.last_names,
+            email: res.data.email,
+            phone_number: res.data.phone_number,
+            bio: res.data.bio,
+          })
+        }
+      })
+      .then(res => {
+        setLoading(false)
+        setEditing(false)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
 
   }
 
   const setUserField = (field, value) => {
-    setUserFields({
-      ...userFields,
+    setUser({
+      ...user,
       [field]: value
     })
   }
 
-  const saveUser= (e) => {
+  const saveUser = (e) => {
     e.preventDefault();
-    if(editing){
-      submit();
+    if (editing) {
+      saveUserProfile();
     } else {
-      setEditing(true)
+      setEditing(!editing)
     }
-    
   }
 
 
-async function sendPhoto(e){
+  const sendPhoto = (e) => {
+    console.log("heu")
     const image = e.target.files[0]
-    const data = new FormData() 
+    const data = new FormData()
     data.append('file', image);
     const options = {
       method: 'PUT',
+      headers: {
+        'authorization': user.token
+      },
       body: data
     };
-    await fetch(API_URL + "users/photo/3", options)
-    console.log(API_URL + "users/photo/3");
+    fetch(API_URL + "users/auth/profilepicture", options)
+    .then(res => {
+      res.json()
+    })
+    .then(res => {
+      console.log(res)
+      if (res.ok == true) {
+        setUser({
+          ...user,
+          picture: res.data.profile_picture,    
+        })
+      }
+    })
+    .catch(err => console.log(err))
+    
     getUser();
-}
+  }
 
 
   return (
@@ -121,32 +165,37 @@ async function sendPhoto(e){
       <div className='profile-image-container'>
         <div className='profile-image-complete'>
           <img
-            className='profile-image' 
-            src={ userFields.picture ? 
-              API_URL + 'photos/users/'+ userFields.picture :  avatar} 
-            alt="" 
-            />
-          <Button className='profile-image-button img-button' size="small"><AddAPhotoIcon/>&nbsp;Subir foto</Button>
-          <input className="profile-image-input" type="file" name="file" onChange={sendPhoto}/> 
+            className='profile-image'
+            src={user.profile_picture ?
+              ("http://localhost:3080/" + user.profile_picture) : (avatar)}
+            alt=""
+          />
+          <Button className='profile-image-button img-button' size="small"><AddAPhotoIcon />&nbsp;Subir foto</Button>
+          <input 
+            className="profile-image-input" 
+            type="file" 
+            name="file" 
+            onChange={(e) => sendPhoto(e)} 
+          />
         </div>
       </div>
       <div className='profile-form-container'>
         <form className="profile-form" onSubmit={saveUser} >
           <Typography variant="h4" className='profile-title profile-sub'>Tu perfil
             <IconButton disabled={loading} type='submit' aria-label="edit">
-              {!editing ? <EditIcon /> : <SaveIcon/>}
+              {!editing ? <EditIcon /> : <SaveIcon />}
             </IconButton>
           </Typography >
-          <Typography className='profile-title profile-sub'>La información que nos facilites se utilizará en toda la aplicación para 
-          que otros usuarios sepan quién eres.</Typography >
+          <Typography className='profile-title profile-sub'>La información que nos facilites se utilizará en toda la aplicación para
+            que otros usuarios sepan quién eres.</Typography >
           <div className='profile-inputs-container'>
             <div>
               {editing ?
                 <TextField
                   className="profile-field profile-text"
                   label="Nombre"
-                  onInput={(e) => setUserField("name", e.target.value)}
-                  value={userFields.name}
+                  onInput={(e) => setUserField("first_name", e.target.value)}
+                  value={user.first_name}
                   size="small"
                   required
                 /> :
@@ -155,7 +204,7 @@ async function sendPhoto(e){
                     Nombre
                   </Typography>
                   <Typography variant='body1'>
-                    {userFields.name}
+                    {user.first_name}
                   </Typography>
                 </div>
               }
@@ -166,8 +215,8 @@ async function sendPhoto(e){
                 <TextField
                   className="profile-field profile-text"
                   label="Apellido"
-                  value={userFields.lastName}
-                  onInput={(e) => setUserField("lastName", e.target.value)}
+                  value={user.last_names}
+                  onInput={(e) => setUserField("last_names", e.target.value)}
                   size="small"
                   required
                 /> :
@@ -176,7 +225,7 @@ async function sendPhoto(e){
                     Apellido
                   </Typography>
                   <Typography variant='body1'>
-                    {userFields.lastName}
+                    {user.last_names}
                   </Typography>
                 </div>
               }
@@ -187,7 +236,7 @@ async function sendPhoto(e){
                 <TextField
                   className="profile-field profile-text"
                   label="Email"
-                  value={userFields.email}
+                  value={user.email}
                   onInput={(e) => setUserField("email", e.target.value)}
                   size="small"
                   required
@@ -197,7 +246,7 @@ async function sendPhoto(e){
                     Email
                   </Typography>
                   <Typography variant='body1'>
-                    {userFields.email}
+                    {user.email}
                   </Typography>
                 </div>
               }
@@ -208,17 +257,16 @@ async function sendPhoto(e){
                 <TextField
                   className="profile-field profile-text"
                   label="Teléfono"
-                  value={userFields.phone}
-                  onInput={(e) => setUserField("phone", e.target.value)}
+                  value={user.phone_number}
+                  onInput={(e) => setUserField("phone_number", e.target.value)}
                   size="small"
-                  required
                 /> :
                 <div>
                   <Typography variant='subtitle2'>
                     Teléfono
                   </Typography>
                   <Typography variant='body1'>
-                    {userFields.phone}
+                    {user.phone_number}
                   </Typography>
                 </div>
               }
@@ -229,7 +277,7 @@ async function sendPhoto(e){
                 <TextField
                   className="profile-field profile-text"
                   label="Sobre mí"
-                  value={userFields.bio}
+                  value={user.bio}
                   onInput={(e) => setUserField("bio", e.target.value)}
                   size="small"
                   multiline
@@ -240,7 +288,7 @@ async function sendPhoto(e){
                     Sobre mí
                   </Typography>
                   <Typography variant='body1'>
-                    {userFields.bio}
+                    {user.bio}
                   </Typography>
                 </div>
               }

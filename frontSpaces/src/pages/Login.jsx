@@ -1,19 +1,21 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../apiconfig';
-import { Button, Card, CardContent, TextField, Typography, FormControl, IconButton, 
-    OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
-import {Visibility, VisibilityOff }from '@mui/icons-material';
+import {
+    Button, Card, CardContent, TextField, Typography, FormControl, IconButton,
+    OutlinedInput, InputLabel, InputAdornment
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import jwt_decode from 'jwt-decode'
+import GlobalContext from "../context/GlobalContext"
 import './Login.css'
+
 
 export const Login = () => {
     const goTo = useNavigate();
 
-    const [userFields, setUserFields] = useState({
-        email: '',
-        password: '',
-    })
+    const { user, setUser, error, setError } = useContext(GlobalContext)
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -23,28 +25,55 @@ export const Login = () => {
         event.preventDefault();
     };
 
-    function submit(e) {
-        e.preventDefault();
+    useEffect(() => {
+        if (user.token) {
+            goTo("/home")
+        } 
+    }, [user])
 
-        const opcions = {
+    const login = () => {
+
+        const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: userFields.email,
-                password: userFields.password
+                email: user.email,
+                password: user.password
             })
         };
 
-        fetch(API_URL + "users", opcions)
-        goTo('/users')
-
+        fetch(API_URL + "users/login", options)
+            .then(res => res.json())
+            .then(res => {
+                if (res.ok === true) {
+                    const decoded = jwt_decode(res.token)
+                    setUser({
+                        ...user,
+                        email: decoded.email,
+                        password: '',
+                        token: res.token
+                    })
+                } else {
+                    setUser({
+                        ...user,
+                        password: '',
+                        error: res.error
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                setError(error)
+                goTo("error")
+            })
     }
-    
+
+
     const setUserField = (field, value) => {
-        setUserFields({
-            ...userFields,
+        setUser({
+            ...user,
             [field]: value
         })
     }
@@ -52,12 +81,12 @@ export const Login = () => {
         <div className='login-container'>
             <Card className='login-card'>
                 <CardContent>
-                    <form className="login-form" onSubmit={submit} >
-                        <Typography variant="h4" className='login-title login-sub'>Bienvenido</Typography >
+                    <form className="register-form" >
+                        <Typography variant="h4" className='register-title register-sub'>Bienvenido</Typography >
                         <TextField
                             className="login-field login-text"
                             label="Email"
-                            value={userFields.email}
+                            value={user.email}
                             onInput={(e) => setUserField("email", e.target.value)}
                             size="small"
                             required
@@ -65,7 +94,7 @@ export const Login = () => {
                         <FormControl className="login-field login-text" size="small" required>
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
-                                value={userFields.password}
+                                value={user.password}
                                 id="outlined-adornment-password"
                                 type={showPassword ? 'text' : 'password'}
                                 endAdornment={
@@ -84,8 +113,17 @@ export const Login = () => {
                                 label="Password"
                             />
                         </FormControl>
+                        { 
+                        user.error && 
+                        <Typography sx={{
+                            color: 'red',
+                        }} className='register-title register-sub'>
+                            {user.error}
+                        </Typography >
+                        }
+
                         <br />
-                        <Button variant="contained" type="submit">
+                        <Button variant="contained" onClick={() => login()}>
                             Iniciar sesión
                         </Button>
                         <Typography className='login-title login-sub'>¿No tienes una cuenta? <Link to='/Register'>Registrarse</Link></Typography >
