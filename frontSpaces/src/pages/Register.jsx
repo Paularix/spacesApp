@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate, Link} from 'react-router-dom';
 import { API_URL } from '../apiconfig';
 import {
@@ -7,6 +7,8 @@ import {
     OutlinedInput, InputLabel, InputAdornment
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import GlobalContext from "../context/GlobalContext"
+
 import './Register.css'
 
 
@@ -14,13 +16,8 @@ function Register() {
 
     const goTo = useNavigate();
 
-    const [userFields, setUserFields] = useState({
-        name: '',
-        lastName: '',
-        email: '',
-        password: '',
-        phone: '',
-    })
+    const { newUser, setNewUser} = useContext(GlobalContext)
+
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -33,28 +30,35 @@ function Register() {
     function submit(e) {
         e.preventDefault();
 
-        const opcions = {
+        const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                first_name: userFields.name,
-                last_names: userFields.lastName,
-                email: userFields.email,
-                phone_number: userFields.phone,
-                password: userFields.password
+                first_name: newUser.name,
+                last_names: newUser.lastName,
+                email: newUser.email,
+                phone_number: newUser.phone,
+                password: newUser.password
             })
         };
 
-        fetch(API_URL + "users/register", opcions)
-        goTo('/users')
+        fetch(API_URL + "users/register", options)
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .then(res=> {
+            goTo('/profile')
+        })
+        .catch(error => {
+            console.log(error)
+        })
 
     }
 
     const setUserField = (field, value) => {
-        setUserFields({
-            ...userFields,
+        setNewUser({
+            ...newUser,
             [field]: value
         })
     }
@@ -72,14 +76,14 @@ function Register() {
                             className="register-field register-text"
                             label="Nombre"
                             onInput={(e) => setUserField("name", e.target.value)}
-                            value={userFields.name}
+                            value={newUser.name }
                             size="small"
                             required
                         />
                         <TextField
                             className="register-field register-text"
                             label="Apellido"
-                            value={userFields.lastName}
+                            value={newUser.lastName}
                             onInput={(e) => setUserField("lastName", e.target.value)}
                             size="small"
                             required
@@ -87,7 +91,7 @@ function Register() {
                         <TextField
                             className="register-field register-text"
                             label="Email"
-                            value={userFields.email}
+                            value={newUser.email}
                             onInput={(e) => setUserField("email", e.target.value)}
                             size="small"
                             required
@@ -96,7 +100,7 @@ function Register() {
                         <TextField
                             className="register-field register-text"
                             label="Teléfono"
-                            value={userFields.phone}
+                            value={newUser.phone}
                             onInput={(e) => setUserField("phone", e.target.value)}
                             size="small"
                             required
@@ -104,7 +108,7 @@ function Register() {
                         <FormControl size="small" className="register-field register-text" required>
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
-                                value={userFields.password}
+                                value={newUser.password}
                                 required
                                 id="outlined-adornment-password"
                                 type={showPassword ? 'text' : 'password'}

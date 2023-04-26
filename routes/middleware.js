@@ -2,19 +2,16 @@ import jsonwebtoken from "jsonwebtoken"
 
 
 export const authenticate = (req, res, next) => {
-	console.log("auth functioon")
 	let token = req.headers.authorization || '';
 	if (!token) {
-		next({ error: 'no token' });
+		next({ error: 'No token in request' });
 	} 
 
 	jsonwebtoken.verify(token, process.env.SECRET_KEY, (error, decoded) => {
 		if (error) {
-			next({ error: 'invalid token' });
+			next({ error: 'Invalid token' });
 		} else {
-            console.log(decoded)
-			let { expiredAt } = decoded;
-        
+			let { expiredAt } = decoded;        
 			if (Number(expiredAt) > new Date().getTime()) {
 				next();
 			} else {
@@ -26,7 +23,7 @@ export const authenticate = (req, res, next) => {
 };
 
 export const authError = (err, req, res, next) => {
-	console.log("auth error")
+	console.log("Authentication error")
 	res.status(400).json(err);
 };
 
