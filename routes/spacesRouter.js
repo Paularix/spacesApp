@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import {sequelize} from "../loadSequelize.js";
 import {Spaces} from '../models/Models.js';
-
+import { authenticate, authError } from './middleware.js';
 
 const router = express.Router();
 
@@ -53,6 +53,36 @@ router.get('/:id', function (req, res, next) {
     });
 });
 
+// GET información protegida de los espacios del usuario
+// @desc ruta protegida perfil de usuario
+router.get("/auth/mySpaces", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        sequelize.sync().then(() => {
+            Spaces.findAll({ where: { id: decoded.id } })
+                .then(spaces => {
+                    res.status(200).json({
+                        ok: true,
+                        data: spaces
+                    })
+                })
+                .catch((error) => {
+                    res.status(400).json({
+                        ok: false,
+                        error
+                    })
+                })
+        })
+            .catch((error) => {
+                res.status(400).json({
+                    ok: false,
+                    error
+                })
+            })
+
+    }
+})
 
 
 // POST, creació d'un nou spaces

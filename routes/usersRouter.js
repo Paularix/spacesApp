@@ -236,7 +236,6 @@ router.get("/auth/profile", [authenticate, authError], (req, res) => {
                     error
                 })
             })
-
     }
 })
 

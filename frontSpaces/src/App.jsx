@@ -18,6 +18,8 @@ import Profile from './pages/Profile'
 import { Home } from './pages/Home'; 
 import SpaceInfo from './pages/SpaceInfo'
 import SpaceCard from './components/SpaceCard'
+import MySpaces from './pages/MySpaces'
+
 
 
 function App() {
@@ -76,6 +78,7 @@ const space = {
           <Route path="/Home" element={<Home />}/>
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
           <Route path="/spaceCard" element={<SpaceCard space={space} />}/>
+          <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/error" element={<Error />} />
 
         </Routes>
