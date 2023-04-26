@@ -1,14 +1,44 @@
-.spacesSection{
+
+.spacecard-typo-title{
+    text-align: left;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    color: #000;
+    font-family: Poppins, Arial, Helvetica, sans-serif;
+}
+
+.spacecard-typo{
+    text-align: left;
+    font-size: 14px;
+    line-height: 26px;
+    font-weight: 500;
+    color: #878787;
+    font-family: Poppins, Arial, Helvetica, sans-serif;
+}
+
+.add-to-favorites {
+    align-items: right;
+}
+
+
+
+.spacecard-img{
+    transition: all 0.3s ease;
+}
+
+.spacecard-img:hover {
+    opacity: 0.7;
+  }
+
+.spacecard-icons {
     display: flex;
-    margin: 20px;
-    gap: 20px;
+    justify-content: space-around;
+    margin-bottom: 15px;
+
 }
-.card{
-    
-    width: 180px;
-    height: 200px;
-}
-.cards-body{
-    width: 100%;
-    height: 100%;
+
+.spacecard-icon-person{
+    display: flex;
+    margin-right: 10px;
 }
