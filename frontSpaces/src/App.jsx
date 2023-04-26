@@ -14,6 +14,7 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 import { Home } from './pages/Home'; 
 import SpaceInfo from './pages/SpaceInfo'
+import SpaceCard from './components/SpaceCard'
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/profile" element={<Profile />}/>
           <Route path="/Home" element={<Home />}/>
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
+          <Route path="/spaceCard" element={<SpaceCard />}/>
 
         </Routes>
         <Footer />
