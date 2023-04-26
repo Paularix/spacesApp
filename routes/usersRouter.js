@@ -141,9 +141,9 @@ router.delete('/:id', function (req, res, next) {
 router.post("/register", (req, res, next) => {
 
     // if (req.body.password == req.body.repeatPassword) {
-    //     const hash = bcrypt.hashSync(req.body.password, 10)
-    //     req.body.password = hash
-
+        const hash = bcrypt.hashSync(req.body.password, 10)
+        req.body.password = hash
+|
     Users.create({
         first_name: req.body.first_name,
         last_names: req.body.last_names,
@@ -322,18 +322,6 @@ router.get("/auth/protected", [authenticate, authError], (req, res) => {
         message: "Protected Route"
     })
 })
-
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'photos-profile')
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname)
-    }
-})
-
-const upload = multer({ storage: storage }).single('file');
 
 
 router.put('/photo/:id', (req, res, next) => {

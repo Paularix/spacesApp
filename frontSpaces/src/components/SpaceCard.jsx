@@ -15,7 +15,9 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+import EuroIcon from '@mui/icons-material/Euro';
 import './SpaceCard.css'
+import noImage from './no_image.jpg'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -28,64 +30,51 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function SpaceCard() {
+export default function SpaceCard({ space }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  return (
 
+  return (
     <Card sx={{ maxWidth: 300 }}>
-      {/* <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      /> */}
       <CardMedia
         className='spacecard-img'
         component="img"
         height="194"
-        image="https://www.lamp.es/images/487081/small_slider_image.jpg"
+        image={space.space_picture ?
+          ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
         alt="Paella dish"
       />
       <CardContent>
         <div>
-          <Typography mt={2} className='spacecard-typo-title'>
-            Loft con Luz natural estilo Nórdico
-          </Typography>
+          <Typography mt={2} variant="h5" className='spacecard-typo-title'>
+            {space.name}
+          </Typography> 
           <Typography className='spacecard-typo'>
-            Poblenou
+            {space.address}
           </Typography>
         </div>
       </CardContent>
-
-      <CardActions disableSpacing>
+      <CardActions className="spacecard-icons">
         <div className='spacecard-icon-person'>
-          <IconButton aria-label="share">
-            <PersonOutlineRoundedIcon />
-          </IconButton>
+          <PersonOutlineRoundedIcon />
           <Typography>
-            30
+            {space.capacity}
           </Typography>
         </div>
-        <div className="add-to-favorites">
+        <div className='spacecard-icon-price'>
+          <Typography variant="h6">
+            <b>{space.price} €</b> / dia
+          </Typography>
+        </div>
+        {/* <div className="add-to-favorites">
           <IconButton>
             <FavoriteIcon />
           </IconButton>
-        </div>
-       
-
+        </div> */}
       </CardActions>
       {/* <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
@@ -95,7 +84,6 @@ export default function SpaceCard() {
           <ShareIcon />
         </IconButton>
       </CardActions> */}
-
     </Card>
   );
 }

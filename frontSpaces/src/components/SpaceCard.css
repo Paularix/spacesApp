@@ -30,3 +30,15 @@
 .spacecard-img:hover {
     opacity: 0.7;
   }
+
+.spacecard-icons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+
+}
+
+.spacecard-icon-person{
+    display: flex;
+    margin-right: 10px;
+}
