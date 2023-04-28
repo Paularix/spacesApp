@@ -45,6 +45,7 @@ const logout = () => {
     email: '',
     token: ''
   })
+  localStorage.removeItem("token");
   navigate("/")
 }
 
