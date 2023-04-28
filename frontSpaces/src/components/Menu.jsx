@@ -30,6 +30,7 @@ function ResponsiveAppBar() {
     const { user, setUser, logout } = useContext(GlobalContext)
     const [anchorElUser, setAnchorElUser] = useState(false);
 
+    //levanta la sesion del token
     useEffect(() => {
         const token = localStorage.token;
         if (token) {
