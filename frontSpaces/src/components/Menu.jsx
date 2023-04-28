@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material'
 import Toolbar from '@mui/material/Toolbar';
@@ -18,6 +18,8 @@ import GlobalContext from "../context/GlobalContext"
 import Divider from '@mui/material/Divider';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
+import jwt_decode from 'jwt-decode'
+
 
 
 
@@ -27,6 +29,21 @@ function ResponsiveAppBar() {
 
     const { user, setUser, logout } = useContext(GlobalContext)
     const [anchorElUser, setAnchorElUser] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.token;
+        if (token) {
+          const decoded = jwt_decode(token)
+          const { expiredAt, email, id } = decoded
+          if (Number(expiredAt) > new Date().getTime()) {
+            setUser({
+                email,
+                id,
+                token
+            })
+          }
+        }
+      }, [])
 
 
     const openUserMenu = (event) => {

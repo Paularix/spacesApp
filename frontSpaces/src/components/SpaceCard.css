@@ -1,16 +1,15 @@
-
-.spacecard-typo-title{
+.spacecard-typo-title {
     text-align: left;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 20px;
     font-weight: 500;
     color: #000;
     font-family: Poppins, Arial, Helvetica, sans-serif;
 }
 
-.spacecard-typo{
+.spacecard-typo {
     text-align: left;
-    font-size: 14px;
+    font-size: 10px;
     line-height: 26px;
     font-weight: 500;
     color: #878787;
@@ -21,24 +20,20 @@
     align-items: right;
 }
 
-
-
-.spacecard-img{
+.spacecard-img {
     transition: all 0.3s ease;
 }
 
 .spacecard-img:hover {
     opacity: 0.7;
-  }
+}
 
 .spacecard-icons {
     display: flex;
     justify-content: space-around;
     margin-bottom: 15px;
-
 }
 
-.spacecard-icon-person{
-    display: flex;
-    margin-right: 10px;
+.spacecard-icon-person {
+    display: flex;  
 }

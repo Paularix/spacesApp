@@ -1,21 +1,13 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
-import EuroIcon from '@mui/icons-material/Euro';
+
 import './SpaceCard.css'
 import noImage from './no_image.jpg'
 
@@ -39,7 +31,7 @@ export default function SpaceCard({ space }) {
 
 
   return (
-    <Card sx={{ maxWidth: 300 }}>
+    <Card sx={{ maxWidth: 300, minWidth: 300 }}>
       <CardMedia
         className='spacecard-img'
         component="img"
@@ -50,10 +42,10 @@ export default function SpaceCard({ space }) {
       />
       <CardContent>
         <div>
-          <Typography mt={2} variant="h5" className='spacecard-typo-title'>
+          <Typography variant="h6" className='spacecard-typo-title'>
             {space.name}
           </Typography> 
-          <Typography className='spacecard-typo'>
+          <Typography variant="subtitle2" className='spacecard-typo'>
             {space.address}
           </Typography>
         </div>
@@ -66,7 +58,7 @@ export default function SpaceCard({ space }) {
           </Typography>
         </div>
         <div className='spacecard-icon-price'>
-          <Typography variant="h6">
+          <Typography variant="subtitle2">
             <b>{space.price} €</b> / dia
           </Typography>
         </div>

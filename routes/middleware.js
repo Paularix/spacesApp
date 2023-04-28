@@ -8,16 +8,13 @@ export const authenticate = (req, res, next) => {
 	} 
 
 	jsonwebtoken.verify(token, process.env.SECRET_KEY, (error, decoded) => {
-		console.log("decoded", decoded)
 		if (error) {
 			next({ error: 'Invalid token' });
 		} else {
 			let { expiredAt } = decoded;
-			console.log(expiredAt)
 			if (Number(expiredAt) > new Date().getTime()) {
 				next();
 			} else {
-				console.log("entra aca")
 				next({ error: 'Session expired'});
 			}
 		}
