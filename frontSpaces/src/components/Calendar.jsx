@@ -21,11 +21,10 @@ const yyyymmdd = (dateString) => {
 
 
 
-export default () => {
+export default ({date, setDate }) => {
 
 
     const [selectedDates, setSelectedDates] = useState("");
-    const [date, setDate] = useState(new Date())
 
     function tileClassName({ date, view }) {
         if (view === 'month') {
@@ -61,7 +60,19 @@ export default () => {
                         value={date}
                         selectRange={true}
                     />
-
+                    {date.length > 0 ? (
+                        <p className='text-center'>
+                            <span className='bold'>Start:</span>{' '}
+                            {date[0].toDateString()}
+                            &nbsp;|&nbsp;
+                            <span className='bold'>End:</span> {date[1].toDateString()}
+                        </p>
+                    ) : (
+                        <p className='text-center'>
+                            <span className='bold'>Default selected date:</span>{' '}
+                            {date.toDateString()}
+                        </p>
+                    )}
                 </Box>
             </Grid>
         </Grid >
