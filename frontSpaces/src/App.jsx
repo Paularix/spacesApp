@@ -19,10 +19,11 @@ import { Home } from './pages/Home';
 import SpaceInfo from './pages/SpaceInfo'
 import SpaceCard from './components/SpaceCard'
 import MySpaces from './pages/MySpaces'
-
+import MyReservations from './pages/MyReservations'
 
 
 function App() {
+
   const navigate = useNavigate()
   const [newUser, setNewUser] = useState({
     name: '',
@@ -54,18 +55,6 @@ const context = {
   logout 
 }
 
-const space = {
-  "id": 4,
-  "name": "El Torreon",
-  "address": "la costa 3030",
-  "capacity": "20",
-  "price": 90,
-  "description": ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus odio delectus",
-  "rules": ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus odio delectus",
-  "space_picture": "space.jpg",
-  "rid_host_user": 2
-}
-
   return (
     <GlobalContext.Provider value={context}>
       <div className="app">
@@ -77,8 +66,8 @@ const space = {
           <Route path="/profile" element={<Profile />}/>
           <Route path="/Home" element={<Home />}/>
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
-          <Route path="/spaceCard" element={<SpaceCard space={space} />}/>
           <Route path="/MySpaces" element={<MySpaces />}/>
+          <Route path="/MyReservations" element={<MyReservations/>}/>
           <Route path="/error" element={<Error />} />
 
         </Routes>

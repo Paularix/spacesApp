@@ -43,12 +43,12 @@ export const Login = () => {
                 password: user.password
             })
         };
-
         fetch(API_URL + "users/login", options)
             .then(res => res.json())
             .then(res => {
                 if (res.ok === true) {
                     const decoded = jwt_decode(res.token)
+                    localStorage.token = res.token;
                     setUser({
                         ...user,
                         email: decoded.email,

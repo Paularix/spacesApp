@@ -31,7 +31,7 @@ export default function SpaceCard({ space }) {
 
 
   return (
-    <Card sx={{ maxWidth: 300 }}>
+    <Card sx={{ maxWidth: 300, minWidth: 300 }}>
       <CardMedia
         className='spacecard-img'
         component="img"
@@ -42,10 +42,10 @@ export default function SpaceCard({ space }) {
       />
       <CardContent>
         <div>
-          <Typography mt={2} variant="h5" className='spacecard-typo-title'>
+          <Typography variant="h6" className='spacecard-typo-title'>
             {space.name}
           </Typography> 
-          <Typography className='spacecard-typo'>
+          <Typography variant="subtitle2" className='spacecard-typo'>
             {space.address}
           </Typography>
         </div>
@@ -58,7 +58,7 @@ export default function SpaceCard({ space }) {
           </Typography>
         </div>
         <div className='spacecard-icon-price'>
-          <Typography variant="h6">
+          <Typography variant="subtitle2">
             <b>{space.price} €</b> / dia
           </Typography>
         </div>

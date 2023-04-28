@@ -9,26 +9,30 @@
 }
 
 .myspaces-card-container {
-    /* display: flex; */
+    display: flex;
     justify-content: center;
-    max-width: 900px;
-    padding: 0;
+    /* max-width: 900px; */
+    padding: 20px;
     margin: 0;
   }
+
+.myspaces-card {
+    width: 100%;
+}
   
 .myspaces-button.myspaces-banner-button {
     margin: 10px;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+
+.myspaces-list-spaces {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-li {
-    display: inline-block;
-    padding: 10px;
-    background-color: #fafafa;
-    border: 1px solid #fafafa;
+.myspaces-card-spaces {
+    height: 402px;
+    margin: 8px;
+    width: auto;
+    min-width: 250px;
 }

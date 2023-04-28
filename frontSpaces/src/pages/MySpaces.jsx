@@ -4,7 +4,8 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import GlobalContext from "../context/GlobalContext"
 import './MySpaces.css'
 import { API_URL } from "../apiconfig";
 import SpaceCard from '../components/SpaceCard';
@@ -12,105 +13,73 @@ import SpaceCard from '../components/SpaceCard';
 
 export const MySpaces = () => {
 
+    const { user } = useContext(GlobalContext)
     const [spaces, setSpaces] = useState([]);
 
     useEffect(() => {
-        loadData();
-    }, [])
+        console.log(user)
+        if (user.token)
+            loadData();
+    }, [user])
 
-    const model = "auth/mySpaces";
-    const space = {
-        "id": 4,
-        "name": "El Torreon",
-        "address": "la costa 3030",
-        "capacity": "20",
-        "price": 90,
-        "description": ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus odio delectus",
-        "rules": ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus odio delectus",
-        "space_picture": "space.jpg",
-        "rid_host_user": 2
-    }
+    const route = "spaces/auth/mySpaces";
 
     function loadData() {
-        fetch(API_URL + model)
-            .then(resultat => resultat.json())
-            .then(retornat => {
-                if (retornat.ok === true) {
-                    setSpaces(retornat.data);
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': user.token
+            }
+        };
+        fetch(API_URL + route, options)
+            .then(result => result.json())
+            .then(response => {
+                if (response.ok === true) {
+                    setSpaces(response.data);
                 } else {
-                    setError(retornat.error)
+                    setError(response.error)
                 }
             })
             .catch(error => setError(error))
     }
 
-    const rows = spaces.map((item, idx) => {
-        return (
-            <li key={idx}>
-                <SpaceCard />
-            </li>)
-    });
     return (
+
         <div className='myspaces-container'>
-            <div className='myspaces-card-container'>
-                <Card sx={{ maxWidth: 900 }}>
-                    <CardMedia
-                        component="img"
-                        alt="green iguana"
-                        height="140"
-                        image="https://www.loiola.com/images/espacio_abierto_portada.png"
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            No tienes ningún espacio cargado... ¡por ahora!
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            Comienza a planear tu próxima evento
-                        </Typography>
-                    </CardContent>
-                    <Button className='myspaces-button myspaces-banner-button' variant="contained">Sube tu espacio</Button>
-                </Card>
-            </div>
-
-            <div>
-                <Typography mt={2} variant="h5" color="text.primary">
-                    Mis Espacios
-                </Typography>
-                <div className='myspaces-list-spaces' >
-                    <ul>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                        <li>
-                            <SpaceCard space={space} />
-                        </li>
-                    </ul>
-
+            {!spaces.length ?
+                <div className='myspaces-card-container'>
+                    <Card className='myspaces-card'>
+                        <CardMedia
+                            component="img"
+                            alt="space image"
+                            height="300"
+                            image="https://www.loiola.com/images/espacio_abierto_portada.png"
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                No tienes ningún espacio cargado... ¡por ahora!
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Comienza a planear tu próxima evento
+                            </Typography>
+                        </CardContent>
+                        <Button className='myspaces-button myspaces-banner-button' variant="contained">Sube tu espacio</Button>
+                    </Card>
+                </div> :
+                <div>
+                    <Typography mt={2} variant="h5" color="text.primary">
+                        Mis Espacios
+                    </Typography>
+                    <div className='myspaces-list-spaces' >
+                        {spaces.map((space, index) => (
+                            <div className='myspaces-card-spaces'>
+                                <SpaceCard key={index} space={space} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
-
-            </div>
-
+            }
         </div>
     )
 }
