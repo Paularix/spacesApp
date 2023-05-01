@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/material';
@@ -15,47 +15,31 @@ import FormControl from '@mui/material/FormControl';
 import Checkbox from '@mui/material/Checkbox';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { API_URL } from '../apiconfig';
 
+import PublicIcon from '@mui/icons-material/Public';
+import LockIcon from '@mui/icons-material/Lock';
 
+import PublicPrivateSwitch from '../components/PublicPrivateSwitch';
 
 import './addSpace.css';
 import { display } from '@mui/system';
 
 const addSpace = () => {
-  const services = [
-    {
-      id: 1,
-      name: "Aire Acondicionado",
-      value: "Aire Acondicionado",
-    },
-    {
-      id: 2,
-      name: "Sillas",
-      value: "Sillas"
+  const [services, setServices] = useState([])
 
-    },
-    {
-      id: 3,
-      name: "Microondas",
-      value: "Microondas"
 
-    },
-    {
-      id: 4,
-      name: "Mesas",
-      value: "Mesas"
 
-    }
-  ]
-
-  const [selectedServices, setSelectedServices] = useState([services[1]]);
-
-  const handleChange = (event) => {
-    setSelectedServices(
-      ...selectedServices,
-      event.target.value
-    );
-  };
+  useEffect(() => {
+    fetch(API_URL + "services")
+      .then(res => res.json())
+      .then(res => {
+        setServices([...services, ...res.data])
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
 
   return (
     <div>
@@ -159,9 +143,13 @@ const addSpace = () => {
                 </Button>
 
                 <FormControl sx={{ m: 1.78, marginTop: 3.4, minWidth: 120 }}>
+                  <Typography variant="h6" sx={{
+                    textAlign: 'left'
+                  }}>Servicios:</Typography>
                   <Box sx={{
                     display: 'flex',
-                    flexWrap: 'wrap'
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between'
                   }}>
                     {
                       services.map((service, index) => (
@@ -170,7 +158,8 @@ const addSpace = () => {
                     }
                   </Box>
 
-
+                  <PublicPrivateSwitch />
+                 
                 </FormControl>
 
                 <Button variant="contained" component="label" sx={{
@@ -186,7 +175,6 @@ const addSpace = () => {
                   },
                 }}>
                   Guardar
-                  <input hidden accept="image/*" multiple type="file" />
                 </Button>
               </Grid>
 
