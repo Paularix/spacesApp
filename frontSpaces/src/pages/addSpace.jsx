@@ -2,33 +2,32 @@ import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/material';
-import { InputBase } from '@mui/material';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import { Button, CardActionArea, CardActions, TextField } from '@mui/material';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Checkbox from '@mui/material/Checkbox';
-
+import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { API_URL } from '../apiconfig';
-
-import PublicIcon from '@mui/icons-material/Public';
-import LockIcon from '@mui/icons-material/Lock';
-
 import PublicPrivateSwitch from '../components/PublicPrivateSwitch';
-
 import './addSpace.css';
-import { display } from '@mui/system';
 
 const addSpace = () => {
   const [services, setServices] = useState([])
-
-
+  const [center, setCenter] = useState([]);
+  const [aproximateLocation, setAproximateLocation] = useState([])
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(coords);
+    }
+  }
+  function coords(position) {
+    const lat = position.coords.latitude;
+    const long = position.coords.longitude;
+    setCenter([lat, long]);
+  }
 
   useEffect(() => {
     fetch(API_URL + "services")
@@ -39,7 +38,30 @@ const addSpace = () => {
       .catch(err => {
         console.log(err)
       })
+
+    getLocation();
+
   }, [])
+
+  function HandleMapEvents() {
+    const map = useMapEvents({
+      click: (e) => {
+        const { lat, lng } = e.latlng;
+        console.log(lat, lng)
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+          .then(response => response.json())
+          .then(data => {
+            setCenter([lat, lng])
+            setAproximateLocation([parseFloat(data.lat) , parseFloat(data.lon)])
+          });
+      },
+      locationfound: (location) => {
+        console.log('location found:', location)
+      },
+    })
+    return null
+  }
+
 
   return (
     <div>
@@ -58,18 +80,44 @@ const addSpace = () => {
         </Grid>
 
         <Grid item xs={5.5}>
-          <Typography variant="h1" sx={{
-            fontSize: 18,
-            textAlign: 'center',
-            margin: 3
-          }}>
-            Selecciona una dirección aproximada:
-          </Typography>
-          <MapContainer center={[41.391306159158506, 2.179069519042969]} zoom={13}>
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={[41.391306159158506, 2.179069519042969]}>
-            </Marker>
-          </MapContainer>
+
+          {
+            center.length > 0
+              ? (
+                <>
+                  <Typography variant="h1" sx={{
+                    fontSize: 18,
+                    textAlign: 'center',
+                    margin: 9
+                  }}>
+                    Selecciona una dirección aproximada:
+                  </Typography>
+                  <MapContainer center={center} zoom={13}>
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                    <HandleMapEvents />
+                    {
+                      aproximateLocation.length>0
+                        ? (
+                          <Marker position={aproximateLocation}>
+                          </Marker>
+                        )
+                        : (' ')
+                    }
+                  </MapContainer>
+                </>
+              )
+              : (
+                <Box sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  marginTop: 52
+                }}>
+                  <CircularProgress />
+                </Box>
+              )
+          }
+
         </Grid>
         <Grid xs={6.5} sx={{
           display: 'flex',
@@ -88,7 +136,6 @@ const addSpace = () => {
                 flexDirection: 'column',
                 justifyContent: 'space-between',
               }}>
-
                 <TextField
                   className="space-field space-name"
                   label="Nombre"
@@ -159,7 +206,7 @@ const addSpace = () => {
                   </Box>
 
                   <PublicPrivateSwitch />
-                 
+
                 </FormControl>
 
                 <Button variant="contained" component="label" sx={{
