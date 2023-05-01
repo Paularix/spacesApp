@@ -1,0 +1,18 @@
+.leaflet-container{
+    margin-left: 15px;
+    border-radius: 5px;
+    width: 100%;
+    height: 50vh;
+}
+
+.space-field.space-name {
+	margin: 14px;
+	max-width: 600px;
+	min-width: 300px;
+}
+
+.space-field.space-description {
+    margin: 14px;
+	max-width: 600px;
+	min-width: 300px;
+}

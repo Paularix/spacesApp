@@ -19,9 +19,8 @@ import Divider from '@mui/material/Divider';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import jwt_decode from 'jwt-decode'
-
-
-
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import DomainAddIcon from '@mui/icons-material/DomainAdd';
 
 const pages = [];
 
@@ -45,8 +44,7 @@ function ResponsiveAppBar() {
           }
         }
       }, [])
-
-
+      
     const openUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -155,6 +153,31 @@ function ResponsiveAppBar() {
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
                                                     <AccountCircleIcon/>
                                                     <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">Profile</Typography>
+                                                </MenuItem>
+                                            </Link>
+                                            <Divider />
+                                            <Link
+                                                style={{
+                                                    textDecoration: 'none',
+                                                    color: 'black'
+                                                }}
+                                                to="/mySpaces"
+                                            >
+                                                <MenuItem style={menuItem} onClick={toggleUserMenu}>
+                                                    <ApartmentIcon/>
+                                                    <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">My spaces</Typography>
+                                                </MenuItem>
+                                            </Link>
+                                            <Link
+                                                style={{
+                                                    textDecoration: 'none',
+                                                    color: 'black'
+                                                }}
+                                                to="/addSpace"
+                                            >
+                                                <MenuItem style={menuItem} onClick={toggleUserMenu}>
+                                                    <DomainAddIcon/>
+                                                    <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">Add Space</Typography>
                                                 </MenuItem>
                                             </Link>
                                             <Divider />
