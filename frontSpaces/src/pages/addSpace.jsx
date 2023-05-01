@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/material';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Button, CardActionArea, CardActions, TextField } from '@mui/material';
@@ -13,11 +13,17 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { API_URL } from '../apiconfig';
 import PublicPrivateSwitch from '../components/PublicPrivateSwitch';
 import './addSpace.css';
+import GlobalContext from "../context/GlobalContext";
+import { useNavigate } from 'react-router-dom';
 
 const addSpace = () => {
+  const goTo = useNavigate();
+
   const [services, setServices] = useState([])
   const [center, setCenter] = useState([]);
   const [aproximateLocation, setAproximateLocation] = useState([])
+  const { user, setUser, error, setError } = useContext(GlobalContext)
+
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(coords);
@@ -30,17 +36,21 @@ const addSpace = () => {
   }
 
   useEffect(() => {
-    fetch(API_URL + "services")
-      .then(res => res.json())
-      .then(res => {
-        setServices([...services, ...res.data])
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    if (user.token) {
+      fetch(API_URL + "services")
+        .then(res => res.json())
+        .then(res => {
+          setServices([...services, ...res.data])
+        })
+        .catch(err => {
+          console.log(err)
+        })
 
-    getLocation();
-
+      getLocation();
+    } else {
+      setError("Not authentified.")
+      goTo("/error")
+    }
   }, [])
 
   function HandleMapEvents() {
@@ -52,7 +62,7 @@ const addSpace = () => {
           .then(response => response.json())
           .then(data => {
             setCenter([lat, lng])
-            setAproximateLocation([parseFloat(data.lat) , parseFloat(data.lon)])
+            setAproximateLocation([parseFloat(data.lat), parseFloat(data.lon)])
           });
       },
       locationfound: (location) => {
@@ -64,13 +74,14 @@ const addSpace = () => {
 
 
   return (
-    <div>
+    <div className='add-space-container'>
       <Grid container spacing={1}>
         <Grid item xs={5.5}>
         </Grid>
         <Grid item xs={6.5} sx={{
           display: 'flex',
           justifyContent: 'center',
+          marginTop:3
         }}>
           <Typography variant="h1" sx={{
             fontSize: 32,
@@ -96,7 +107,7 @@ const addSpace = () => {
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <HandleMapEvents />
                     {
-                      aproximateLocation.length>0
+                      aproximateLocation.length > 0
                         ? (
                           <Marker position={aproximateLocation}>
                           </Marker>

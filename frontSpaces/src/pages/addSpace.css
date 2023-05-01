@@ -1,4 +1,9 @@
-.leaflet-container{
+.add-space-container {
+    background-color: #fafafa;
+    padding: 15px;
+}
+
+.leaflet-container {
     margin-left: 15px;
     border-radius: 5px;
     width: 100%;
@@ -6,13 +11,13 @@
 }
 
 .space-field.space-name {
-	margin: 14px;
-	max-width: 600px;
-	min-width: 300px;
+    margin: 14px;
+    max-width: 600px;
+    min-width: 300px;
 }
 
 .space-field.space-description {
     margin: 14px;
-	max-width: 600px;
-	min-width: 300px;
+    max-width: 600px;
+    min-width: 300px;
 }
