@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/material';
@@ -8,11 +8,55 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { Button, CardActionArea, CardActions, TextField } from '@mui/material';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Checkbox from '@mui/material/Checkbox';
+
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+
 
 import './addSpace.css';
 import { display } from '@mui/system';
 
 const addSpace = () => {
+  const services = [
+    {
+      id: 1,
+      name: "Aire Acondicionado",
+      value: "Aire Acondicionado",
+    },
+    {
+      id: 2,
+      name: "Sillas",
+      value: "Sillas"
+
+    },
+    {
+      id: 3,
+      name: "Microondas",
+      value: "Microondas"
+
+    },
+    {
+      id: 4,
+      name: "Mesas",
+      value: "Mesas"
+
+    }
+  ]
+
+  const [selectedServices, setSelectedServices] = useState([services[1]]);
+
+  const handleChange = (event) => {
+    setSelectedServices(
+      ...selectedServices,
+      event.target.value
+    );
+  };
+
   return (
     <div>
       <Grid container spacing={1}>
@@ -51,7 +95,6 @@ const addSpace = () => {
             marginLeft: 4,
             marginRight: 4,
             marginTop: 2,
-            //marginLeft: 6
           }}>
             <CardContent>
 
@@ -92,18 +135,22 @@ const addSpace = () => {
                 <TextField
                   className="space-field space-name"
                   label="Dirección"
-                  helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva"
+                  helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."
                   size="small"
                   required
                 />
-                <Button size="small" variant="contained" component="label" sx={{
-                  background:'#7879F1',
+
+                <Button variant="outlined" component="label" sx={{
+                  color: '#7879F1',
+                  borderColor: '#7879F1',
                   marginLeft: 1.78,
+                  marginTop: 1,
                   marginRight: 1.78,
                   boxShadow: 'none',
                   justifyItems: 'center',
                   '&:hover': {
-                    background:'#7879F1',
+                    color: '#7879F1',
+                    borderColor: '#7879F1',
                     boxShadow: 'none',
                   },
                 }}>
@@ -111,7 +158,36 @@ const addSpace = () => {
                   <input hidden accept="image/*" multiple type="file" />
                 </Button>
 
+                <FormControl sx={{ m: 1.78, marginTop: 3.4, minWidth: 120 }}>
+                  <Box sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap'
+                  }}>
+                    {
+                      services.map((service, index) => (
+                        <FormControlLabel key={index} control={<Checkbox />} value={service.value} label={service.name} />
+                      ))
+                    }
+                  </Box>
 
+
+                </FormControl>
+
+                <Button variant="contained" component="label" sx={{
+                  background: '#7879F1',
+                  marginLeft: 1.78,
+                  marginTop: 1,
+                  marginRight: 1.78,
+                  boxShadow: 'none',
+                  justifyItems: 'center',
+                  '&:hover': {
+                    background: '#7879F1',
+                    boxShadow: 'none',
+                  },
+                }}>
+                  Guardar
+                  <input hidden accept="image/*" multiple type="file" />
+                </Button>
               </Grid>
 
 
