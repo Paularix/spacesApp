@@ -3,6 +3,7 @@ import multer from 'multer';
 import jsonwebtoken from 'jsonwebtoken';
 import {sequelize} from "../loadSequelize.js";
 import {Spaces} from '../models/Models.js';
+import multer from 'multer';
 import { authenticate, authError } from './middleware.js';
 
 const router = express.Router();
@@ -83,6 +84,69 @@ router.get("/auth/mySpaces", [authenticate, authError], (req, res) => {
             })
 
     }
+})
+
+// POST subir espacio
+// @desc ruta protegida para subir espacio 
+router.post("/auth", [authenticate, authError], (req, res) => {
+
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+
+        upload(req, res, function (err) {
+            if (err) {
+                console.log("error uploading the file")
+                return res.status(500).send("Error uploading file")
+            } else {
+                console.log("file uploaded")
+                Users.findOne({ where: { id: decoded.id } })
+                    .then(user => {
+
+                        user.update({
+                            profile_picture: req.file.originalname
+                        })
+                        console.log("filename saved")
+
+                    })
+                    .catch(error => {
+                        console.log("error saving filename")
+
+                        res.json({
+                            ok: false,
+                            error: error.message
+                        })
+                    })
+                return res.status(200).send(req.file)
+            }
+
+        })
+    // const token = req.headers.authorization || ''
+    // if (token) {
+    //     const decoded = jsonwebtoken.decode(token)
+    //     sequelize.sync().then(() => {
+    //         Spaces.findAll({ where: { rid_host_user: decoded.id } })
+    //             .then(spaces => {
+    //                 res.status(200).json({
+    //                     ok: true,
+    //                     data: spaces
+    //                 })
+    //             })
+    //             .catch((error) => {
+    //                 res.status(400).json({
+    //                     ok: false,
+    //                     error
+    //                 })
+    //             })
+    //     })
+    //         .catch((error) => {
+    //             res.status(400).json({
+    //                 ok: false,
+    //                 error
+    //             })
+    //         })
+
+    // }
 })
 
 

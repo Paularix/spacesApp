@@ -275,7 +275,8 @@ router.put("/auth/profile", [authenticate, authError], (req, res) => {
     }
 })
 
-
+// PUT
+// @desc guardar foto de perfil
 router.put('/auth/profilepicture', [authenticate, authError], (req, res, next) => {
     const token = req.headers.authorization || ''
     console.log(req.body)
