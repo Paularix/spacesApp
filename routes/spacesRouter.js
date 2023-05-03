@@ -3,7 +3,6 @@ import multer from 'multer';
 import jsonwebtoken from 'jsonwebtoken';
 import {sequelize} from "../loadSequelize.js";
 import {Spaces} from '../models/Models.js';
-import multer from 'multer';
 import { authenticate, authError } from './middleware.js';
 
 const router = express.Router();
@@ -100,27 +99,26 @@ router.post("/auth", [authenticate, authError], (req, res) => {
                 return res.status(500).send("Error uploading file")
             } else {
                 console.log("file uploaded")
-                Users.findOne({ where: { id: decoded.id } })
-                    .then(user => {
 
-                        user.update({
-                            profile_picture: req.file.originalname
-                        })
-                        console.log("filename saved")
+                sequelize.sync().then(() => {
 
+                    Spaces.create(req.body)
+                        .then((item) => res.json({ ok: true, data: item }))
+                        .catch((error) => res.json({ ok: false, error: error.message }))
+            
+                }).catch((error) => {
+                    res.json({
+                        ok: false,
+                        error: error.message
                     })
-                    .catch(error => {
-                        console.log("error saving filename")
+                });
 
-                        res.json({
-                            ok: false,
-                            error: error.message
-                        })
-                    })
                 return res.status(200).send(req.file)
             }
 
         })
+    }
+})
     // const token = req.headers.authorization || ''
     // if (token) {
     //     const decoded = jsonwebtoken.decode(token)
@@ -147,7 +145,7 @@ router.post("/auth", [authenticate, authError], (req, res) => {
     //         })
 
     // }
-})
+//})
 
 
 // POST, creació d'un nou spaces

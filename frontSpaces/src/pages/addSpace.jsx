@@ -176,7 +176,6 @@ const addSpace = () => {
 
         <Grid item xs={5.5}>
 
-
           {
             center.length > 0
               ? (
@@ -213,7 +212,6 @@ const addSpace = () => {
                 </Box>
               )
           }
-
 
         </Grid>
         <Grid item xs={6.5} sx={{
@@ -324,7 +322,6 @@ const addSpace = () => {
 
 
                   <PublicPrivateSwitch />
-
 
                 </FormControl>
 
