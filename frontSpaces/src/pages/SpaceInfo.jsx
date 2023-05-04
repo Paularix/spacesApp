@@ -1,40 +1,21 @@
 import React, { useState } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import './SpaceInfo.css';
 
 const SpaceInfo = () => {
   const [startDate, setStartDate] = useState(new Date());
-
-  const CustomPrevArrow = (props) => {
-    const { onClick } = props;
-    return (
-      <button className="slick-arrow slick-prev" onClick={onClick}>
-        <i className="fa fa-chevron-left"></i>
-      </button>
-    );
-  };
-
-  const CustomNextArrow = (props) => {
-    const { onClick } = props;
-    return (
-      <button className="slick-arrow slick-next" onClick={onClick}>
-        <i className="fa fa-chevron-right"></i>
-      </button>
-    );
-  };
+  const [endDate, setEndDate] = useState(new Date());
 
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
-    slidesToScroll: 1,
-    prevArrow: <CustomPrevArrow />,
-    nextArrow: <CustomNextArrow />
+    slidesToScroll: 1
   };
 
   return (
@@ -44,23 +25,33 @@ const SpaceInfo = () => {
         <div className="col-md-6">
           <Slider {...settings}>
             <div className="slide">
-              <img src="https://via.placeholder.com/800x400" alt="Foto 1" />
+              <img src="/public/vite1" alt="Foto 1" />
             </div>
             <div className="slide">
-              <img src="https://via.placeholder.com/800x400" alt="Foto 2" />
+              <img src="/public/vite2" alt="Foto 2" />
             </div>
             <div className="slide">
-              <img src="https://via.placeholder.com/800x400" alt="Foto 3" />
+              <img src="/public/vite" alt="Foto 3" />
+            </div>
+            <div className="slide">
+              <img src="https://via.placeholder.com/800x400/FFFF00/000000" alt="Foto 4" />
             </div>
           </Slider>
         </div>
-        <div className="col-md-6">
+        <div className="descriptionSpace">
           <p>Descripción del establecimiento.</p>
           <h3>Precio: $100 por noche</h3>
           <div>
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
+              dateFormat="dd/MM/yyyy"
+            />
+          </div>
+          <div>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
               dateFormat="dd/MM/yyyy"
             />
           </div>
