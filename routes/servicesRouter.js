@@ -1,10 +1,14 @@
 import express from 'express';
 import multer from 'multer';
-import {sequelize} from "../loadSequelize.js";
-import {Services} from '../models/Models.js';
+import { sequelize } from "../loadSequelize.js";
+import { Services } from '../models/Models.js';
 import { authenticate, authError } from './middleware.js';
 
+import { Spaces } from '../models/Models.js';
+import { SpaceServices } from '../models/Models.js';
 
+
+Services.belongsToMany(Spaces, {through: "SpaceServices", foreignKey: 'rid_service'})
 
 const router = express.Router();
 
@@ -51,16 +55,23 @@ router.get('/auth', [authenticate, authError], function (req, res, next) {
     sequelize.sync().then(() => {
 
         Services.findAll()
-            .then(services => res.json({
-                ok: true,
-                data: services
-            }))
-            .catch(error => res.json({
-                ok: false,
-                error: error
-            }))
+            .then(services => {
+                console.log(services)
+                res.json({
+                    ok: true,
+                    data: services
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                res.json({
+                    ok: false,
+                    error: error
+                })
+            })
 
     }).catch((error) => {
+        console.log(error)
         res.json({
             ok: false,
             error: error

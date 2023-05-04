@@ -29,11 +29,11 @@ const addSpace = () => {
     description: "",
     capacity: "",
     price: "",
-    adress: "",
+    address: "",
     services: [],
     approximateCoords: []
   })
-  const { user, setUser, error, setError } = useContext(GlobalContext)
+  const {user, setUser, error, setError } = useContext(GlobalContext)
 
 
   function getLocation() {
@@ -52,18 +52,16 @@ const addSpace = () => {
     if (user.token) {
       const options = {
         headers: {
-          authorization: user.token
+          'authorization': user.token
         }
       }
       fetch(API_URL + "services/auth", options)
         .then(res => res.json())
         .then(res => {
           if (res.ok == true) {
-            console.log(res)
             setServices([...services, ...res.data])
-            console.log(services)
           } else {
-            setError(res.error)
+            setError(res.error.name)
             goTo("/error")
           }
         })
@@ -134,21 +132,18 @@ const addSpace = () => {
   const postSpace = () => {
     const data = new FormData()
     data.append('file', image)
-    //data.append('newSpace', newSpace)
+    data.append('newSpace', JSON.stringify(newSpace))
 
-
-     const options = {
-       method: 'POST',
-       headers: {
-        'content-type': 'application/json',
+    const options = {
+      method: 'POST',
+      body: data, 
+      headers: {
         'authorization': user.token,
-       },
-       body: data
-     }
+      }
+    }
 
+    console.log(data)
 
-
-    //console.log(options.body)
     fetch(API_URL + "spaces/auth", options)
 
 
@@ -224,8 +219,6 @@ const addSpace = () => {
             marginTop: 2,
           }}>
             <CardContent>
-
-
               <Grid item sx={{
                 marginTop: 2,
                 display: 'flex',
@@ -270,8 +263,8 @@ const addSpace = () => {
                 <TextField
                   className="space-field space-name"
                   label="Dirección"
-                  value={newSpace.adress}
-                  onChange={(e) => setNewSpace({ ...newSpace, adress: e.target.value })}
+                  value={newSpace.address}
+                  onChange={(e) => setNewSpace({ ...newSpace, address: e.target.value })}
                   helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."
                   size="small"
                   required
@@ -293,10 +286,8 @@ const addSpace = () => {
                   },
                 }}>
                   Imagen del espacio
-                  <input hidden accept="image/*" multiple type="file" onChange={(e) => savePhoto(e)}
-                  />
+                  <input hidden accept="image/*" multiple type="file" onChange={(e) => savePhoto(e)}/>
                 </Button>
-
 
                 <FormControl sx={{ m: 1.78, marginTop: 3.4, minWidth: 120 }}>
                   <Typography variant="h6" sx={{
@@ -343,14 +334,8 @@ const addSpace = () => {
                   Guardar
                 </Button>
               </Grid>
-
-
-
-
             </CardContent>
             <CardActions>
-
-
             </CardActions>
           </Card>
         </Grid>

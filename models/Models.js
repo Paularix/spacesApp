@@ -52,4 +52,10 @@ export const Services = sequelize.define('Services', {
     name: dataTypes.STRING,
 }, { tableName: 'services', timestamps: false });
 
+export const SpaceServices = sequelize.define('SpaceServices', {
+    rid_space: dataTypes.INTEGER,
+    rid_service: dataTypes.INTEGER
+    
+}, { tableName: 'space_services', timestamps: false });
+
 
