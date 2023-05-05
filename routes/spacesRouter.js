@@ -117,31 +117,41 @@ router.post("/auth", [authenticate, authError], (req, res) => {
                 const decoded = jsonwebtoken.decode(token)
                 const newSpace = JSON.parse(req.body.newSpace)
 
+                console.log(newSpace.approximateCoords[0])
+                console.log(newSpace.approximateCoords[1])
+
+
                 const spaceToBeSaved = {
                     name: newSpace.name,
                     address: newSpace.address,
                     description: newSpace.description,
+                    rules: newSpace.rules,
                     capacity: newSpace.capacity,
                     price: Number(newSpace.price),
-                    rid_host_user: Number(decoded.id)
+                    rid_host_user: Number(decoded.id),
+                    status: newSpace.status,
+                    lat: newSpace.approximateCoords[0],
+                    long: newSpace.approximateCoords[1],
                 }
                 
+                console.log(spaceToBeSaved)
+
                 Spaces.create(spaceToBeSaved)
                 .then(item => {
                     if (req.file) {
-                        item.update({space_picture: req.file.filename})
+                        item.update({
+                            space_picture: req.file.filename
+                        })
                     }
-
                     return item
                 })
                 .then(item => {
                     for (let service of newSpace.services) {
-                        Spaces.addSpaceServices({
+                        SpaceServices.create({
                             rid_space: item.id,
-                            rid_service: 0
+                            rid_service: service
                         })
                     }
-
                     return item
                 })
                 .then((item) => {

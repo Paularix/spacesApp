@@ -55,12 +55,28 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     },
 }));
 
-export default function PublicPrivateSwitch() {
+export default function PublicPrivateSwitch({ newSpace, setNewSpace }) {
+
+    const handlePublicPrivate = (e) => {
+        if (newSpace.status == "private") {
+            setNewSpace({
+                ...newSpace,
+                status: "public"
+            })
+        } else {
+            setNewSpace({
+                ... newSpace,
+                status: "private"
+            })
+        }
+    }
+
     return (
         <FormGroup sx={{
             marginTop: 3
         }}>
             <FormControlLabel
+                onChange={((e) => handlePublicPrivate(e))}
                 control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
                 label="¿Quieres publicar este espacio?"
             />

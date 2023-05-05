@@ -23,6 +23,9 @@ export const Spaces = sequelize.define('Spaces', {
     rules: dataTypes.STRING,
     space_picture: dataTypes.STRING,
     rid_host_user: dataTypes.INTEGER,
+    lat: dataTypes.FLOAT,
+    long:dataTypes.FLOAT,
+    status: dataTypes.STRING,
 }, { tableName: 'spaces', timestamps: false });
 
 

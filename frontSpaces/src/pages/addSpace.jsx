@@ -20,20 +20,23 @@ import { useNavigate } from 'react-router-dom';
 const addSpace = () => {
   const goTo = useNavigate();
 
-
   const [services, setServices] = useState([])
   const [center, setCenter] = useState([]);
   const [image, setImage] = useState()
+
   const [newSpace, setNewSpace] = useState({
     name: "",
     description: "",
     capacity: "",
     price: "",
     address: "",
+    rules: "",
+    status: "private",
     services: [],
     approximateCoords: []
   })
-  const {user, setUser, error, setError } = useContext(GlobalContext)
+
+  const { user, setUser, error, setError } = useContext(GlobalContext)
 
 
   function getLocation() {
@@ -58,6 +61,7 @@ const addSpace = () => {
       fetch(API_URL + "services/auth", options)
         .then(res => res.json())
         .then(res => {
+          console.log(res.data)
           if (res.ok == true) {
             setServices([...services, ...res.data])
           } else {
@@ -126,9 +130,6 @@ const addSpace = () => {
     setImage(e.target.files[0])
   }
 
-
-
-
   const postSpace = () => {
     const data = new FormData()
     data.append('file', image)
@@ -136,17 +137,12 @@ const addSpace = () => {
 
     const options = {
       method: 'POST',
-      body: data, 
+      body: data,
       headers: {
         'authorization': user.token,
       }
     }
-
-    console.log(data)
-
     fetch(API_URL + "spaces/auth", options)
-
-
   }
 
 
@@ -159,7 +155,6 @@ const addSpace = () => {
         <Grid item xs={6.5} sx={{
           display: 'flex',
           justifyContent: 'center',
-          marginTop: 3
         }}>
           <Typography variant="h1" sx={{
             fontSize: 32,
@@ -178,7 +173,8 @@ const addSpace = () => {
                   <Typography variant="h1" sx={{
                     fontSize: 18,
                     textAlign: 'center',
-                    margin: 9
+                    marginTop: 28,
+                    marginBottom: 3
                   }}>
                     Selecciona una dirección aproximada:
                   </Typography>
@@ -244,6 +240,16 @@ const addSpace = () => {
                   rows={4}
                 />
                 <TextField
+                  className="space-field space-description"
+                  id="outlined-multiline-static"
+                  label="Reglas"
+                  value={newSpace.rules}
+                  onChange={(e) => setNewSpace({ ...newSpace, rules: e.target.value })}
+                  multiline
+                  required
+                  rows={4}
+                />
+                <TextField
                   className="space-field space-name"
                   label="Capacidad"
                   value={newSpace.capacity}
@@ -286,7 +292,7 @@ const addSpace = () => {
                   },
                 }}>
                   Imagen del espacio
-                  <input hidden accept="image/*" multiple type="file" onChange={(e) => savePhoto(e)}/>
+                  <input hidden accept="image/*" multiple type="file" onChange={(e) => savePhoto(e)} />
                 </Button>
 
                 <FormControl sx={{ m: 1.78, marginTop: 3.4, minWidth: 120 }}>
@@ -305,14 +311,17 @@ const addSpace = () => {
                           control={<Checkbox
                             onChange={(e) => handleServiceCheck(e)}
                           />}
-                          value={service.name}
+                          value={service.id}
                           label={service.name} />
                       ))
                     }
                   </Box>
 
 
-                  <PublicPrivateSwitch />
+                  <PublicPrivateSwitch 
+                    newSpace={newSpace} 
+                    setNewSpace={setNewSpace} 
+                  />
 
                 </FormControl>
 
