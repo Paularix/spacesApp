@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Button, CardActionArea, CardActions, TextField } from '@mui/material';
+import { Button, CardActions, TextField } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -15,6 +15,7 @@ import PublicPrivateSwitch from '../components/PublicPrivateSwitch';
 import './addSpace.css';
 import GlobalContext from "../context/GlobalContext";
 import { useNavigate } from 'react-router-dom';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 
 const addSpace = () => {
@@ -33,8 +34,80 @@ const addSpace = () => {
     rules: "",
     status: "private",
     services: [],
-    approximateCoords: []
+    approximateCoords: [],
+    errors: {
+      name: [],
+      description: [],
+      capacity: [],
+      price: [],
+      address: [],
+      rules: [],
+      services: [],
+      approximateCoords: [],
+    }
   })
+
+  const validate = (field, value) => {
+
+    let errors = [...newSpace.errors[field]];
+
+    switch (field) {
+      case "name":
+        if (!value) {
+          errors.push("Por favor, intruduce un nombre para tu espacio.")
+        }
+        break
+      case "description":
+        if (!value) {
+          errors.push("Por favor, intruduce una descripción para tu espacio.")
+        }
+        break
+      case "capacity":
+        if (value == 0) {
+          errors.push("El aforo no puede ser cero.");
+        }
+        break
+      case "price":
+        if (value == 0) {
+          errors.push("El precio no puede ser 0");
+        }
+        break
+      case "address":
+        if (!value) {
+          errors.push("Por favor, intruduce una dirección para tu espacio.")
+        }
+        break
+      case "services":
+        if (value.length == 0) {
+          errors.push("¿De verdad no tienes ninguno de los servicios de la lista?");
+        }
+        break
+      case "approximateCoords":
+        if (value.length == 0) {
+          errors.push("Indicanos en el mapa una ubicación aproximada para poder mostrarla al ofertar el espacio.");
+        }
+        break
+      case "rules":
+        if (!value) {
+          errors.push("¿De verdad no hay ninguna regla?");
+        }
+        break
+
+      default:
+        break
+    }
+
+    setNewSpace((prevState) => ({
+      ...prevState,
+      errors: {
+        ...prevState.errors,
+        [field]: errors,
+      },
+    }))
+  }
+
+
+
 
   const { user, setUser, error, setError } = useContext(GlobalContext)
 
@@ -85,6 +158,7 @@ const addSpace = () => {
 
 
   const handleServiceCheck = (e) => {
+    
     if (newSpace.services.includes(e.target.value)) {
       setNewSpace({
         ...newSpace,
@@ -92,6 +166,13 @@ const addSpace = () => {
           ...newSpace.services.filter(service => service != e.target.value)
         ]
       })
+      setNewSpace((prevState) => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          services: [],
+        }
+      }))
     } else {
       setNewSpace({
         ...newSpace,
@@ -100,6 +181,13 @@ const addSpace = () => {
           e.target.value
         ]
       })
+      setNewSpace((prevState) => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          services: [],
+        }
+      }))
     }
   }
 
@@ -107,6 +195,7 @@ const addSpace = () => {
   function HandleMapEvents() {
     const map = useMapEvents({
       click: (e) => {
+ 
         const { lat, lng } = e.latlng;
         fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
           .then(response => response.json())
@@ -114,9 +203,15 @@ const addSpace = () => {
             setCenter([lat, lng])
             setNewSpace({
               ...newSpace,
-              approximateCoords: [parseFloat(data.lat), parseFloat(data.lon)]
+              approximateCoords: [parseFloat(data.lat), parseFloat(data.lon)],
+              errors: {
+                ...newSpace.errors,
+                approximateCoords: [],
+              }
             })
           });
+
+          
       },
       locationfound: (location) => {
         console.log('location found:', location)
@@ -126,24 +221,74 @@ const addSpace = () => {
   }
 
 
+
+  const handleChange = (e) => {
+    setNewSpace((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    setNewSpace((prevState) => ({
+      ...prevState,
+      errors: {
+        ...prevState.errors,
+        [e.target.name]: [],
+      }
+    }))
+  };
+
+
   const savePhoto = (e) => {
     setImage(e.target.files[0])
   }
 
-  const postSpace = () => {
-    const data = new FormData()
-    data.append('file', image)
-    data.append('newSpace', JSON.stringify(newSpace))
 
-    const options = {
-      method: 'POST',
-      body: data,
-      headers: {
-        'authorization': user.token,
+  const postSpace = () => {
+
+    validate("name", newSpace.name)
+    validate("description", newSpace.description)
+    validate("rules", newSpace.rules)
+    validate("price", newSpace.price)
+    validate("capacity", newSpace.capacity)
+    validate("address", newSpace.address)
+    validate("services", newSpace.services)
+    validate("approximateCoords", newSpace.approximateCoords)
+
+    if (newSpace.errors.name.lentgh == 0
+      && newSpace.errors.description.lentgh == 0
+      && newSpace.errors.rules.lentgh == 0
+      && newSpace.errors.price.lentgh == 0
+      && newSpace.errors.capacity.lentgh == 0
+      && newSpace.errors.address.lentgh == 0
+      && newSpace.errors.services.lentgh == 0
+      && newSpace.errors.approximateCoords.lentgh == 0
+    ) {
+      const data = new FormData()
+      data.append('file', image)
+      data.append('newSpace', JSON.stringify(newSpace))
+
+      const options = {
+        method: 'POST',
+        body: data,
+        headers: {
+          'authorization': user.token,
+        }
       }
+      fetch(API_URL + "spaces/auth", options)
+        .then((res) => {
+          res.json()
+        })
+        .then((res) => {
+          if (res.ok == true) {
+            goTo("/mySpaces")
+          } else {
+            setError(res.error)
+            goTo("/error")
+          }
+        })
+        .catch((err) => {
+          setError(err.error)
+          goTo("/error")
+        })
     }
-    fetch(API_URL + "spaces/auth", options)
   }
+
 
 
   return (
@@ -190,6 +335,18 @@ const addSpace = () => {
                         : (' ')
                     }
                   </MapContainer>
+                  {newSpace.errors.approximateCoords
+                    ? (newSpace.errors.approximateCoords.map((error, index) => (
+                      <Typography variant="p" sx={{
+                        fontSize: 14,
+                        color: '#e61919'
+                      }}
+                        key={index}>
+                        {error}
+                      </Typography>
+                    )))
+                    : (' ')
+                  }
                 </>
               )
               : (
@@ -222,59 +379,134 @@ const addSpace = () => {
                 justifyContent: 'space-between',
               }}>
                 <TextField
+                  name="name"
                   className="space-field space-name"
-                  label="Nombre"
+                  label="Dinos el nombre del espacio"
                   value={newSpace.name}
-                  onChange={(e) => setNewSpace({ ...newSpace, name: e.target.value })}
+                  onChange={(e) => handleChange(e)}
                   size="small"
-                  required
                 />
+                {newSpace.errors.name
+                  ? (newSpace.errors.name.map((error, index) => (
+                    <Typography variant="p" sx={{
+                      fontSize: 14,
+                      color: '#e61919'
+                    }}
+                      key={index}>
+                      {error}
+                    </Typography>
+                  )))
+                  : (' ')
+                }
                 <TextField
                   className="space-field space-description"
                   id="outlined-multiline-static"
-                  label="Descripción"
+                  label="¿Superficie? ¿qué se suele organizar en él?"
                   value={newSpace.description}
-                  onChange={(e) => setNewSpace({ ...newSpace, description: e.target.value })}
+                  onChange={(e) => handleChange(e)}
+                  name="description"
                   multiline
-                  required
                   rows={4}
                 />
+                {newSpace.errors.description
+                  ? (newSpace.errors.description.map((error, index) => (
+                    <Typography variant="p" sx={{
+                      fontSize: 14,
+                      color: '#e61919'
+                    }}
+                      key={index}>
+                      {error}
+                    </Typography>
+                  )))
+                  : (' ')
+                }
                 <TextField
                   className="space-field space-description"
                   id="outlined-multiline-static"
-                  label="Reglas"
+                  label="¡Reglas! ¿Fumar? ¿Ruido? ¿Horario? ¿Limpieza?"
                   value={newSpace.rules}
-                  onChange={(e) => setNewSpace({ ...newSpace, rules: e.target.value })}
+                  onChange={(e) => handleChange(e)}
+                  name="rules"
                   multiline
-                  required
                   rows={4}
                 />
+                {newSpace.errors.rules
+                  ? (newSpace.errors.rules.map((error, index) => (
+                    <Typography variant="p" sx={{
+                      fontSize: 14,
+                      color: '#e61919'
+                    }}
+                      key={index}>
+                      {error}
+                    </Typography>
+                  )))
+                  : (' ')
+                }
                 <TextField
                   className="space-field space-name"
-                  label="Capacidad"
+                  label="Aforo"
+                  type="number"
                   value={newSpace.capacity}
-                  onChange={(e) => setNewSpace({ ...newSpace, capacity: e.target.value })}
+                  onChange={(e) => handleChange(e)}
+                  name="capacity"
                   size="small"
-                  required
+
                 />
+                {newSpace.errors.capacity
+                  ? (newSpace.errors.capacity.map((error, index) => (
+                    <Typography variant="p" sx={{
+                      fontSize: 14,
+                      color: '#e61919'
+                    }}
+                      key={index}>
+                      {error}
+                    </Typography>
+                  )))
+                  : (' ')
+                }
                 <TextField
                   className="space-field space-name"
-                  label="Precio/dia"
+                  label="Precio por dia"
                   value={newSpace.price}
-                  onChange={(e) => setNewSpace({ ...newSpace, price: e.target.value })}
+                  onChange={(e) => handleChange(e)}
+                  name="price"
                   type="number"
                   size="small"
-                  required
+
                 />
+                {newSpace.errors.price
+                  ? (newSpace.errors.price.map((error, index) => (
+                    <Typography variant="p" sx={{
+                      fontSize: 14,
+                      color: '#e61919'
+                    }}
+                      key={index}>
+                      {error}
+                    </Typography>
+                  )))
+                  : (' ')
+                }
                 <TextField
                   className="space-field space-name"
                   label="Dirección"
                   value={newSpace.address}
-                  onChange={(e) => setNewSpace({ ...newSpace, address: e.target.value })}
+                  onChange={(e) => handleChange(e)}
+                  name="address"
                   helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."
                   size="small"
-                  required
                 />
+                {newSpace.errors.address
+                  ? (newSpace.errors.address.map((error, index) => (
+                    <Typography variant="p" sx={{
+                      fontSize: 14,
+                      color: '#e61919'
+                    }}
+                      key={index}>
+                      {error}
+                    </Typography>
+                  )))
+                  : (' ')
+                }
 
 
                 <Button variant="outlined" component="label" sx={{
@@ -294,6 +526,30 @@ const addSpace = () => {
                   Imagen del espacio
                   <input hidden accept="image/*" multiple type="file" onChange={(e) => savePhoto(e)} />
                 </Button>
+                {image
+                  ? (
+                    <Grid item xs={12} sx={{
+                      height: 16,
+                      width: 500
+                    }}>
+
+                      <AttachFileIcon sx={{
+                        fontSize: 16,
+                        marginTop: 2,
+                        marginRight: 0.8,
+                      }}>
+                      </AttachFileIcon>
+                      <Typography variant="p" sx={{
+                        fontSize: 16,
+                        textAlign: 'justify',
+                        marginBottom: 1
+                      }}>
+                        {image.name}
+                      </Typography>
+                    </Grid>
+                  )
+                  : (' ')
+                }
 
                 <FormControl sx={{ m: 1.78, marginTop: 3.4, minWidth: 120 }}>
                   <Typography variant="h6" sx={{
@@ -317,10 +573,23 @@ const addSpace = () => {
                     }
                   </Box>
 
+                  {newSpace.errors.services
+                    ? (newSpace.errors.services.map((error, index) => (
+                      <Typography variant="p" sx={{
+                        fontSize: 14,
+                        color: '#e61919'
+                      }}
+                        key={index}>
+                        {error}
+                      </Typography>
+                    )))
+                    : (' ')
+                  }
 
-                  <PublicPrivateSwitch 
-                    newSpace={newSpace} 
-                    setNewSpace={setNewSpace} 
+
+                  <PublicPrivateSwitch
+                    newSpace={newSpace}
+                    setNewSpace={setNewSpace}
                   />
 
                 </FormControl>
