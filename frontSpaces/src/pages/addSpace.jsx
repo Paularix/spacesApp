@@ -16,6 +16,8 @@ import './addSpace.css';
 import GlobalContext from "../context/GlobalContext";
 import { useNavigate } from 'react-router-dom';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import FormHelperText from '@mui/material/FormHelperText';
+
 
 
 const addSpace = () => {
@@ -24,7 +26,7 @@ const addSpace = () => {
   const [services, setServices] = useState([])
   const [center, setCenter] = useState([]);
   const [image, setImage] = useState()
-
+  const [send, setSend] = useState(false)
   const [newSpace, setNewSpace] = useState({
     name: "",
     description: "",
@@ -134,7 +136,6 @@ const addSpace = () => {
       fetch(API_URL + "services/auth", options)
         .then(res => res.json())
         .then(res => {
-          console.log(res.data)
           if (res.ok == true) {
             setServices([...services, ...res.data])
           } else {
@@ -143,8 +144,7 @@ const addSpace = () => {
           }
         })
         .catch(err => {
-          console.log(err)
-          //setError(err)
+          setError(err.message)
           goTo("/error")
         })
 
@@ -156,9 +156,48 @@ const addSpace = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if (send == true) {
+      if (newSpace.errors.name.length == 0
+        && newSpace.errors.description.length == 0
+        && newSpace.errors.rules.length == 0
+        && newSpace.errors.price.length == 0
+        && newSpace.errors.capacity.length == 0
+        && newSpace.errors.services.length == 0
+        && newSpace.errors.approximateCoords.length == 0
+        && newSpace.errors.address.length == 0) {
+        const data = new FormData()
+        data.append('file', image)
+        data.append('newSpace', JSON.stringify(newSpace))
+
+        const options = {
+          method: 'POST',
+          body: data,
+          headers: {
+            'authorization': user.token,
+          }
+        }
+        fetch(API_URL + "spaces/auth", options)
+          .then(res => res.json())
+          .then((res) => {
+            if (res.ok == true) {
+              goTo("/mySpaces")
+            } else {
+              setError(res.error)
+              goTo("/error")
+            }
+          })
+          .catch((err) => {
+            setError(err.error)
+            goTo("/error")
+          })
+      }
+      setSend(false)
+    }
+  }, [newSpace.errors])
 
   const handleServiceCheck = (e) => {
-    
+
     if (newSpace.services.includes(e.target.value)) {
       setNewSpace({
         ...newSpace,
@@ -195,7 +234,7 @@ const addSpace = () => {
   function HandleMapEvents() {
     const map = useMapEvents({
       click: (e) => {
- 
+
         const { lat, lng } = e.latlng;
         fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
           .then(response => response.json())
@@ -211,7 +250,7 @@ const addSpace = () => {
             })
           });
 
-          
+
       },
       locationfound: (location) => {
         console.log('location found:', location)
@@ -239,8 +278,8 @@ const addSpace = () => {
   }
 
 
-  const postSpace = () => {
-
+  const validateAndSend = () => {
+    setSend(true)
     validate("name", newSpace.name)
     validate("description", newSpace.description)
     validate("rules", newSpace.rules)
@@ -249,44 +288,6 @@ const addSpace = () => {
     validate("address", newSpace.address)
     validate("services", newSpace.services)
     validate("approximateCoords", newSpace.approximateCoords)
-
-    if (newSpace.errors.name.lentgh == 0
-      && newSpace.errors.description.lentgh == 0
-      && newSpace.errors.rules.lentgh == 0
-      && newSpace.errors.price.lentgh == 0
-      && newSpace.errors.capacity.lentgh == 0
-      && newSpace.errors.address.lentgh == 0
-      && newSpace.errors.services.lentgh == 0
-      && newSpace.errors.approximateCoords.lentgh == 0
-    ) {
-      const data = new FormData()
-      data.append('file', image)
-      data.append('newSpace', JSON.stringify(newSpace))
-
-      const options = {
-        method: 'POST',
-        body: data,
-        headers: {
-          'authorization': user.token,
-        }
-      }
-      fetch(API_URL + "spaces/auth", options)
-        .then((res) => {
-          res.json()
-        })
-        .then((res) => {
-          if (res.ok == true) {
-            goTo("/mySpaces")
-          } else {
-            setError(res.error)
-            goTo("/error")
-          }
-        })
-        .catch((err) => {
-          setError(err.error)
-          goTo("/error")
-        })
-    }
   }
 
 
@@ -337,13 +338,13 @@ const addSpace = () => {
                   </MapContainer>
                   {newSpace.errors.approximateCoords
                     ? (newSpace.errors.approximateCoords.map((error, index) => (
-                      <Typography variant="p" sx={{
-                        fontSize: 14,
-                        color: '#e61919'
+                      <FormHelperText sx={{
+                        marginLeft: 1.78,
+                        color: '#ba000d'
                       }}
                         key={index}>
                         {error}
-                      </Typography>
+                      </FormHelperText>
                     )))
                     : (' ')
                   }
@@ -379,6 +380,8 @@ const addSpace = () => {
                 justifyContent: 'space-between',
               }}>
                 <TextField
+                  error={newSpace.errors.name.length == 0 ? false : true}
+                  helperText={newSpace.errors.name.length == 0 ? ' ' : newSpace.errors.name}
                   name="name"
                   className="space-field space-name"
                   label="Dinos el nombre del espacio"
@@ -386,41 +389,22 @@ const addSpace = () => {
                   onChange={(e) => handleChange(e)}
                   size="small"
                 />
-                {newSpace.errors.name
-                  ? (newSpace.errors.name.map((error, index) => (
-                    <Typography variant="p" sx={{
-                      fontSize: 14,
-                      color: '#e61919'
-                    }}
-                      key={index}>
-                      {error}
-                    </Typography>
-                  )))
-                  : (' ')
-                }
                 <TextField
+                  error={newSpace.errors.description.length == 0 ? false : true}
+                  helperText={newSpace.errors.description.length == 0 ? ' ' : newSpace.errors.description}
                   className="space-field space-description"
                   id="outlined-multiline-static"
-                  label="¿Superficie? ¿qué se suele organizar en él?"
+                  label="Descripción: Dinos algo... ¿qué se suele organizar en él?"
                   value={newSpace.description}
                   onChange={(e) => handleChange(e)}
                   name="description"
                   multiline
                   rows={4}
                 />
-                {newSpace.errors.description
-                  ? (newSpace.errors.description.map((error, index) => (
-                    <Typography variant="p" sx={{
-                      fontSize: 14,
-                      color: '#e61919'
-                    }}
-                      key={index}>
-                      {error}
-                    </Typography>
-                  )))
-                  : (' ')
-                }
+
                 <TextField
+                  error={newSpace.errors.rules.length == 0 ? false : true}
+                  helperText={newSpace.errors.rules.length == 0 ? ' ' : newSpace.errors.rules}
                   className="space-field space-description"
                   id="outlined-multiline-static"
                   label="¡Reglas! ¿Fumar? ¿Ruido? ¿Horario? ¿Limpieza?"
@@ -430,19 +414,10 @@ const addSpace = () => {
                   multiline
                   rows={4}
                 />
-                {newSpace.errors.rules
-                  ? (newSpace.errors.rules.map((error, index) => (
-                    <Typography variant="p" sx={{
-                      fontSize: 14,
-                      color: '#e61919'
-                    }}
-                      key={index}>
-                      {error}
-                    </Typography>
-                  )))
-                  : (' ')
-                }
+
                 <TextField
+                  error={newSpace.errors.capacity.length == 0 ? false : true}
+                  helperText={newSpace.errors.capacity.length == 0 ? ' ' : newSpace.errors.capacity}
                   className="space-field space-name"
                   label="Aforo"
                   type="number"
@@ -450,21 +425,11 @@ const addSpace = () => {
                   onChange={(e) => handleChange(e)}
                   name="capacity"
                   size="small"
-
                 />
-                {newSpace.errors.capacity
-                  ? (newSpace.errors.capacity.map((error, index) => (
-                    <Typography variant="p" sx={{
-                      fontSize: 14,
-                      color: '#e61919'
-                    }}
-                      key={index}>
-                      {error}
-                    </Typography>
-                  )))
-                  : (' ')
-                }
+
                 <TextField
+                  error={newSpace.errors.price.length == 0 ? false : true}
+                  helperText={newSpace.errors.price.length == 0 ? ' ' : newSpace.errors.price}
                   className="space-field space-name"
                   label="Precio por dia"
                   value={newSpace.price}
@@ -474,39 +439,36 @@ const addSpace = () => {
                   size="small"
 
                 />
-                {newSpace.errors.price
-                  ? (newSpace.errors.price.map((error, index) => (
-                    <Typography variant="p" sx={{
-                      fontSize: 14,
-                      color: '#e61919'
-                    }}
-                      key={index}>
-                      {error}
-                    </Typography>
-                  )))
-                  : (' ')
-                }
+                
                 <TextField
-                  className="space-field space-name"
+                  error={newSpace.errors.address.length == 0 ? false : true}
+                  helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."
+                  className="space-field space-address"
                   label="Dirección"
                   value={newSpace.address}
                   onChange={(e) => handleChange(e)}
                   name="address"
-                  helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."
                   size="small"
+                  padding="none"
+                  sx={{
+                    padding: 0,
+                  }}
                 />
+
                 {newSpace.errors.address
                   ? (newSpace.errors.address.map((error, index) => (
-                    <Typography variant="p" sx={{
-                      fontSize: 14,
-                      color: '#e61919'
+                    <FormHelperText sx={{
+                      marginLeft: 3.55,
+                      color: '#ba000d'
                     }}
                       key={index}>
                       {error}
-                    </Typography>
+                    </FormHelperText>
                   )))
                   : (' ')
                 }
+
+
 
 
                 <Button variant="outlined" component="label" sx={{
@@ -575,13 +537,13 @@ const addSpace = () => {
 
                   {newSpace.errors.services
                     ? (newSpace.errors.services.map((error, index) => (
-                      <Typography variant="p" sx={{
-                        fontSize: 14,
-                        color: '#e61919'
+                      <FormHelperText sx={{
+                        marginLeft: 1.78,
+                        color: '#ba000d'
                       }}
                         key={index}>
                         {error}
-                      </Typography>
+                      </FormHelperText>
                     )))
                     : (' ')
                   }
@@ -607,7 +569,7 @@ const addSpace = () => {
                     boxShadow: 'none',
                   },
                 }}
-                  onClick={() => postSpace()}
+                  onClick={() => validateAndSend()}
                 >
                   Guardar
                 </Button>

@@ -196,6 +196,7 @@ router.post('/login', (req, res) => {
                 {
                     expiredAt: new Date().getTime() + Number(process.env.EXPIRED_AFTER),
                     email: user.email,
+                    profile_picture: user.profile_picture,
                     id: user.id
                 },
                 process.env.SECRET_KEY

@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -33,18 +34,23 @@ function ResponsiveAppBar() {
     useEffect(() => {
         const token = localStorage.token;
         if (token) {
-          const decoded = jwt_decode(token)
-          const { expiredAt, email, id } = decoded
-          if (Number(expiredAt) > new Date().getTime()) {
-            setUser({
-                email,
-                id,
-                token
-            })
-          }
+            const decoded = jwt_decode(token)
+            const { expiredAt, email, id } = decoded
+            if (Number(expiredAt) > new Date().getTime()) {
+                setUser({
+                    email,
+                    id,
+                    token
+                })
+            }
         }
-      }, [])
-      
+    }, [])
+
+    const menuProfileImage = {
+        width: '40px',
+        borderRadius:'20px'
+    }
+
     const openUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -122,12 +128,22 @@ function ResponsiveAppBar() {
 
                                         <Tooltip title="Open settings">
                                             <IconButton onClick={openUserMenu} sx={{ p: 0 }}>
-                                                <Avatar alt="Remy Sharp" />
+                                               { 
+                                               user.profile_picture 
+                                               ? (<img
+                                                    style={menuProfileImage}
+                                                    src={("http://localhost:3080/" + user.profile_picture)}
+                                                    alt=""
+                                                />) 
+                                                :(
+                                                    <Avatar style={menuProfileImage}></Avatar>
+                                                )
+                                                }
                                             </IconButton>
                                         </Tooltip>
                                         <Menu
-                                            sx={{ 
-                                                mt: '45px', 
+                                            sx={{
+                                                mt: '45px',
                                             }}
                                             id="menu-appbar"
                                             anchorEl={anchorElUser}
@@ -151,8 +167,8 @@ function ResponsiveAppBar() {
                                                 to="/profile"
                                             >
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
-                                                    <AccountCircleIcon/>
-                                                    <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">Profile</Typography>
+                                                    <AccountCircleIcon />
+                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Profile</Typography>
                                                 </MenuItem>
                                             </Link>
                                             <Divider />
@@ -164,8 +180,8 @@ function ResponsiveAppBar() {
                                                 to="/mySpaces"
                                             >
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
-                                                    <ApartmentIcon/>
-                                                    <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">My spaces</Typography>
+                                                    <ApartmentIcon />
+                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">My spaces</Typography>
                                                 </MenuItem>
                                             </Link>
                                             <Link
@@ -176,14 +192,14 @@ function ResponsiveAppBar() {
                                                 to="/addSpace"
                                             >
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
-                                                    <DomainAddIcon/>
-                                                    <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">Add Space</Typography>
+                                                    <DomainAddIcon />
+                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Add Space</Typography>
                                                 </MenuItem>
                                             </Link>
                                             <Divider />
                                             <MenuItem style={menuItem} onClick={logout}>
                                                 <LogoutIcon />
-                                                <Typography style={{margin: "5px 10px 5px 10px"}} textAlign="center">Logout</Typography>
+                                                <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Logout</Typography>
                                             </MenuItem>
                                         </Menu>
                                     </>

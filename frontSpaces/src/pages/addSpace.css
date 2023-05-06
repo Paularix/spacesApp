@@ -11,13 +11,29 @@
 }
 
 .space-field.space-name {
-    margin: 14px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-right: 14px;
+    margin-left: 14px;
     max-width: 600px;
     min-width: 300px;
 }
 
 .space-field.space-description {
-    margin: 14px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-right: 14px;
+    margin-left: 14px;
     max-width: 600px;
     min-width: 300px;
 }
+
+.space-field.space-address {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-right: 14px;
+    margin-left: 14px;
+    max-width: 600px;
+    min-width: 300px;
+}
+

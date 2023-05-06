@@ -52,6 +52,7 @@ export const Login = () => {
                     setUser({
                         ...user,
                         email: decoded.email,
+                        profile_picture: decoded.profile_picture,
                         password: '',
                         token: res.token
                     })
