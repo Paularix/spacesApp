@@ -1,55 +1,81 @@
-import * as React from 'react'
-import "./SpaceCard.css";
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+
+import './SpaceCard.css'
+import noImage from './no_image.jpg'
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+export default function SpaceCard({ space }) {
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
 
-const SpaceCard = () => {
-
-
-
-    return (<>
-    
-    <Card sx={{ maxWidth: 345 }}>
+  return (
+    <Card sx={{ maxWidth: 300, minWidth: 300 }}>
       <CardMedia
-        sx={{ height: 140 }}
-        image="/public/vite.svg"
+        className='spacecard-img'
+        component="img"
+        height="194"
+        image={space.space_picture ?
+          ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
+        alt="Paella dish"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Space title
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Space location
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Price/day
-        </Typography>
+        <div>
+          <Typography variant="h6" className='spacecard-typo-title'>
+            {space.name}
+          </Typography> 
+          <Typography variant="subtitle2" className='spacecard-typo'>
+            {space.address}
+          </Typography>
+        </div>
       </CardContent>
-      <CardActions>
-        <Link to="/spaceInfo" >
-        <Button size="small" >Share</Button>
-        </Link>
-        <Link to="/spaceInfo" >
-        <Button size="small" >Info</Button>
-        </Link>
-       
+      <CardActions className="spacecard-icons">
+        <div className='spacecard-icon-person'>
+          <PersonOutlineRoundedIcon />
+          <Typography>
+            {space.capacity}
+          </Typography>
+        </div>
+        <div className='spacecard-icon-price'>
+          <Typography variant="subtitle2">
+            <b>{space.price} €</b> / dia
+          </Typography>
+        </div>
+        {/* <div className="add-to-favorites">
+          <IconButton>
+            <FavoriteIcon />
+          </IconButton>
+        </div> */}
       </CardActions>
+      {/* <CardActions disableSpacing>
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
+      </CardActions> */}
     </Card>
-
-        
-
-    </>)
+  );
 }
-
-export default SpaceCard
-
-
-
-
-  

@@ -41,7 +41,7 @@ export const Home = () => {
         {spaces.map(space => (
           <Marker key={space.id} position={space.location}>
             <Popup>
-              <SpaceCard name={space.name} />
+              <SpaceCard space={space} />
             </Popup>
           </Marker>
         ))}
@@ -49,7 +49,7 @@ export const Home = () => {
     </div>
      <div className='spacesSection'>
      {spaces.map(space => (
-       <SpaceCard key={space.id} name={space.name} />
+       <SpaceCard key={space.id} space={space} />
      ))}
    </div>
    </>

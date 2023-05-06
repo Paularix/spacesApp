@@ -141,15 +141,15 @@ router.delete('/:id', function (req, res, next) {
 router.post("/register", (req, res, next) => {
 
     // if (req.body.password == req.body.repeatPassword) {
-    //     const hash = bcrypt.hashSync(req.body.password, 10)
-    //     req.body.password = hash
+        const hash = bcrypt.hashSync(req.body.password, 10)
+        // req.body.password = hash
 
     Users.create({
         first_name: req.body.first_name,
         last_names: req.body.last_names,
         phone_number: req.body.phone_number,
         email: req.body.email,
-        password: req.body.password
+        password: hash
     })
         .then(item => {
             res.json({
@@ -196,6 +196,7 @@ router.post('/login', (req, res) => {
                 {
                     expiredAt: new Date().getTime() + Number(process.env.EXPIRED_AFTER),
                     email: user.email,
+                    profile_picture: user.profile_picture,
                     id: user.id
                 },
                 process.env.SECRET_KEY
@@ -236,7 +237,6 @@ router.get("/auth/profile", [authenticate, authError], (req, res) => {
                     error
                 })
             })
-
     }
 })
 
@@ -276,10 +276,11 @@ router.put("/auth/profile", [authenticate, authError], (req, res) => {
     }
 })
 
-
+// PUT
+// @desc guardar foto de perfil
 router.put('/auth/profilepicture', [authenticate, authError], (req, res, next) => {
     const token = req.headers.authorization || ''
-    console.log(req.body)
+    console.log(req.file)
     if (token) {
         const decoded = jsonwebtoken.decode(token)
 
