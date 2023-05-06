@@ -325,6 +325,18 @@ router.get("/auth/protected", [authenticate, authError], (req, res) => {
 })
 
 
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, 'photos-profile')
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, file.originalname)
+//     }
+// })
+
+// const upload = multer({ storage: storage }).single('file');
+
+
 router.put('/photo/:id', (req, res, next) => {
 
     upload(req, res, function (err) {
