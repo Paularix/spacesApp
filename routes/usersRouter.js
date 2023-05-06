@@ -196,6 +196,7 @@ router.post('/login', (req, res) => {
                 {
                     expiredAt: new Date().getTime() + Number(process.env.EXPIRED_AFTER),
                     email: user.email,
+                    profile_picture: user.profile_picture,
                     id: user.id
                 },
                 process.env.SECRET_KEY
@@ -275,10 +276,11 @@ router.put("/auth/profile", [authenticate, authError], (req, res) => {
     }
 })
 
-
+// PUT
+// @desc guardar foto de perfil
 router.put('/auth/profilepicture', [authenticate, authError], (req, res, next) => {
     const token = req.headers.authorization || ''
-    console.log(req.body)
+    console.log(req.file)
     if (token) {
         const decoded = jsonwebtoken.decode(token)
 

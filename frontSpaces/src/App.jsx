@@ -20,6 +20,7 @@ import SpaceInfo from './pages/SpaceInfo'
 import SpaceCard from './components/SpaceCard'
 import MySpaces from './pages/MySpaces'
 import MyReservations from './pages/MyReservations'
+import AddSpace from './pages/addSpace'
 
 
 function App() {
@@ -69,6 +70,7 @@ const context = {
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
           <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/MyReservations" element={<MyReservations/>}/>
+          <Route path="/AddSpace" element={<AddSpace />} />
           <Route path="/error" element={<Error />} />
 
         </Routes>
