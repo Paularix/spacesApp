@@ -1,10 +1,27 @@
 import express from 'express';
 import multer from 'multer';
-import {sequelize} from "../loadSequelize.js";
-import {Services} from '../models/Models.js';
+import { sequelize } from "../loadSequelize.js";
+import { Services } from '../models/Models.js';
+import { authenticate, authError } from './middleware.js';
 
+import { Spaces } from '../models/Models.js';
+import { SpaceServices } from '../models/Models.js';
+
+
+Services.belongsToMany(Spaces, {through: "SpaceServices", foreignKey: 'rid_service'})
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'photos-profile')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+
+const upload = multer({ storage: storage, debug: true }).single('file');
 
 // GET services
 // @desc obtener todos los services de BD
@@ -23,6 +40,38 @@ router.get('/', function (req, res, next) {
             }))
 
     }).catch((error) => {
+        res.json({
+            ok: false,
+            error: error
+        })
+    });
+
+});
+
+// GET services
+// @desc obtener todos los services de BD
+router.get('/auth', [authenticate, authError], function (req, res, next) {
+
+    sequelize.sync().then(() => {
+
+        Services.findAll()
+            .then(services => {
+                console.log(services)
+                res.json({
+                    ok: true,
+                    data: services
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                res.json({
+                    ok: false,
+                    error: error
+                })
+            })
+
+    }).catch((error) => {
+        console.log(error)
         res.json({
             ok: false,
             error: error

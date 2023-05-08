@@ -23,6 +23,9 @@ export const Spaces = sequelize.define('Spaces', {
     rules: dataTypes.STRING,
     space_picture: dataTypes.STRING,
     rid_host_user: dataTypes.INTEGER,
+    lat: dataTypes.FLOAT,
+    long:dataTypes.FLOAT,
+    status: dataTypes.STRING,
 }, { tableName: 'spaces', timestamps: false });
 
 
@@ -51,5 +54,11 @@ export const Preferences = sequelize.define('Preferences', {
 export const Services = sequelize.define('Services', {
     name: dataTypes.STRING,
 }, { tableName: 'services', timestamps: false });
+
+export const SpaceServices = sequelize.define('SpaceServices', {
+    rid_space: dataTypes.INTEGER,
+    rid_service: dataTypes.INTEGER
+    
+}, { tableName: 'space_services', timestamps: false });
 
 

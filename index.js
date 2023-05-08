@@ -28,6 +28,8 @@ if (env === 'development') {
     }))
 }
 
+app.use(express.static("photos-profile"))
+
 // Routers
 app.use('/api', indexRouter)
 app.use('/api/users', usersRouter)
@@ -36,6 +38,9 @@ app.use('/api/bookings', bookingsRouter)
 app.use('/api/dates', datesRouter)
 app.use('/api/preferences', preferencesRouter)
 app.use('/api/services', servicesRouter)
+
+app.use('/api/photos/users', express.static('photos-profile'));
+app.use('/api/photos/spaces', express.static('photos-spaces'));
 
 
 // Montando la app en el servidor (utilizando la variable de entorno, "process.env")

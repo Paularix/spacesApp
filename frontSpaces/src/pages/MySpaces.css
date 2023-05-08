@@ -1,0 +1,38 @@
+.myspaces-container {
+   
+    justify-content: center;
+    align-items: center;
+    background-color: #fafafa;
+    height: calc(100vh - 124px);
+    overflow: auto;
+
+}
+
+.myspaces-card-container {
+    display: flex;
+    justify-content: center;
+    /* max-width: 900px; */
+    padding: 20px;
+    margin: 0;
+  }
+
+.myspaces-card {
+    width: 100%;
+}
+  
+.myspaces-button.myspaces-banner-button {
+    margin: 10px;
+}
+
+
+.myspaces-list-spaces {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.myspaces-card-spaces {
+    height: 402px;
+    margin: 8px;
+    width: auto;
+    min-width: 250px;
+}

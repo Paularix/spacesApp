@@ -1,0 +1,20 @@
+.myreservations-container {
+   
+    justify-content: center;
+    align-items: center;
+    background-color: #fafafa;
+    height: calc(100vh - 124px);
+
+}
+
+.myreservations-card-container {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
+  
+.myreservations-button.myreservations-banner-button {
+    margin: 10px;
+}
+
