@@ -84,7 +84,6 @@ function ResponsiveAppBar() {
                         noWrap
                         component="a"
                         sx={{
-                            mr: 2,
                             display: { xs: 'none', md: 'flex' },
                             letterSpacing: '.3rem',
                             color: 'black',
@@ -104,10 +103,10 @@ function ResponsiveAppBar() {
                         noWrap
                         component="a"
                         sx={{
-                            mr: 2,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
                             letterSpacing: '.3rem',
+                            fontSize: '32px',
                             color: 'black',
                             textDecoration: 'none',
                             cursor: 'pointer'
