@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import './Profile.css'
-import avatar from './images/avatar.png'
+import avatar from '../images/avatar.png'
 import GlobalContext from "../../context/GlobalContext"
 
 

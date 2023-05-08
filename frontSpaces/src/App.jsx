@@ -9,18 +9,18 @@ import GlobalContext from "./context/GlobalContext"
 
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import Error from './pages/Error';
+import Error from './pages/Error/Error';
 
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Register from './pages/Register'
-import Profile from './pages/Profile'
-import { Home } from './pages/Home'; 
-import SpaceInfo from './pages/SpaceInfo'
+import Landing from './pages/Landing/Landing';
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register'
+import Profile from './pages/Profile/Profile'
+import { Home } from './pages/Home/Home'; 
+import SpaceInfo from './pages/SpaceInfo/SpaceInfo'
 import SpaceCard from './components/SpaceCard'
-import MySpaces from './pages/MySpaces'
-import MyReservations from './pages/MyReservations'
-import AddSpace from './pages/addSpace'
+import MySpaces from './pages/MySpaces/MySpaces'
+import MyReservations from './pages/MyReservations/MyReservations'
+import AddSpace from './pages/addSpace/addSpace'
 
 
 function App() {

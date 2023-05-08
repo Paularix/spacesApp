@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import './Home.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import { Button } from 'react-bootstrap';
-import SpaceCard from '../components/SpaceCard';
+import SpaceCard from '../../components/SpaceCard';
 
 
 export const Home = () => {
