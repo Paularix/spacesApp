@@ -4,12 +4,12 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import SpaceCard from '../components/SpaceCard';
 
 const spaces = [
-  { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg" },
-  { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg" },
-  { id: 3, image: "public/vite2.svg", name: 'Espacio 3', location: [41.383210, 2.176955], image: "public/vite1.svg" },
-  { id: 4, image: "public/vite.svg", name: 'Espacio 4', location: [41.390808, 2.174852], image: "public/vite1.svg" },
-     { id: 5, image: "public/vite1.svg", name: 'Espacio 5', location: [41.398406, 2.183006], image: "public/vite.svg" },
-     { id: 16, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg" },
+  { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
+  { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg",  space_picture: "" },
+  { id: 3, image: "public/vite2.svg", name: 'Espacio 3', location: [41.383210, 2.176955], image: "public/vite1.svg",  space_picture: "" },
+  { id: 4, image: "public/vite.svg", name: 'Espacio 4', location: [41.390808, 2.174852], image: "public/vite1.svg",  space_picture: "" },
+     { id: 5, image: "public/vite1.svg", name: 'Espacio 5', location: [41.398406, 2.183006], image: "public/vite.svg",  space_picture: ""  },
+     { id: 16, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg",  space_picture: ""  },
   //   { id: 17, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg" },
   //   { id: 18, image: "public/vite2.svg", name: 'Espacio 3', location: [41.383210, 2.176955], image: "public/vite1.svg" },
   //   // { id: 19, image: "public/vite.svg", name: 'Espacio 4', location: [41.390808, 2.174852], image: "public/vite1.svg" },
@@ -129,10 +129,11 @@ export const Home = () => {
       </div>
       <div className="spaces-container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
         {spaces.map(space => (
+          
           <div key={space.id} style={{ flexBasis: '25%', marginRight: '16px', marginBottom: '46px' }}>
-            <SpaceCard image={space.image} name={space.name} />
+            <SpaceCard space={space}/>
           </div>
-        ))}
+        ))} 
       </div>
     </div >
     </>

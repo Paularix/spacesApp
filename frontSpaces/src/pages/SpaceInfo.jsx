@@ -23,6 +23,7 @@ const SpaceInfo = () => {
     slidesToShow: 1,
     slidesToScroll: 1
   };
+  
 
   return (
     <div className="container">
@@ -54,7 +55,7 @@ const SpaceInfo = () => {
               <h3 className="mb-3"><a className='p'>P</a>recio: 100€</h3>
               <div className="datepickers-wrapper">
                 <div className="form-group">
-                  <DateRangePicker
+                  {/* <DateRangePicker
                     startDate={dateRange.startDate}
                     startDateId="start-date"
                     endDate={dateRange.endDate}
@@ -65,7 +66,7 @@ const SpaceInfo = () => {
                     showClearDates={true}
                     numberOfMonths={1}
                     isOutsideRange={() => false}
-                  />
+                  /> */}
                 </div>
               </div>
               <button className="btn btn-primary mt-3">Reservar</button>

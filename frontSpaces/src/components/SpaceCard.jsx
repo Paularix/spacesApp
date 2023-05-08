@@ -8,9 +8,10 @@ import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
-
+import Button from '@mui/material/Button';
 import './SpaceCard.css'
 import noImage from './no_image.jpg'
+import {Link} from "react-router-dom";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -24,7 +25,7 @@ const ExpandMore = styled((props) => {
 }));
 
 
-const SpaceCard = ({ name, image }) => {
+const SpaceCard = ({ space }) => {
   const shareViaWhatsApp = () => {
     const whatsappMessage = encodeURIComponent(`Hey! Check out this awesome space: ${window.location.href}`);
     window.location.href = `https://wa.me/?text=${whatsappMessage}`;
@@ -44,7 +45,7 @@ const SpaceCard = ({ name, image }) => {
         <div>
           <Typography variant="h6" className='spacecard-typo-title'>
             {space.name}
-          </Typography> 
+          </Typography>
           <Typography variant="subtitle2" className='spacecard-typo'>
             {space.address}
           </Typography>
@@ -63,7 +64,7 @@ const SpaceCard = ({ name, image }) => {
           </Typography>
         </div>
         <div> <Button size="small" onClick={shareViaWhatsApp}>Share via WhatsApp</Button>
-        <Link to="spaceInfo" size="small">Info</Link>
+          <Link to="/spaceInfo" size="small">Info</Link>
         </div>
         {/* <div className="add-to-favorites">
           <IconButton>

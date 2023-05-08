@@ -68,10 +68,9 @@ const context = {
           <Route path="/profile" element={<Profile />}/>
           <Route path="/Home" element={<Home />}/>
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
-          <Route path="/AddSpace" element={<SpaceCard />} />
           <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/MyReservations" element={<MyReservations/>}/>
-          <Route path="/AddSpace" element={<AddSpace />} />
+          <Route path="/addSpace" element={<AddSpace />} />
           <Route path="/error" element={<Error />} />
 
         </Routes>
