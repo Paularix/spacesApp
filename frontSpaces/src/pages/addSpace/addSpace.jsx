@@ -11,7 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { API_URL } from '../../apiconfig';
-import PublicPrivateSwitch from '../../components/PublicPrivateSwitch';
+import PublicPrivateSwitch from '../../components/PublicPrivateSwitch/PublicPrivateSwitch';
 import './addSpace.css';
 import GlobalContext from "../../context/GlobalContext";
 import { useNavigate } from 'react-router-dom';

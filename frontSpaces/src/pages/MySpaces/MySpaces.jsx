@@ -8,7 +8,8 @@ import { useState, useEffect, useContext } from "react";
 import GlobalContext from "../../context/GlobalContext"
 import './MySpaces.css'
 import { API_URL } from "../../apiconfig";
-import SpaceCard from '../../components/SpaceCard';
+
+import SpaceCard from '../../components/SpaceCard/SpaceCard';
 
 
 export const MySpaces = () => {

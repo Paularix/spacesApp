@@ -8,7 +8,7 @@ import { useState, useEffect, useContext } from "react";
 import GlobalContext from "../../context/GlobalContext"
 import './MyReservations.css'
 import { API_URL } from "../../apiconfig";
-import SpaceCard from '../../components/SpaceCard';
+import SpaceCard from '../../components/SpaceCard/SpaceCard';
 
 
 export const MyReservations = () => {

@@ -15,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import BalconyIcon from '@mui/icons-material/Balcony';
 import { Link, useNavigate } from 'react-router-dom';
-import GlobalContext from "../context/GlobalContext"
+import GlobalContext from "../../context/GlobalContext"
 import Divider from '@mui/material/Divider';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';

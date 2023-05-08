@@ -7,8 +7,10 @@ import './App.css'
 import {Route, Routes, useNavigate} from "react-router-dom"
 import GlobalContext from "./context/GlobalContext"
 
-import Menu from './components/Menu';
-import Footer from './components/Footer';
+import Menu from './components/Menu/Menu';
+import Footer from './components/Footer/Footer';
+import SpaceCard from './components/SpaceCard/SpaceCard'
+
 import Error from './pages/Error/Error';
 
 import Landing from './pages/Landing/Landing';
@@ -17,7 +19,6 @@ import Register from './pages/Register/Register'
 import Profile from './pages/Profile/Profile'
 import { Home } from './pages/Home/Home'; 
 import SpaceInfo from './pages/SpaceInfo/SpaceInfo'
-import SpaceCard from './components/SpaceCard'
 import MySpaces from './pages/MySpaces/MySpaces'
 import MyReservations from './pages/MyReservations/MyReservations'
 import AddSpace from './pages/addSpace/addSpace'
