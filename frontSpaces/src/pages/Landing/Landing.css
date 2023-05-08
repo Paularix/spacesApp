@@ -22,8 +22,7 @@
 .landing-form {
     position: absolute;
     top: -10%;
-    transform: translate(0%, -25%);
-
+    transform: translate(0%, 0%);
     z-index: 1;
     top: 250px;
     background-color: rgba(183, 183, 235, 0.75);

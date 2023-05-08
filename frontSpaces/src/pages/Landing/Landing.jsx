@@ -10,7 +10,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import './Landing.css'
 import { Link } from 'react-router-dom'
 import { InputBase } from '@mui/material';
-import Calendar from '../components/Calendar'
+import Calendar from '../../components/Calendar'
 import NativeSelect from '@mui/material/NativeSelect'
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
