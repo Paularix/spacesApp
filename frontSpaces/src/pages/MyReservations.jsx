@@ -5,56 +5,56 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useState, useEffect, useContext } from "react";
-import GlobalContext from "../context/GlobalContext"
-import './MyReservations.css'
+import GlobalContext from "../context/GlobalContext";
+import './Myreservations.css';
 import { API_URL } from "../apiconfig";
-import SpaceCard from '../components/SpaceCard';
+import CardReservations from '../components/cardReservations';
 
 
-export const MyReservations = () => {
+export const Myreservations = () => {
 
-    // const { user } = useContext(GlobalContext)
-    // const [spaces, setSpaces] = useState([]);
+    const { user } = useContext(GlobalContext)
+    const [spaces, setSpaces] = useState([]);
+    const [bookings, setBookings] = useState([]);
 
-    // useEffect(() => {
-    //     console.log(user)
-    //     if (user.token)
-    //         loadData();
-    // }, [user])
+    useEffect(() => {
+        if (user.token)
+            loadData();
+    }, [user])
 
-    // const route = "spaces/auth/MyReservations";
+    const route = "bookings/auth/Myreservations";
 
-    // function loadData() {
-    //     const options = {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'authorization': user.token
-    //         }
-    //     };
-    //     fetch(API_URL + route, options)
-    //         .then(result => result.json())
-    //         .then(response => {
-    //             if (response.ok === true) {
-    //                 setSpaces(response.data);
-    //             } else {
-    //                 setError(response.error)
-    //             }
-    //         })
-    //         .catch(error => setError(error))
-    // }
+    function loadData() {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': user.token
+            }
+        };
+        fetch(API_URL + route, options)
+            .then(result => result.json())
+            .then(response => {
+                if (response.ok === true) {
+                    setBookings(response.data);
+                } else {
+                    setError(response.error)
+                }
+            })
+            .catch(error => setError(error))
+    }
 
     return (
 
-        <div className='myspaces-container'>
+        <div className='myreservations-container'>
             {/* {!spaces.length ?
-                <div className='myspaces-card-container'>
-                    <Card className='myspaces-card'>
+                <div className='myreservations-card-container'>
+                    <Card className='myreservations-card'>
                         <CardMedia
                             component="img"
                             alt="space image"
                             height="300"
-                            image="https://www.loiola.com/images/espacio_abierto_portada.png"
+                            image="https://www.lexington.es/app/uploads/2019/04/Alquiler-espacios-para-grabaciones-en-Madrid.png"
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
@@ -64,24 +64,27 @@ export const MyReservations = () => {
                                 Comienza a planear tu próxima evento
                             </Typography>
                         </CardContent>
-                        <Button className='myspaces-button myspaces-banner-button' variant="contained">Sube tu espacio</Button>
+                        <Button className='myreservations-button myreservations-banner-button' variant="contained">Reservar</Button>
                     </Card>
-                </div> :
-                <div>
-                    <Typography mt={2} variant="h5" color="text.primary">
-                        Mis Reservas
-                    </Typography>
-                    <div className='myspaces-list-spaces' >
-                        {spaces.map((space, index) => (
-                            <div className='myspaces-card-spaces'>
-                                <SpaceCard key={index} space={space} />
+                </div> : */}
+            <div>
+                <Typography mt={2} variant="h5" color="text.primary">
+                    Mis Reservas
+                </Typography>
+                <div className='myreservations-list-spaces' >
+                    <div className='myreservations-card-spaces'>
+                        {bookings.map((booking, index) => (
+                            <div className='myreservations-card-spaces'>
+                                <CardReservations key={index} booking={booking} />
                             </div>
                         ))}
                     </div>
                 </div>
-            } */}
+            </div>
+
         </div>
+
     )
 }
 
-export default MyReservations
+export default Myreservations

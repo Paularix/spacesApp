@@ -1,8 +1,9 @@
 import express from 'express';
 import multer from 'multer';
+import jsonwebtoken from 'jsonwebtoken';
 import {sequelize} from "../loadSequelize.js";
 import {Bookings} from '../models/Models.js';
-
+import { authenticate, authError } from './middleware.js';
 
 const router = express.Router();
 
@@ -52,6 +53,41 @@ router.get('/:id', function (req, res, next) {
         })
     });
 });
+
+// GET información protegida de las reservas del usuario
+// @desc ruta protegida perfil de usuario
+router.get("/auth/Myreservations", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        sequelize.sync().then(() => {
+            Bookings.findAll({ where: { rid_booker_user: decoded.id } })
+                .then(bookings => {
+                    res.status(200).json({
+                        ok: true,
+                        data: bookings
+                    })
+                })
+                .then(places => res.json({
+                    ok: true,
+                    data: places
+                }))
+                .catch((error) => {
+                    res.status(400).json({
+                        ok: false,
+                        error
+                    })
+                })
+        })
+            .catch((error) => {
+                res.status(400).json({
+                    ok: false,
+                    error
+                })
+            })
+
+    }
+})
 
 
 

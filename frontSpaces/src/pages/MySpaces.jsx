@@ -9,8 +9,6 @@ import GlobalContext from "../context/GlobalContext"
 import './MySpaces.css'
 import { API_URL } from "../apiconfig";
 import SpaceCard from '../components/SpaceCard';
-
-
 export const MySpaces = () => {
 
     const { user } = useContext(GlobalContext)
