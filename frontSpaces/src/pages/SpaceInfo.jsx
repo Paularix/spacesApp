@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SpaceInfo.css';
+import { DateRangePicker } from 'react-dates';
+import moment from 'moment';
+
 
 const SpaceInfo = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+
+  const [dateRange, setDateRange] = useState({
+    startDate: moment(),
+    endDate: moment(),
+    focusedInput: null,
+  });
 
   const settings = {
     dots: true,
@@ -19,43 +25,52 @@ const SpaceInfo = () => {
   };
 
   return (
-    <div>
-      <h2>Nombre del Establecimiento</h2>
+    <div className="container">
       <div className="row">
-        <div className="col-md-6">
-          <Slider {...settings}>
-            <div className="slide">
-              <img src="/public/vite1" alt="Foto 1" />
-            </div>
-            <div className="slide">
-              <img src="/public/vite2" alt="Foto 2" />
-            </div>
-            <div className="slide">
-              <img src="/public/vite" alt="Foto 3" />
-            </div>
-            <div className="slide">
-              <img src="https://via.placeholder.com/800x400/FFFF00/000000" alt="Foto 4" />
-            </div>
-          </Slider>
+        <div className="col-md-6 col-lg-5">
+          <h2 className="text-center mb-4">Nombre del Establecimiento</h2>
+          <div className="carousel-wrapper">
+            <Slider {...settings}>
+              <div className="carousel-item">
+                <img src="/public/vite1" alt="Foto 1" />
+              </div>
+              <div className="carousel-item">
+                <img src="/public/vite2" alt="Foto 2" />
+              </div>
+              <div className="carousel-item">
+                <img src="/public/vite" alt="Foto 3" />
+              </div>
+              <div className="carousel-item">
+                <img src="https://via.placeholder.com/300x100" alt="Foto 4" />
+              </div>
+            </Slider>
+          </div>
         </div>
-        <div className="descriptionSpace">
-          <p>Descripción del establecimiento.</p>
-          <h3>Precio: $100 por noche</h3>
-          <div>
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              dateFormat="dd/MM/yyyy"
-            />
+        <div className="col-md-6 col-lg-7">
+          <div className="description-wrapper">
+            <h3 className="mb-3"><a className='d'>D</a>escripción del establecimiento.</h3>
+            <p>hola soy la descripción del space</p>
+            <div className="price-wrapper">
+              <h3 className="mb-3"><a className='p'>P</a>recio: 100€</h3>
+              <div className="datepickers-wrapper">
+                <div className="form-group">
+                  <DateRangePicker
+                    startDate={dateRange.startDate}
+                    startDateId="start-date"
+                    endDate={dateRange.endDate}
+                    endDateId="end-date"
+                    onDatesChange={({ startDate, endDate }) => setDateRange({ startDate, endDate })}
+                    focusedInput={dateRange.focusedInput}
+                    onFocusChange={(focusedInput) => setDateRange({ ...dateRange, focusedInput })}
+                    showClearDates={true}
+                    numberOfMonths={1}
+                    isOutsideRange={() => false}
+                  />
+                </div>
+              </div>
+              <button className="btn btn-primary mt-3">Reservar</button>
+            </div>
           </div>
-          <div>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              dateFormat="dd/MM/yyyy"
-            />
-          </div>
-          <button className="btn btn-primary">Reservar</button>
         </div>
       </div>
     </div>
