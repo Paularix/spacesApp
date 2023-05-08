@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import jwt_decode from 'jwt-decode'
-import GlobalContext from "../../gicontext/GlobalContext"
+import GlobalContext from "../../context/GlobalContext"
 import './Login.css'
 
 
