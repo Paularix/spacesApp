@@ -1,13 +1,13 @@
 import React from 'react'
 import { useState, useContext } from 'react';
 import { useNavigate, Link} from 'react-router-dom';
-import { API_URL } from '../apiconfig';
+import { API_URL } from '../../apiconfig';
 import {
     Button, Card, CardContent, TextField, Typography, FormControl, IconButton,
     OutlinedInput, InputLabel, InputAdornment
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import GlobalContext from "../context/GlobalContext"
+import GlobalContext from "../../context/GlobalContext"
 
 import './Register.css'
 

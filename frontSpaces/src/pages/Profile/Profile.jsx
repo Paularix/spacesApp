@@ -1,14 +1,14 @@
 import React from 'react'
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../apiconfig';
+import { API_URL } from '../../apiconfig';
 import { TextField, Typography, IconButton, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import './Profile.css'
-import avatar from './images/avatar.png'
-import GlobalContext from "../context/GlobalContext"
+import avatar from '../images/avatar.png'
+import GlobalContext from "../../context/GlobalContext"
 
 
 

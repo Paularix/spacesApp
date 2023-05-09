@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import './Home.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
-import SpaceCard from '../components/SpaceCard';
+import { Button } from 'react-bootstrap';
+import SpaceCard from '../../components/SpaceCard/SpaceCard';
 
 const spaces = [
   { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },

@@ -5,10 +5,11 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useState, useEffect, useContext } from "react";
-import GlobalContext from "../context/GlobalContext"
+import GlobalContext from "../../context/GlobalContext"
 import './MySpaces.css'
-import { API_URL } from "../apiconfig";
-import SpaceCard from '../components/SpaceCard';
+import { API_URL } from "../../apiconfig";
+
+import SpaceCard from '../../components/SpaceCard/SpaceCard';
 
 export const MySpaces = () => {
 
