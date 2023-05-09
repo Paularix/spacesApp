@@ -1,5 +1,6 @@
 import React from 'react'
-import { useState, useEffect, createTheme } from "react"
+import { useState, useEffect, createTheme, useContext} from "react"
+import GlobalContext from '../context/GlobalContext'
 import Calendar from 'react-calendar'
 import Button from '@mui/material/Button'
 import CardContent from '@mui/material/CardContent'
@@ -21,9 +22,9 @@ const yyyymmdd = (dateString) => {
 
 
 
-export default ({date, setDate }) => {
+export default () => {
 
-
+    const {date, setDate} = useContext(GlobalContext);
     const [selectedDates, setSelectedDates] = useState("");
 
     function tileClassName({ date, view }) {
