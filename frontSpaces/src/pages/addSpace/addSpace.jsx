@@ -48,7 +48,6 @@ const addSpace = () => {
       approximateCoords: [],
     }
   })
-
   const validate = (field, value) => {
 
     let errors = [...newSpace.errors[field]];

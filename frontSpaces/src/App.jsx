@@ -35,6 +35,9 @@ function App() {
     phone: '',
 })
 
+const [date, setDate]  = useState(new Date())
+
+
 const [error, setError]  = useState("")
 const [user, setUser] = useState({
   email: '',
@@ -52,6 +55,7 @@ const logout = () => {
 }
 
 const context = { 
+  date, setDate,
   newUser, setNewUser, 
   user, setUser, 
   error, setError, 
@@ -71,7 +75,7 @@ const context = {
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
           <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/MyReservations" element={<MyReservations/>}/>
-          <Route path="/AddSpace" element={<AddSpace />} />
+          <Route path="/addSpace" element={<AddSpace />} />
           <Route path="/error" element={<Error />} />
 
         </Routes>

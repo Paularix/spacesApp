@@ -11,7 +11,6 @@ import { API_URL } from "../../apiconfig";
 
 import SpaceCard from '../../components/SpaceCard/SpaceCard';
 
-
 export const MySpaces = () => {
 
     const { user } = useContext(GlobalContext)
