@@ -131,10 +131,10 @@
 
 .react-calendar__tile--now:enabled:hover,
 .react-calendar__tile--now:enabled:focus {
- background: #6f48eb33;
- border-radius: 6px;
- font-weight: bold;
- color: #7879F1;
+    background: #6f48eb33;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #7879F1;
 }
 
 .react-calendar__tile--hasActive {
@@ -183,6 +183,11 @@
     border-bottom-left-radius: 0;
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
-    background:#7879F1;
+    background: #7879F1;
     color: white;
+}
+
+
+.highlighted-date {
+    color: rgb(200,200,200);
 }

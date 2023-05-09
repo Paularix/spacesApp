@@ -17,12 +17,36 @@ import GlobalContext from "../../context/GlobalContext";
 import { useNavigate } from 'react-router-dom';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FormHelperText from '@mui/material/FormHelperText';
+//import Calendar from '../../components/Calendar/Calendar'
+import '../../Components/Calendar/Calendar.css';
+import Calendar from 'react-calendar'
 
+
+
+const yyyymmdd = (date) => `${date.getFullYear()}-${('00' + (date.getMonth() + 1)).slice(-2)}-${('00' + (date.getDate())).slice(-2)}`;
+
+//dayX és 0 per diumenge, 1 dilluns i anar fent
+function getDaysXOfYear(dayX, year) {
+  const firstDayOfYear = new Date(year+'-1-1')
+  const dayInMillis = 86400000; // number of milliseconds in a day
+  let dayToCheck = new Date(firstDayOfYear.getTime())
+  const dates = [];
+  let t = 0;
+  while (dayToCheck.getFullYear()===year){
+      if (dayToCheck.getDay()===dayX){
+          dates.push(yyyymmdd(dayToCheck))
+      }
+      t++;
+      dayToCheck = new Date(firstDayOfYear.getTime() + t * dayInMillis);
+  }
+  return dates;
+}
 
 
 const addSpace = () => {
   const goTo = useNavigate();
-
+  const [year, setYear] = useState((new Date()).getFullYear());
+  const [selectedDates, setSelectedDates] = useState([]);
   const [services, setServices] = useState([])
   const [center, setCenter] = useState([]);
   const [image, setImage] = useState()
@@ -111,7 +135,7 @@ const addSpace = () => {
 
 
 
-  const { user, setUser, error, setError } = useContext(GlobalContext)
+  const { user, setUser, error, setError, date, setDate } = useContext(GlobalContext)
 
 
   function getLocation() {
@@ -125,6 +149,41 @@ const addSpace = () => {
     setCenter([lat, long]);
   }
 
+  function removeDuplicates(arr) {
+    return Array.from(new Set(arr));
+  }
+
+  function handleClickDay(date) {
+    const dateStr = yyyymmdd(date)
+    let addDates = false
+
+    if (selectedDates.indexOf(dateStr) === -1) {
+      addDates = true;
+    }
+    if (addDates) {
+      setSelectedDates(removeDuplicates([...selectedDates, dateStr]))
+    } else {
+      setSelectedDates([...selectedDates].filter(day => indexOf(day) === -1))
+    }
+  }
+
+  
+  
+  // const handleClickDay = (day) => {
+  //   const date = yyyymmdd(day)
+  //   console.log(date)
+  // }
+
+  function tileClassName({ date, view }) {
+    if (view === 'month') {
+      const dateStr = yyyymmdd(date)
+      if (selectedDates.includes(dateStr)) {
+        console.log(dateStr)
+        return "highlighted-date";
+      }
+    }
+    return null
+  }
 
   useEffect(() => {
     if (user.token) {
@@ -290,6 +349,17 @@ const addSpace = () => {
     validate("approximateCoords", newSpace.approximateCoords)
   }
 
+  const blockDayOfTheWeek = (d) => {
+    let day = ['LU','MT','MC','JV','VR','SD','DG'].indexOf(d) +1 ;
+        if (day === 7) day=0;
+
+        const days = getDaysXOfYear(day, year);
+        let dates = [...selectedDates];
+        dates = dates.filter(el => dates.indexOf(el)===-1)
+        dates = [...dates, ...days]
+        setSelectedDates(dates)
+  }
+
 
 
   return (
@@ -319,7 +389,6 @@ const addSpace = () => {
                   <Typography variant="h1" sx={{
                     fontSize: 18,
                     textAlign: 'center',
-                    marginTop: 28,
                     marginBottom: 3
                   }}>
                     Selecciona una dirección aproximada:
@@ -361,7 +430,43 @@ const addSpace = () => {
                 </Box>
               )
           }
+          <Typography variant="h1" sx={{
+            fontSize: 18,
+            textAlign: 'center',
+            marginTop: 5,
+            marginBottom: 3
+          }}>
+            ¿Quieres bloquear algún día?
+          </Typography>
+          {['LU','MT','MC','JV','VR','SD','DG'].map((el, idx) => <Button variant="outlined" sx={{
+            color: '#7879F1',
+            borderColor: '#7879F1',
+            fontSize: 10,
+            padding: 0.33,
+            margin: 1,
+            '&:hover': {
+              color: '#7879F1',
+              borderColor: '#7879F1',
+              boxShadow: 'none',
+            },
+            }} onClick={()=>blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
 
+          <Calendar
+            //onActiveStartDateChange={handleActiveStartDateChange}
+            showNeighboringMonth={true}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center'
+            }}
+            //tileClassName={tileClassName}
+            onChange={setDate}
+            //onClickWeekNumber={handleClickWeekNumber}
+            value={date}
+            onClickDay={handleClickDay}
+            tileClassName={tileClassName}
+
+          //selectRange={true}
+          />
         </Grid>
         <Grid item xs={6.5} sx={{
           display: 'flex',
@@ -439,7 +544,7 @@ const addSpace = () => {
                   size="small"
 
                 />
-                
+
                 <TextField
                   error={newSpace.errors.address.length == 0 ? false : true}
                   helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."

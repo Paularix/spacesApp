@@ -26,7 +26,6 @@ const yyyymmdd = (dateString) => {
 
 
 export const Landing = () => {
-  const [date, setDate] = useState(new Date())
   const [location, setLocation] = useState("")
   const landingButton = {
     marginTop: '25px',
@@ -143,7 +142,7 @@ export const Landing = () => {
                 horizontal: 'left',
               }}
             >
-              <Calendar date={date} setDate={setDate} />
+              <Calendar/>
             </Popover>
 
 

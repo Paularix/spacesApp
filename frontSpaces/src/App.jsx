@@ -27,6 +27,7 @@ import AddSpace from './pages/addSpace/addSpace'
 function App() {
 
   const navigate = useNavigate()
+  const [date, setDate] = useState(new Date())
   const [newUser, setNewUser] = useState({
     name: '',
     lastName: '',
@@ -55,6 +56,7 @@ const context = {
   newUser, setNewUser, 
   user, setUser, 
   error, setError, 
+  date, setDate,
   logout 
 }
 
@@ -73,7 +75,6 @@ const context = {
           <Route path="/MyReservations" element={<MyReservations/>}/>
           <Route path="/AddSpace" element={<AddSpace />} />
           <Route path="/error" element={<Error />} />
-
         </Routes>
         <Footer />
       </div>
