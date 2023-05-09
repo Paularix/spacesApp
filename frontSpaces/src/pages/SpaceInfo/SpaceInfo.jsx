@@ -5,7 +5,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SpaceInfo.css';
 import moment from 'moment';
-import Calendar from '../components/Calendar';
+import Calendar from '../../components/Calendar/Calendar';
 
 
 const SpaceInfo = () => {

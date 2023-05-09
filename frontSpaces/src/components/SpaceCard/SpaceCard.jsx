@@ -11,6 +11,8 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Button from '@mui/material/Button';
 import './SpaceCard.css'
 import noImage from '../images/no_image.jpg'
+import {Link} from 'react-router-dom'
+
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
