@@ -2,9 +2,35 @@ import express from 'express';
 import multer from 'multer';
 import {sequelize} from "../loadSequelize.js";
 import {Bookings} from '../models/Models.js';
-
+import {authError} from './middleware.js'
+import {authenticate} from './middleware.js'
 
 const router = express.Router();
+
+// POST, creació d'un amb status 0 (requested) 
+// @desc sube un booking a BD pendiende de aceptar
+router.post('/', [authenticate, authError],function (req, res, next) {
+   console.log(req.body)
+   res.status(200).json({
+        ok: true,
+        data: req.body
+   })
+   
+    // sequelize.sync().then(() => {
+
+    //     Bookings.create(req.body)
+    //         .then((item) => res.json({ ok: true, data: item }))
+    //         .catch((error) => res.json({ ok: false, error: error.message }))
+
+
+    // }).catch((error) => {
+    //     res.json({
+    //         ok: false,
+    //         error: error.message
+    //     })
+    // });
+});
+
 
 // GET bookings
 // @desc obtener todos los bookings de BD
