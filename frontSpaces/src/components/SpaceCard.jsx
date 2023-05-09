@@ -11,7 +11,8 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Button from '@mui/material/Button';
 import './SpaceCard.css'
 import noImage from './no_image.jpg'
-import {Link} from "react-router-dom";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -37,8 +38,8 @@ const SpaceCard = ({ space }) => {
         className='spacecard-img'
         component="img"
         height="194"
-        image={space.space_picture ?
-          ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
+         image={space.space_picture ?
+           ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
         alt="Paella dish"
       />
       <CardContent>

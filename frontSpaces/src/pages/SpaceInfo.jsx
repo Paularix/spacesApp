@@ -4,8 +4,8 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SpaceInfo.css';
-import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
+import Calendar from '../components/Calendar';
 
 
 const SpaceInfo = () => {
@@ -67,6 +67,7 @@ const SpaceInfo = () => {
                     numberOfMonths={1}
                     isOutsideRange={() => false}
                   /> */}
+                  <Calendar />
                 </div>
               </div>
               <button className="btn btn-primary mt-3">Reservar</button>
