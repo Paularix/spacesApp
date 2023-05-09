@@ -24,8 +24,8 @@
     "mysql2": "^3.2.3",
     "nodemon": "^2.0.22",
     "react-datepicker": "^4.11.0",
-    "react-dates": "^21.8.0",
     "react-jss": "^10.10.0",
+    "sequelize": "^6.31.1",
     "slick-carousel": "^1.8.1"
   }
 }

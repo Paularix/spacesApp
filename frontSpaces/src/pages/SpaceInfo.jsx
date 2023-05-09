@@ -4,8 +4,8 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SpaceInfo.css';
-import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
+import Calendar from '../components/Calendar';
 
 
 const SpaceInfo = () => {
@@ -54,18 +54,7 @@ const SpaceInfo = () => {
               <h3 className="mb-3"><a className='p'>P</a>recio: 100€</h3>
               <div className="datepickers-wrapper">
                 <div className="form-group">
-                  <DateRangePicker
-                    startDate={dateRange.startDate}
-                    startDateId="start-date"
-                    endDate={dateRange.endDate}
-                    endDateId="end-date"
-                    onDatesChange={({ startDate, endDate }) => setDateRange({ startDate, endDate })}
-                    focusedInput={dateRange.focusedInput}
-                    onFocusChange={(focusedInput) => setDateRange({ ...dateRange, focusedInput })}
-                    showClearDates={true}
-                    numberOfMonths={1}
-                    isOutsideRange={() => false}
-                  />
+                  <Calendar />
                 </div>
               </div>
               <button className="btn btn-primary mt-3">Reservar</button>

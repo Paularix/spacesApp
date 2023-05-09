@@ -17,7 +17,6 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 import { Home } from './pages/Home'; 
 import SpaceInfo from './pages/SpaceInfo'
-import SpaceCard from './components/SpaceCard'
 import MySpaces from './pages/MySpaces'
 import MyReservations from './pages/MyReservations'
 import AddSpace from './pages/addSpace'
@@ -33,6 +32,9 @@ function App() {
     password: '',
     phone: '',
 })
+
+const [date, setDate]  = useState(new Date())
+
 
 const [error, setError]  = useState("")
 const [user, setUser] = useState({
@@ -51,6 +53,7 @@ const logout = () => {
 }
 
 const context = { 
+  date, setDate,
   newUser, setNewUser, 
   user, setUser, 
   error, setError, 
@@ -68,7 +71,6 @@ const context = {
           <Route path="/profile" element={<Profile />}/>
           <Route path="/Home" element={<Home />}/>
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
-          <Route path="/AddSpace" element={<SpaceCard />} />
           <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/MyReservations" element={<MyReservations/>}/>
           <Route path="/AddSpace" element={<AddSpace />} />

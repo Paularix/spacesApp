@@ -11,6 +11,8 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 
 import './SpaceCard.css'
 import noImage from './no_image.jpg'
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -24,7 +26,7 @@ const ExpandMore = styled((props) => {
 }));
 
 
-const SpaceCard = ({ name, image }) => {
+const SpaceCard = ({ space }) => {
   const shareViaWhatsApp = () => {
     const whatsappMessage = encodeURIComponent(`Hey! Check out this awesome space: ${window.location.href}`);
     window.location.href = `https://wa.me/?text=${whatsappMessage}`;
@@ -36,8 +38,8 @@ const SpaceCard = ({ name, image }) => {
         className='spacecard-img'
         component="img"
         height="194"
-        image={space.space_picture ?
-          ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
+         image={space.space_picture ?
+           ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
         alt="Paella dish"
       />
       <CardContent>
