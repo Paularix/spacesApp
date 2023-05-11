@@ -1,10 +1,10 @@
 import express from 'express';
 import multer from 'multer';
 import {sequelize} from "../loadSequelize.js";
-import {Bookings} from '../models/Models.js';
+import {Bookings, Spaces, Users} from '../models/Models.js';
 import {authError} from './middleware.js'
 import {authenticate} from './middleware.js'
-
+import jsonwebtoken from 'jsonwebtoken';
 const router = express.Router();
 
 // POST, creació d'un amb status 0 (requested) 
@@ -146,3 +146,45 @@ router.delete('/:id', function (req, res, next) {
 
 
 export default router;
+
+// GET información protegida de las reservas del usuario
+// @desc ruta protegida perfil de usuario
+router.get("/auth/Myreservations", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        sequelize.sync().then(() => {
+            Bookings.findAll({
+                where: { rid_booker_user: decoded.id },
+                include: [{
+                    model: Spaces,
+                    required: true
+                },{
+                    model: Users,
+                    required: true
+                }]
+            })
+                .then(bookings => {
+                    res.status(200).json({
+                        ok: true,
+                        data: bookings
+                    })
+                })
+                .catch((error) => {
+                    console.log('FALLA', error)
+                    res.status(400).json({
+                        ok: false,
+                        error
+                    })
+                })
+        })
+            .catch((error) => {
+                console.log('FALLA', error)
+                res.status(400).json({
+                    ok: false,
+                    error
+                })
+            })
+
+    }
+})
