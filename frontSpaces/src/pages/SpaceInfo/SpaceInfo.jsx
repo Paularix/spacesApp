@@ -4,25 +4,25 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SpaceInfo.css';
-import moment from 'moment';
-import Calendar from '../../components/Calendar/Calendar';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
+import Calendar from '../../components/Calendar/Calendar'
+import Popover from '@mui/material/Popover';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 const SpaceInfo = () => {
 
-  const [dateRange, setDateRange] = useState({
-    startDate: moment(),
-    endDate: moment(),
-    focusedInput: null,
-  });
+  // const [dateRange, setDateRange] = useState({
+  //   startDate: moment(),
+  //   endDate: moment(),
+  //   focusedInput: null,
+  // });
 
+  const [date, setDate] = useState(new Date())
   const settings = {
     dots: true,
     infinite: true,
@@ -32,16 +32,28 @@ const SpaceInfo = () => {
   };
 
 
+  const [showCalendar, setShowCalendar] = useState(null);
+
+  const handleClick = (event) => {
+    setShowCalendar(event.currentTarget);
+  };
+  const handleClose = () => {
+    setShowCalendar(null);
+  };
+
+  const open = Boolean(showCalendar);
+  const id = open ? 'simple-popover' : undefined;
+
   return (
     <div className="spaceInfo-container">
       <div className="row">
         <div className="col-md-6 col-lg-5">
           <div className='spaceInfo-title'>
-            <Typography variant="h5" component="h2">
+            <Typography variant="h5" component="h4">
               Encantador Loft para Reuniones
             </Typography>
-            <a href="https://www.google.com/maps/place/Barcelona/">Barcelona, España</a>
-            <h6 className="text-center mb-4">Milán, Lombardia, Italia</h6>
+
+            <h6 className="text-center mb-4"> <a href="https://www.google.com/maps/place/Barcelona/" target="_blank">Barcelona, España</a></h6>
           </div>
           <div className="carousel-wrapper">
             <Slider className="carousel-slider" {...settings}>
@@ -61,13 +73,14 @@ const SpaceInfo = () => {
           </div>
         </div>
         <Grid className="spaceInfo-grid-container" container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={7}>
+          <h2>Espacio apto para músicos. Anfitrión: <strong>Valentina</strong></h2>
             <div className="description-wrapper">
-              <h2>Espacio apto para músicos. Anfitrión: <strong>Valentina</strong></h2>
+            
               <div>
                 <Typography variant="h5" component="h3">
                   Conoce a tu anfitrión
-                </Typography>   
+                </Typography>
                 <div className='spaceInfo-host'>
                   <img className='spaceInfo-image' src="https://www.caritas.org.mx/wp-content/uploads/2019/02/cualidades-persona-humanitaria.jpg" alt="" />
                   <h2><strong>Valentina</strong></h2>
@@ -123,11 +136,46 @@ const SpaceInfo = () => {
               </div>
             </div>
           </Grid>
-          <Grid item xs={6}>
-            
+          <Grid item xs={5}>
+            <Card className='spaceInfo-card' sx={{ maxWidth: 345 }}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  <strong>25€</strong>/dia
+                </Typography>
+                <input type="text" value={date} onClick={handleClick} />
+                <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={showCalendar}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                >
+                  <Calendar date={date} setDate={setDate} />
+                </Popover>
+                <Button variant="contained" size="medium">
+                    Reservar
+                </Button>
+                <div>
+                </div>
+                {/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  adjective
+                </Typography>
+                <Typography variant="body2">
+                  well meaning and kindly.
+                  <br />
+                  {'"a benevolent smile"'}
+                </Typography> */}
+              </CardContent>
+              {/* <CardActions>
+                <Button size="small">Learn More</Button>
+              </CardActions> */}
+            </Card>
             <div>
               <div className="price-wrapper">
-                <h3 className="mb-3"><a className='p'>P</a>recio: 100€</h3>
+
                 <div className="datepickers-wrapper">
                   <div className="form-group">
                     {/* <DateRangePicker
@@ -142,10 +190,10 @@ const SpaceInfo = () => {
                     numberOfMonths={1}
                     isOutsideRange={() => false}
                   /> */}
-                    <Calendar />
+                    {/* <Calendar /> */}
+
                   </div>
                 </div>
-                <button className="btn btn-primary mt-3">Reservar</button>
               </div>
             </div>
           </Grid>
