@@ -18,10 +18,16 @@
 
   .carousel-wrapper {
     margin-bottom: 30px;
+    padding: 40px;
   }
 
   .carousel-item img {
-    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    display: block;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .description-wrapper {
@@ -44,7 +50,34 @@
     font-size: 30px;
 }
 .slide img {
-    max-width: 100%;
     max-height: 100px;
     object-fit: contain;
   }
+
+.spaceInfo-image {
+	width: 214px;
+  border-radius:100%;
+  position: relative;
+}
+.carousel-slider {
+  height: 300px;
+}
+
+.slick-arrow {
+  -webkit-text-fill-color: #7879F1;
+  margin-top: 25px;
+
+}
+
+
+@media (max-width: 767px) {
+  .carousel-item img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
