@@ -75,6 +75,7 @@ function ResponsiveAppBar() {
         navigate("/")
     }
     return (
+        <div>
         <AppBar position="static" elevation={0} style={{ backgroundColor: '#ffffff' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
@@ -219,6 +220,8 @@ function ResponsiveAppBar() {
                 </Toolbar>
             </Container>
         </AppBar>
+        <Divider />
+        </div>
     );
 }
 export default ResponsiveAppBar;

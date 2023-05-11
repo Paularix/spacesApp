@@ -6,7 +6,14 @@ import 'slick-carousel/slick/slick-theme.css';
 import './SpaceInfo.css';
 import moment from 'moment';
 import Calendar from '../../components/Calendar/Calendar';
-
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import { Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 
 const SpaceInfo = () => {
 
@@ -20,17 +27,22 @@ const SpaceInfo = () => {
     dots: true,
     infinite: true,
     speed: 450,
-    slidesToShow: 2,
+    slidesToShow: window.screen.availWidth > 1300 ? 3 : 2,
     slidesToScroll: 1
   };
 
 
   return (
-    <div className="container">
+    <div className="spaceInfo-container">
       <div className="row">
         <div className="col-md-6 col-lg-5">
-          <h2 className="text-center mb-4">Encantador Loft para Reuniones</h2>
-          <h6 className="text-center mb-4">Milán, Lombardia, Italia</h6>
+          <div className='spaceInfo-title'>
+            <Typography variant="h5" component="h2">
+              Encantador Loft para Reuniones
+            </Typography>
+            <a href="https://www.google.com/maps/place/Barcelona/">Barcelona, España</a>
+            <h6 className="text-center mb-4">Milán, Lombardia, Italia</h6>
+          </div>
           <div className="carousel-wrapper">
             <Slider className="carousel-slider" {...settings}>
               <div className="carousel-item">
@@ -48,22 +60,77 @@ const SpaceInfo = () => {
             </Slider>
           </div>
         </div>
-        <div className="col-md-6 col-lg-7">
-          <div className="description-wrapper">
-            <h2>Espacio apto para músicos. Anfitrión: Valentina</h2>
-            <h2>Conoce a tu anfitrión</h2>
-            <div>
-              <img className='spaceInfo-image' src="https://www.caritas.org.mx/wp-content/uploads/2019/02/cualidades-persona-humanitaria.jpg" alt="" />
-              <div>Nombre: Valentina</div>
-              <div>Descripción: Soy escritora, escritora y tengo un doctorado en cine y teología de King 's College London. Fui director de una escuela de cine durante 13 años y ahora tengo un negocio de consultoría en la industria del cine. Me encanta comer la comida increíble de mi marido David, sobre todo en compañía. Me encanta viajar y soy aventurero </div>
+        <Grid className="spaceInfo-grid-container" container spacing={2}>
+          <Grid item xs={6}>
+            <div className="description-wrapper">
+              <h2>Espacio apto para músicos. Anfitrión: <strong>Valentina</strong></h2>
+              <div>
+                <Typography variant="h5" component="h3">
+                  Conoce a tu anfitrión
+                </Typography>   
+                <div className='spaceInfo-host'>
+                  <img className='spaceInfo-image' src="https://www.caritas.org.mx/wp-content/uploads/2019/02/cualidades-persona-humanitaria.jpg" alt="" />
+                  <h2><strong>Valentina</strong></h2>
+                  <h6>Anfitrión</h6>
+                  <div className='spaceInfo-host-description'>Descripción: Soy escritora, escritora y tengo un doctorado en cine y teología de King 's College London. Fui director de una escuela de cine durante 13 años y ahora tengo un negocio de consultoría en la industria del cine. Me encanta comer la comida increíble de mi marido David, sobre todo en compañía. Me encanta viajar y soy aventurero </div>
+                </div>
+              </div>
+              <Divider />
+              <div>
+                <h2>Información sobre este espacio</h2>
+                <div className='spaceInfo-space-description'>
+                  <div>*descripcion*Sala polivalente situado en Gràcia. ​Cocina completa, televisión 65', equipo de sonido alta fidelidad, wifi, work-shops, clases privadas, presentaciones comerciales, coworking, reuniones de trabajo, estudio de grabación y fotográfico; cine, música y televisión (ideal para ver retransmisiones deportivas), reuniones de trabajo. Un espacio versátil y acogedor, es un local discreto, moderno y con encanto</div>
+                </div>
+              </div>
+              <Divider />
+              <div>
+                <h2>Características</h2>
+                <div>
+                  <h2>Comodidades</h2>
+                  <div>* Aire Acondicionado</div>
+                  <div>* Sillas</div>
+                  <div>* Wi-Fi</div>
+                </div>
+                <div>
+                  <h2>Zonas</h2>
+                  <div>* Aire Acondicionado</div>
+                  <div>* Sillas</div>
+                  <div>* Wi-Fi</div>
+                </div>
+              </div>
+              <Divider />
+              <div>
+                <h2>Aforo</h2>
+                <div>
+                  <div>Aforo del espacio:</div>
+                </div>
+              </div>
+              <Divider />
+              <div>
+                <h2>Qué debes saber</h2>
+                <div>
+                  <div>
+                    <h4>Normas del espacio</h4>
+                    <div>*reglas*Respecto el aforo dependiendo del evento puede variar. Sentados en mesa de trabajo es de 12 a 15 personas. Para otro tipo de reuniones puede ser sobre 20 personas.</div>
+                  </div>
+                  <div>
+                    <h4>Política de cancelación</h4>
+                    <div>Cancelación gratuita antes del 24 may..
+                      Consulta la política de cancelación completa del anfitrión, que se aplicará incluso si cancelas por haber contraído la COVID-19 o por cualquier problema relacionado con el coronavirus
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 className="mb-3"><a className='d'>D</a>escripción del establecimiento.</h3>
-            <p>hola soy la descripción del space</p>
-            <div className="price-wrapper">
-              <h3 className="mb-3"><a className='p'>P</a>recio: 100€</h3>
-              <div className="datepickers-wrapper">
-                <div className="form-group">
-                  {/* <DateRangePicker
+          </Grid>
+          <Grid item xs={6}>
+            
+            <div>
+              <div className="price-wrapper">
+                <h3 className="mb-3"><a className='p'>P</a>recio: 100€</h3>
+                <div className="datepickers-wrapper">
+                  <div className="form-group">
+                    {/* <DateRangePicker
                     startDate={dateRange.startDate}
                     startDateId="start-date"
                     endDate={dateRange.endDate}
@@ -75,13 +142,14 @@ const SpaceInfo = () => {
                     numberOfMonths={1}
                     isOutsideRange={() => false}
                   /> */}
-                  <Calendar />
+                    <Calendar />
+                  </div>
                 </div>
+                <button className="btn btn-primary mt-3">Reservar</button>
               </div>
-              <button className="btn btn-primary mt-3">Reservar</button>
             </div>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </div>
     </div>
   );

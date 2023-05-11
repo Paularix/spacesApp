@@ -12,10 +12,14 @@
     margin: 0 auto;
   }
    */
-   .container {
+   .spaceInfo-container {
     margin-top: 50px;
+    padding: 0px;
   }
 
+  .spaceInfo-title {
+    padding-left: 25px;
+  }
   .carousel-wrapper {
     margin-bottom: 30px;
     padding: 40px;
@@ -25,14 +29,20 @@
     max-width: 100%;
     justify-content: center;
     display: block;
-    height: auto;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 2px;
+  }
+
+  .spaceInfo-grid-container{
+    background-color: #f5f5f5;
+  }
+
+  .carousel-item img:hover {
+    opacity: 0.7;
   }
 
   .description-wrapper {
     padding: 30px;
-    background-color: #f5f5f5;
     min-height: 100%;
   }
 
@@ -56,19 +66,36 @@
 
 .spaceInfo-image {
 	width: 214px;
-  border-radius:100%;
+  margin: 10px;
+  padding: 5px;
+  border-radius:50%;
   position: relative;
-}
-.carousel-slider {
-  height: 300px;
 }
 
 .slick-arrow {
   -webkit-text-fill-color: #7879F1;
-  margin-top: 25px;
+  margin-top: 15px;
 
 }
 
+.slick-track {
+  height: 300px;
+}
+
+.spaceInfo-host{
+  background-color: #f0efe9;
+  margin: 10px;
+  text-align: left;
+  padding: 20px;
+  border-radius: 2%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
+ 
+}
+
+.spaceInfo-host-description{
+  text-align: left;
+}
 
 @media (max-width: 767px) {
   .carousel-item img {

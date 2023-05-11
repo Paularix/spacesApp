@@ -32,8 +32,7 @@ export default function CardReservations({ booking }) {
                         <Typography className="card-reservation-dates card-reservation-dates-text" variant="body2" color="text.secondary" component="div">
                             {parseDate(booking.date_from)} -   {parseDate(booking.date_to)}
                         </Typography>
-
-
+                        <Link to="/spaceInfo" size="small">Info</Link>
                     </CardContent>
                 </Box>
             </Card>
