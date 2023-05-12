@@ -58,7 +58,7 @@ const SpaceInfo = () => {
         <div className="col-md-6 col-lg-5">
           <div className='spaceInfo-title'>
             <Typography variant="h5" component="h4">
-              Encantador Loft para Reuniones
+              <strong>Encantador Loft para Reuniones</strong>
             </Typography>
             <h6 className="text-center mb-4"> <a href="https://www.google.com/maps/place/Barcelona/" target="_blank">Barcelona, España</a></h6>
           </div>
@@ -83,12 +83,12 @@ const SpaceInfo = () => {
           <Grid item xs={7}>
             <div className='spaceInfo-grid-part1'>
               <div className='spaceInfo-title2'>
-                <Typography variant="h6" component="h4">Espacio apto para músicos. Anfitrión: Valentina</Typography>
+                <Typography className='spaceInfo-title-typography' variant="h5" component="h4">Espacio apto para músicos. Anfitrión: Valentina</Typography>
                 <h6 className='spaceInfo-title-personIcon'><PersonIcon className='spaceInfo-personIcon' /> 18 Personas</h6>
               </div>
               <div className="description-wrapper">
                 <div>
-                  <Typography variant="h5" component="h3">
+                  <Typography variant="h5" component="h5">
                     Conoce a tu anfitrión
                   </Typography>
                   <div className='spaceInfo-host'>
@@ -106,14 +106,14 @@ const SpaceInfo = () => {
                 </div>
                 <Divider />
                 <div>
-                  <Typography mt={2} variant="h6" component="h2">Información sobre este espacio</Typography>
+                  <Typography mt={2} variant="h6" component="h2"><strong>Información sobre este espacio</strong></Typography>
                   <div className='spaceInfo-space-description'>
                     <div>*descripcion*Sala polivalente situado en Gràcia. ​Cocina completa, televisión 65', equipo de sonido alta fidelidad, wifi, work-shops, clases privadas, presentaciones comerciales, coworking, reuniones de trabajo, estudio de grabación y fotográfico; cine, música y televisión (ideal para ver retransmisiones deportivas), reuniones de trabajo. Un espacio versátil y acogedor, es un local discreto, moderno y con encanto</div>
                   </div>
                 </div>
                 <Divider />
                 <div>
-                  <Typography mt={2} variant="h6" component="h2">Características</Typography>
+                  <Typography mt={2} variant="h6" component="h2"><strong>Características</strong></Typography>
                   <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <Typography variant="subtitle1" component="h2"><OutdoorGrillIcon fontSize="small"/> Comodidades</Typography>
@@ -173,7 +173,7 @@ const SpaceInfo = () => {
                   <Button variant="contained" size="medium">
                     Reservar
                   </Button>
-                  <Typography variant="body2" color="opacity">
+                  <Typography m={2} variant="body2" style={{opacity: 0.5}} align="center">
                     No se te cobrara nada aún.
                   </Typography>
                   <span>
@@ -200,16 +200,16 @@ const SpaceInfo = () => {
             </Card>
           </Grid>
         </Grid>
-        <div>
+        <div className='spaceInfo-grid-rules'>
           <Divider />
-          <Typography variant="h6" component="h2">Qué debes saber</Typography>
+          <Typography mt={2} variant="h6" component="h2"><strong>Qué debes saber</strong></Typography>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <h4>Normas del espacio</h4>
+              <Typography variant="subtitle2"><strong>Normas del espacio</strong></Typography>
               <div>*reglas*Respecto el aforo dependiendo del evento puede variar. Sentados en mesa de trabajo es de 12 a 15 personas. Para otro tipo de reuniones puede ser sobre 20 personas.</div>
             </Grid>
             <Grid item xs={6}>
-              <h4>Política de cancelación</h4>
+              <Typography variant="subtitle2"><strong>Política de cancelación</strong></Typography>
               <div>Cancelación gratuita antes del 24 may..
                 Consulta la política de cancelación completa del anfitrión, que se aplicará incluso si cancelas por haber contraído la COVID-19 o por cualquier problema relacionado con el coronavirus
               </div>
