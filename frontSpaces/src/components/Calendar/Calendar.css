@@ -191,3 +191,8 @@
 .highlighted-date {
     color: rgb(200,200,200);
 }
+
+.calendar-space-container .react-calendar {
+    width: 320px;
+    box-shadow: none;
+}

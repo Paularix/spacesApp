@@ -27,21 +27,41 @@ const yyyymmdd = (date) => `${date.getFullYear()}-${('00' + (date.getMonth() + 1
 
 //dayX és 0 per diumenge, 1 dilluns i anar fent
 function getDaysXOfYear(dayX, year) {
-  const firstDayOfYear = new Date(year+'-1-1')
+  const firstDayOfYear = new Date(year + '-1-1')
   const dayInMillis = 86400000; // number of milliseconds in a day
   let dayToCheck = new Date(firstDayOfYear.getTime())
   const dates = [];
   let t = 0;
-  while (dayToCheck.getFullYear()===year){
-      if (dayToCheck.getDay()===dayX){
-          dates.push(yyyymmdd(dayToCheck))
-      }
-      t++;
-      dayToCheck = new Date(firstDayOfYear.getTime() + t * dayInMillis);
+
+  while (dayToCheck.getFullYear() === year) {
+    if (dayToCheck.getDay() === dayX) {
+      dates.push(yyyymmdd(dayToCheck))
+    }
+    t++;
+    dayToCheck = new Date(firstDayOfYear.getTime() + t * dayInMillis);
   }
-  return dates;
+
+  const ThirteenWeeksFromToday = dates.filter(date => {
+    const today = new Date().getTime()
+    const day = new Date(date).getTime()
+    while (day > today) {
+      return date
+    }
+  })
+
+  return ThirteenWeeksFromToday.slice(0, 13);
 }
 
+
+function fourMonthsFromNow(year) {
+  let month = new Date().getMonth() + 1;
+  const months = [
+    [`${year}-0${month++}`, `${year}-0${month++}`],
+    [`${year}-0${month++}`, `${year}-0${month++}`]
+  ]
+
+  return months
+}
 
 const addSpace = () => {
   const goTo = useNavigate();
@@ -51,6 +71,7 @@ const addSpace = () => {
   const [center, setCenter] = useState([]);
   const [image, setImage] = useState()
   const [send, setSend] = useState(false)
+  const [lockedDays, setLockedDays] = useState([])
   const [newSpace, setNewSpace] = useState({
     name: "",
     description: "",
@@ -163,22 +184,19 @@ const addSpace = () => {
     if (addDates) {
       setSelectedDates(removeDuplicates([...selectedDates, dateStr]))
     } else {
-      setSelectedDates([...selectedDates].filter(day => indexOf(day) === -1))
+      setSelectedDates([...selectedDates].filter(day => selectedDates.indexOf(day) === -1))
     }
   }
 
-  
-  
-  // const handleClickDay = (day) => {
-  //   const date = yyyymmdd(day)
-  //   console.log(date)
-  // }
+
+
+
 
   function tileClassName({ date, view }) {
     if (view === 'month') {
       const dateStr = yyyymmdd(date)
       if (selectedDates.includes(dateStr)) {
-        console.log(dateStr)
+        //console.log(dateStr)
         return "highlighted-date";
       }
     }
@@ -289,6 +307,9 @@ const addSpace = () => {
     }
   }
 
+  function handleActiveStartDateChange(ev) {
+    console.log("canvi de mes", yyyymmdd(ev.activeStartDate))
+  }
 
   function HandleMapEvents() {
     const map = useMapEvents({
@@ -338,7 +359,6 @@ const addSpace = () => {
 
 
   const validateAndSend = () => {
-    setSend(true)
     validate("name", newSpace.name)
     validate("description", newSpace.description)
     validate("rules", newSpace.rules)
@@ -347,18 +367,39 @@ const addSpace = () => {
     validate("address", newSpace.address)
     validate("services", newSpace.services)
     validate("approximateCoords", newSpace.approximateCoords)
+    setSend(true)
+
   }
 
   const blockDayOfTheWeek = (d) => {
-    let day = ['LU','MT','MC','JV','VR','SD','DG'].indexOf(d) +1 ;
-        if (day === 7) day=0;
+    if (lockedDays.includes(d)) {
+      console.log("desmarcar dia semana")
+      let day = ['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].indexOf(d) + 1;
+      if (day === 7) {
+        day = 0;
+      }
+      const days = getDaysXOfYear(day, year);
+      let dates = [...selectedDates]
+      dates = dates.filter(date => !days.includes(date))
+      setSelectedDates(dates)
+      setLockedDays([...lockedDays.filter(day => day != d) ])
+    } else {
+      console.log("marcar dia semana")
 
-        const days = getDaysXOfYear(day, year);
-        let dates = [...selectedDates];
-        dates = dates.filter(el => dates.indexOf(el)===-1)
-        dates = [...dates, ...days]
-        setSelectedDates(dates)
+      let day = ['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].indexOf(d) + 1;
+      if (day === 7) {
+        day = 0;
+      }
+      const days = getDaysXOfYear(day, year);
+      let dates = [...selectedDates]
+      dates = [...dates, ...days]
+      setSelectedDates(dates)
+      setLockedDays([...lockedDays, d])
+    }
+
   }
+
+
 
 
 
@@ -369,6 +410,7 @@ const addSpace = () => {
         <Grid item xs={5.5}>
         </Grid>
         <Grid item xs={6.5} sx={{
+          marginTop: 2,
           display: 'flex',
           justifyContent: 'center',
         }}>
@@ -436,9 +478,9 @@ const addSpace = () => {
             marginTop: 5,
             marginBottom: 3
           }}>
-            ¿Quieres bloquear algún día?
+            Configura la disponibilidad de los próximos 90 días:
           </Typography>
-          {['LU','MT','MC','JV','VR','SD','DG'].map((el, idx) => <Button variant="outlined" sx={{
+          {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
             color: '#7879F1',
             borderColor: '#7879F1',
             fontSize: 10,
@@ -449,34 +491,65 @@ const addSpace = () => {
               borderColor: '#7879F1',
               boxShadow: 'none',
             },
-            }} onClick={()=>blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
+          }} onClick={() => blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
 
-          <Calendar
-            //onActiveStartDateChange={handleActiveStartDateChange}
-            showNeighboringMonth={true}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center'
-            }}
-            //tileClassName={tileClassName}
-            onChange={setDate}
-            //onClickWeekNumber={handleClickWeekNumber}
-            value={date}
-            onClickDay={handleClickDay}
-            tileClassName={tileClassName}
 
-          //selectRange={true}
-          />
+          {
+            fourMonthsFromNow(year).map((q, idx) => (
+              <Grid item sx={{
+                margin: 3,
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+                className="calendar-space-container"
+                key={idx}
+              >
+                {q.map((month, idx) => (
+                  <Grid item sx={{
+                    paddingLeft: 2.4,
+                    display: 'flex',
+                    marginLeft: 1,
+                    flexDirection: 'row'
+                  }}
+                  key={idx}
+
+                  >
+                    <Calendar
+                      onChange={setDate}
+                      minDetail="month"
+                      value={date}
+                      onClickDay={handleClickDay}
+                      tileClassName={tileClassName}
+                      onActiveStartDateChange={handleActiveStartDateChange}
+                      activeStartDate={new Date(month + '-01')}
+                      showNeighboringMonth={false}
+                      nextLabel=''
+                      prevLabel=''
+                      prev2Label=''
+                      next2Label=''
+                    />
+                  </Grid>
+
+                ))
+                }
+              </Grid>
+            ))
+          }
         </Grid>
+
         <Grid item xs={6.5} sx={{
           display: 'flex',
           justifyContent: 'center'
         }}>
+
           <Card sx={{
+            width: '70%',
+            height: 1110,
             marginLeft: 4,
             marginRight: 4,
-            marginTop: 2,
+            marginTop: 5.8,
           }}>
+
             <CardContent>
               <Grid item sx={{
                 marginTop: 2,
