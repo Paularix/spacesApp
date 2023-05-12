@@ -30,6 +30,13 @@
   font-weight: 700 !important;
 }
 
+.spaceInfo-card-info{
+  text-align: left;
+}
+
+.spaceInfo-card-price{
+  text-align: right;
+}
 .spaceInfo-title {
   margin-top: 10px;
   margin-left: 52px;

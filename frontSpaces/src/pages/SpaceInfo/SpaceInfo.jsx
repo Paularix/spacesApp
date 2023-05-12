@@ -115,25 +115,23 @@ const SpaceInfo = () => {
                 <div>
                   <Typography mt={2} variant="h6" component="h2"><strong>Características</strong></Typography>
                   <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <Typography variant="subtitle1" component="h2"><OutdoorGrillIcon fontSize="small"/> Comodidades</Typography>
-                    <ul className='spaceInfo-features-list'>
-                      <li> Microondas</li>
-                      <li> Sillas</li>
-                      <li> Wi-Fi</li>
-                    </ul>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle1" component="h2"><OutdoorGrillIcon fontSize="small" /> Comodidades</Typography>
+                      <ul className='spaceInfo-features-list'>
+                        <li> Microondas</li>
+                        <li> Sillas</li>
+                        <li> Wi-Fi</li>
+                      </ul>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle1" component="h2"><ChairIcon fontSize="small" /> Zonas</Typography>
+                      <ul className='spaceInfo-features-list'>
+                        <li> Cocina</li>
+                        <li> Comedor</li>
+                        <li> Parque</li>
+                      </ul>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="subtitle1" component="h2"><ChairIcon fontSize="small"/> Zonas</Typography>
-                    <ul className='spaceInfo-features-list'>
-                      <li> Cocina</li>
-                      <li> Comedor</li>
-                      <li> Parque</li>  
-                    </ul>
-                  </Grid>
-
-                  </Grid>
-               
                 </div>
               </div>
             </div>
@@ -173,26 +171,22 @@ const SpaceInfo = () => {
                   <Button variant="contained" size="medium">
                     Reservar
                   </Button>
-                  <Typography m={2} variant="body2" style={{opacity: 0.5}} align="center">
+                  <Typography m={2} variant="body2" style={{ opacity: 0.5 }} align="center">
                     No se te cobrara nada aún.
                   </Typography>
-                  <span>
+                  <div>
                     <Typography variant="body2" color="opacity">
-                      80 € x 5 dias 400 €
+                      <span className='spaceInfo-card-info'> 80 € x 5 dias</span> <span className='spaceInfo-card-price'> 400 €</span>
                     </Typography>
                     <Typography variant="body2" color="opacity">
-                      Comisión de servicio de FlexSpace 59 €
+                      <span className='spaceInfo-card-info'>Comisión de servicio de FlexSpace</span><span className='spaceInfo-card-price'> 59 €</span>
                     </Typography>
                     <Divider />
                     <Typography variant="body2" color="opacity">
-                      <strong>Total 400 €</strong>
+                      <strong><span className='spaceInfo-card-info'>Total</span><span className='spaceInfo-card-price'>400 €</span></strong>
                     </Typography>
-                  </span>
+                  </div>
                 </div>
-
-
-
-
               </CardContent>
               {/* <CardActions>
                 <Button size="small">Learn More</Button>
