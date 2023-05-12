@@ -12,17 +12,15 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Calendar from '../../components/Calendar/Calendar'
 import Popover from '@mui/material/Popover';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import FilledInput from '@mui/material/FilledInput';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
+import PersonIcon from '@mui/icons-material/Person';
+import DescriptionIcon from '@mui/icons-material/Description';
+import ChairIcon from '@mui/icons-material/Chair';
+import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
 
 const SpaceInfo = () => {
 
@@ -62,7 +60,6 @@ const SpaceInfo = () => {
             <Typography variant="h5" component="h4">
               Encantador Loft para Reuniones
             </Typography>
-
             <h6 className="text-center mb-4"> <a href="https://www.google.com/maps/place/Barcelona/" target="_blank">Barcelona, España</a></h6>
           </div>
           <div className="carousel-wrapper">
@@ -84,64 +81,59 @@ const SpaceInfo = () => {
         </div>
         <Grid className="spaceInfo-grid-container" container spacing={2}>
           <Grid item xs={7}>
-            <h2>Espacio apto para músicos. Anfitrión: <strong>Valentina</strong></h2>
-            <div className="description-wrapper">
-
-              <div>
-                <Typography variant="h5" component="h3">
-                  Conoce a tu anfitrión
-                </Typography>
-                <div className='spaceInfo-host'>
-                  <img className='spaceInfo-image' src="https://www.caritas.org.mx/wp-content/uploads/2019/02/cualidades-persona-humanitaria.jpg" alt="" />
-                  <h2><strong>Valentina</strong></h2>
-                  <h6>Anfitrión</h6>
-                  <div className='spaceInfo-host-description'>Descripción: Soy escritora, escritora y tengo un doctorado en cine y teología de King 's College London. Fui director de una escuela de cine durante 13 años y ahora tengo un negocio de consultoría en la industria del cine. Me encanta comer la comida increíble de mi marido David, sobre todo en compañía. Me encanta viajar y soy aventurero </div>
-                </div>
+            <div className='spaceInfo-grid-part1'>
+              <div className='spaceInfo-title2'>
+                <Typography variant="h6" component="h4">Espacio apto para músicos. Anfitrión: Valentina</Typography>
+                <h6 className='spaceInfo-title-personIcon'><PersonIcon className='spaceInfo-personIcon' /> 18 Personas</h6>
               </div>
-              <Divider />
-              <div>
-                <h2>Información sobre este espacio</h2>
-                <div className='spaceInfo-space-description'>
-                  <div>*descripcion*Sala polivalente situado en Gràcia. ​Cocina completa, televisión 65', equipo de sonido alta fidelidad, wifi, work-shops, clases privadas, presentaciones comerciales, coworking, reuniones de trabajo, estudio de grabación y fotográfico; cine, música y televisión (ideal para ver retransmisiones deportivas), reuniones de trabajo. Un espacio versátil y acogedor, es un local discreto, moderno y con encanto</div>
-                </div>
-              </div>
-              <Divider />
-              <div>
-                <h2>Características</h2>
+              <div className="description-wrapper">
                 <div>
-                  <h2>Comodidades</h2>
-                  <div>* Aire Acondicionado</div>
-                  <div>* Sillas</div>
-                  <div>* Wi-Fi</div>
-                </div>
-                <div>
-                  <h2>Zonas</h2>
-                  <div>* Aire Acondicionado</div>
-                  <div>* Sillas</div>
-                  <div>* Wi-Fi</div>
-                </div>
-              </div>
-              <Divider />
-              <div>
-                <h2>Aforo</h2>
-                <div>
-                  <div>Aforo del espacio:</div>
-                </div>
-              </div>
-              <Divider />
-              <div>
-                <h2>Qué debes saber</h2>
-                <div>
-                  <div>
-                    <h4>Normas del espacio</h4>
-                    <div>*reglas*Respecto el aforo dependiendo del evento puede variar. Sentados en mesa de trabajo es de 12 a 15 personas. Para otro tipo de reuniones puede ser sobre 20 personas.</div>
-                  </div>
-                  <div>
-                    <h4>Política de cancelación</h4>
-                    <div>Cancelación gratuita antes del 24 may..
-                      Consulta la política de cancelación completa del anfitrión, que se aplicará incluso si cancelas por haber contraído la COVID-19 o por cualquier problema relacionado con el coronavirus
+                  <Typography variant="h5" component="h3">
+                    Conoce a tu anfitrión
+                  </Typography>
+                  <div className='spaceInfo-host'>
+                    <div className='spaceInfo-host-card'>
+                      <Card className='spaceInfo-host-picture' sx={{ maxWidth: 300 }}>
+                        <img className='spaceInfo-image' src="https://www.caritas.org.mx/wp-content/uploads/2019/02/cualidades-persona-humanitaria.jpg" alt="" />
+                        <h2><strong>Valentina</strong></h2>
+                        <h6>Anfitrión</h6>
+                      </Card>
                     </div>
+
+                    <div className='spaceInfo-host-description'><DescriptionIcon /> <strong>Descripción: </strong>
+                      Soy escritora, escritora y tengo un doctorado en cine y teología de King 's College London. Fui director de una escuela de cine durante 13 años y ahora tengo un negocio de consultoría en la industria del cine. Me encanta comer la comida increíble de mi marido David, sobre todo en compañía. Me encanta viajar y soy aventurero </div>
                   </div>
+                </div>
+                <Divider />
+                <div>
+                  <Typography mt={2} variant="h6" component="h2">Información sobre este espacio</Typography>
+                  <div className='spaceInfo-space-description'>
+                    <div>*descripcion*Sala polivalente situado en Gràcia. ​Cocina completa, televisión 65', equipo de sonido alta fidelidad, wifi, work-shops, clases privadas, presentaciones comerciales, coworking, reuniones de trabajo, estudio de grabación y fotográfico; cine, música y televisión (ideal para ver retransmisiones deportivas), reuniones de trabajo. Un espacio versátil y acogedor, es un local discreto, moderno y con encanto</div>
+                  </div>
+                </div>
+                <Divider />
+                <div>
+                  <Typography mt={2} variant="h6" component="h2">Características</Typography>
+                  <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Typography variant="subtitle1" component="h2"><OutdoorGrillIcon fontSize="small"/> Comodidades</Typography>
+                    <ul className='spaceInfo-features-list'>
+                      <li> Microondas</li>
+                      <li> Sillas</li>
+                      <li> Wi-Fi</li>
+                    </ul>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography variant="subtitle1" component="h2"><ChairIcon fontSize="small"/> Zonas</Typography>
+                    <ul className='spaceInfo-features-list'>
+                      <li> Cocina</li>
+                      <li> Comedor</li>
+                      <li> Parque</li>  
+                    </ul>
+                  </Grid>
+
+                  </Grid>
+               
                 </div>
               </div>
             </div>
@@ -150,7 +142,7 @@ const SpaceInfo = () => {
             <Card className='spaceInfo-card' sx={{ maxWidth: 345 }}>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  <strong>25€</strong>/dia
+                  <strong>25 €</strong> día
                 </Typography>
                 <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">¿Qué día?</InputLabel>
@@ -159,7 +151,7 @@ const SpaceInfo = () => {
                     type={'text'}
                     endAdornment={
                       <InputAdornment position="end">
-                        <CalendarTodayRoundedIcon onClick={handleClick}/>
+                        <CalendarTodayRoundedIcon onClick={handleClick} />
                       </InputAdornment>
                     }
                     label="Password"
@@ -177,19 +169,30 @@ const SpaceInfo = () => {
                 >
                   <Calendar date={date} setDate={setDate} />
                 </Popover>
-                <Button variant="contained" size="medium">
-                  Reservar
-                </Button>
-                <div>
+                <div className='spaceInfo-card-pay'>
+                  <Button variant="contained" size="medium">
+                    Reservar
+                  </Button>
+                  <Typography variant="body2" color="opacity">
+                    No se te cobrara nada aún.
+                  </Typography>
+                  <span>
+                    <Typography variant="body2" color="opacity">
+                      80 € x 5 dias 400 €
+                    </Typography>
+                    <Typography variant="body2" color="opacity">
+                      Comisión de servicio de FlexSpace 59 €
+                    </Typography>
+                    <Divider />
+                    <Typography variant="body2" color="opacity">
+                      <strong>Total 400 €</strong>
+                    </Typography>
+                  </span>
                 </div>
-                {/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  adjective
-                </Typography>
-                <Typography variant="body2">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography> */}
+
+
+
+
               </CardContent>
               {/* <CardActions>
                 <Button size="small">Learn More</Button>
@@ -197,6 +200,22 @@ const SpaceInfo = () => {
             </Card>
           </Grid>
         </Grid>
+        <div>
+          <Divider />
+          <Typography variant="h6" component="h2">Qué debes saber</Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <h4>Normas del espacio</h4>
+              <div>*reglas*Respecto el aforo dependiendo del evento puede variar. Sentados en mesa de trabajo es de 12 a 15 personas. Para otro tipo de reuniones puede ser sobre 20 personas.</div>
+            </Grid>
+            <Grid item xs={6}>
+              <h4>Política de cancelación</h4>
+              <div>Cancelación gratuita antes del 24 may..
+                Consulta la política de cancelación completa del anfitrión, que se aplicará incluso si cancelas por haber contraído la COVID-19 o por cualquier problema relacionado con el coronavirus
+              </div>
+            </Grid>
+          </Grid>
+        </div>
       </div>
     </div>
   );
