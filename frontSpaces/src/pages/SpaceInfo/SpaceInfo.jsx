@@ -13,6 +13,16 @@ import Button from '@mui/material/Button';
 import Calendar from '../../components/Calendar/Calendar'
 import Popover from '@mui/material/Popover';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import FilledInput from '@mui/material/FilledInput';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
 
 const SpaceInfo = () => {
 
@@ -74,9 +84,9 @@ const SpaceInfo = () => {
         </div>
         <Grid className="spaceInfo-grid-container" container spacing={2}>
           <Grid item xs={7}>
-          <h2>Espacio apto para músicos. Anfitrión: <strong>Valentina</strong></h2>
+            <h2>Espacio apto para músicos. Anfitrión: <strong>Valentina</strong></h2>
             <div className="description-wrapper">
-            
+
               <div>
                 <Typography variant="h5" component="h3">
                   Conoce a tu anfitrión
@@ -142,7 +152,19 @@ const SpaceInfo = () => {
                 <Typography variant="h5" component="div">
                   <strong>25€</strong>/dia
                 </Typography>
-                <input type="text" value={date} onClick={handleClick} />
+                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">¿Qué día?</InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-password"
+                    type={'text'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <CalendarTodayRoundedIcon onClick={handleClick}/>
+                      </InputAdornment>
+                    }
+                    label="Password"
+                  />
+                </FormControl>
                 <Popover
                   id={id}
                   open={open}
@@ -156,7 +178,7 @@ const SpaceInfo = () => {
                   <Calendar date={date} setDate={setDate} />
                 </Popover>
                 <Button variant="contained" size="medium">
-                    Reservar
+                  Reservar
                 </Button>
                 <div>
                 </div>
@@ -173,29 +195,6 @@ const SpaceInfo = () => {
                 <Button size="small">Learn More</Button>
               </CardActions> */}
             </Card>
-            <div>
-              <div className="price-wrapper">
-
-                <div className="datepickers-wrapper">
-                  <div className="form-group">
-                    {/* <DateRangePicker
-                    startDate={dateRange.startDate}
-                    startDateId="start-date"
-                    endDate={dateRange.endDate}
-                    endDateId="end-date"
-                    onDatesChange={({ startDate, endDate }) => setDateRange({ startDate, endDate })}
-                    focusedInput={dateRange.focusedInput}
-                    onFocusChange={(focusedInput) => setDateRange({ ...dateRange, focusedInput })}
-                    showClearDates={true}
-                    numberOfMonths={1}
-                    isOutsideRange={() => false}
-                  /> */}
-                    {/* <Calendar /> */}
-
-                  </div>
-                </div>
-              </div>
-            </div>
           </Grid>
         </Grid>
       </div>
