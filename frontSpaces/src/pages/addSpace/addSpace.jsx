@@ -182,9 +182,14 @@ const addSpace = () => {
       addDates = true;
     }
     if (addDates) {
+      console.log("add date")
       setSelectedDates(removeDuplicates([...selectedDates, dateStr]))
     } else {
-      setSelectedDates([...selectedDates].filter(day => selectedDates.indexOf(day) === -1))
+      console.log("remove date")
+      let dates = [...selectedDates]
+      dates = dates.filter(day => day != dateStr)
+      console.log(dates)
+      setSelectedDates(dates)
     }
   }
 
@@ -246,6 +251,7 @@ const addSpace = () => {
         const data = new FormData()
         data.append('file', image)
         data.append('newSpace', JSON.stringify(newSpace))
+        data.append('selectedDates', JSON.stringify(selectedDates))
 
         const options = {
           method: 'POST',
@@ -307,9 +313,6 @@ const addSpace = () => {
     }
   }
 
-  function handleActiveStartDateChange(ev) {
-    console.log("canvi de mes", yyyymmdd(ev.activeStartDate))
-  }
 
   function HandleMapEvents() {
     const map = useMapEvents({
@@ -520,7 +523,6 @@ const addSpace = () => {
                       value={date}
                       onClickDay={handleClickDay}
                       tileClassName={tileClassName}
-                      onActiveStartDateChange={handleActiveStartDateChange}
                       activeStartDate={new Date(month + '-01')}
                       showNeighboringMonth={false}
                       nextLabel=''

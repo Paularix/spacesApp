@@ -42,7 +42,7 @@ export const MySpaces = () => {
                     setError(response.error)
                 }
             })
-            .catch(error => setError(error))
+            .catch(error => setError(error.error))
     }
 
     return (

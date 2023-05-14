@@ -43,6 +43,7 @@ export const Bookings = sequelize.define('Bookings', {
 export const Dates = sequelize.define('Dates', {
     date: dataTypes.DATE,
     available: dataTypes.STRING, 
+    spaces_id_space: dataTypes.INTEGER
 }, { tableName: 'dates', timestamps: false });
 
 
