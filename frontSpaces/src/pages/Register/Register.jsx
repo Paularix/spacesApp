@@ -16,7 +16,7 @@ function Register() {
 
     const goTo = useNavigate();
 
-    const { newUser, setNewUser} = useContext(GlobalContext)
+    const { newUser, setNewUser, setUser, user} = useContext(GlobalContext)
 
 
     const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +48,12 @@ function Register() {
         .then(res => res.json())
         .then(res => console.log(res))
         .then(res=> {
-            goTo('/profile')
+            setUser({
+                ...user,
+                password: '',
+                error: ''
+            })
+            goTo('/login')
         })
         .catch(error => {
             console.log(error)

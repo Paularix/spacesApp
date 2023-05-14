@@ -188,7 +188,7 @@ function ResponsiveAppBar() {
                                                     textDecoration: 'none',
                                                     color: 'black'
                                                 }}
-                                                to="/addSpace"
+                                                to="/AddSpace"
                                             >
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
                                                     <DomainAddIcon />

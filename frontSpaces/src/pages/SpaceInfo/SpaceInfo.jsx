@@ -1,70 +1,78 @@
 import React, { useState } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import './SpaceInfo.css';
+import moment from 'moment';
+import Calendar from '../../components/Calendar/Calendar';
+
 
 const SpaceInfo = () => {
-  const [startDate, setStartDate] = useState(new Date());
 
-  const CustomPrevArrow = (props) => {
-    const { onClick } = props;
-    return (
-      <button className="slick-arrow slick-prev" onClick={onClick}>
-        <i className="fa fa-chevron-left"></i>
-      </button>
-    );
-  };
-
-  const CustomNextArrow = (props) => {
-    const { onClick } = props;
-    return (
-      <button className="slick-arrow slick-next" onClick={onClick}>
-        <i className="fa fa-chevron-right"></i>
-      </button>
-    );
-  };
+  const [dateRange, setDateRange] = useState({
+    startDate: moment(),
+    endDate: moment(),
+    focusedInput: null,
+  });
 
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
-    slidesToScroll: 1,
-    prevArrow: <CustomPrevArrow />,
-    nextArrow: <CustomNextArrow />
+    slidesToScroll: 1
   };
+  
 
   return (
-    <div>
-      <h2>Nombre del Establecimiento</h2>
+    <div className="container">
       <div className="row">
-        <div className="col-md-6">
-          <Slider {...settings}>
-            <div className="slide">
-              <img src="https://via.placeholder.com/800x400" alt="Foto 1" />
-            </div>
-            <div className="slide">
-              <img src="https://via.placeholder.com/800x400" alt="Foto 2" />
-            </div>
-            <div className="slide">
-              <img src="https://via.placeholder.com/800x400" alt="Foto 3" />
-            </div>
-          </Slider>
-        </div>
-        <div className="col-md-6">
-          <p>Descripción del establecimiento.</p>
-          <h3>Precio: $100 por noche</h3>
-          <div>
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              dateFormat="dd/MM/yyyy"
-            />
+        <div className="col-md-6 col-lg-5">
+          <h2 className="text-center mb-4">Nombre del Establecimiento</h2>
+          <div className="carousel-wrapper">
+            <Slider {...settings}>
+              <div className="carousel-item">
+                <img src="/public/vite1" alt="Foto 1" />
+              </div>
+              <div className="carousel-item">
+                <img src="/public/vite2" alt="Foto 2" />
+              </div>
+              <div className="carousel-item">
+                <img src="/public/vite" alt="Foto 3" />
+              </div>
+              <div className="carousel-item">
+                <img src="https://via.placeholder.com/300x100" alt="Foto 4" />
+              </div>
+            </Slider>
           </div>
-          <button className="btn btn-primary">Reservar</button>
+        </div>
+        <div className="col-md-6 col-lg-7">
+          <div className="description-wrapper">
+            <h3 className="mb-3"><a className='d'>D</a>escripción del establecimiento.</h3>
+            <p>hola soy la descripción del space</p>
+            <div className="price-wrapper">
+              <h3 className="mb-3"><a className='p'>P</a>recio: 100€</h3>
+              <div className="datepickers-wrapper">
+                <div className="form-group">
+                  {/* <DateRangePicker
+                    startDate={dateRange.startDate}
+                    startDateId="start-date"
+                    endDate={dateRange.endDate}
+                    endDateId="end-date"
+                    onDatesChange={({ startDate, endDate }) => setDateRange({ startDate, endDate })}
+                    focusedInput={dateRange.focusedInput}
+                    onFocusChange={(focusedInput) => setDateRange({ ...dateRange, focusedInput })}
+                    showClearDates={true}
+                    numberOfMonths={1}
+                    isOutsideRange={() => false}
+                  /> */}
+                  <Calendar />
+                </div>
+              </div>
+              <button className="btn btn-primary mt-3">Reservar</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

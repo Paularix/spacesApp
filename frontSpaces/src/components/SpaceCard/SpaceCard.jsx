@@ -1,3 +1,4 @@
+import "./SpaceCard.css";
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -7,9 +8,11 @@ import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
-
+import Button from '@mui/material/Button';
 import './SpaceCard.css'
 import noImage from '../images/no_image.jpg'
+import {Link} from 'react-router-dom'
+
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -22,13 +25,12 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function SpaceCard({ space }) {
-  const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+const SpaceCard = ({ space }) => {
+  const shareViaWhatsApp = () => {
+    const whatsappMessage = encodeURIComponent(`Hey! Check out this awesome space: ${window.location.href}`);
+    window.location.href = `https://wa.me/?text=${whatsappMessage}`;
   };
-
 
   return (
     <Card sx={{ maxWidth: 300, minWidth: 300 }}>
@@ -36,15 +38,15 @@ export default function SpaceCard({ space }) {
         className='spacecard-img'
         component="img"
         height="194"
-        image={space.space_picture ?
-          ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
-        alt="Paella dish"
+         image={space.space_picture ?
+           ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
+        alt="space picture"
       />
       <CardContent>
         <div>
           <Typography variant="h6" className='spacecard-typo-title'>
             {space.name}
-          </Typography> 
+          </Typography>
           <Typography variant="subtitle2" className='spacecard-typo'>
             {space.address}
           </Typography>
@@ -62,6 +64,9 @@ export default function SpaceCard({ space }) {
             <b>{space.price} €</b> / dia
           </Typography>
         </div>
+        <div> <Button size="small" onClick={shareViaWhatsApp}>Share via WhatsApp</Button>
+          <Link to="/spaceInfo" size="small">Info</Link>
+        </div>
         {/* <div className="add-to-favorites">
           <IconButton>
             <FavoriteIcon />
@@ -78,4 +83,7 @@ export default function SpaceCard({ space }) {
       </CardActions> */}
     </Card>
   );
-}
+};
+
+export default SpaceCard;
+

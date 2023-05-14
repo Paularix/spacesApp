@@ -1,14 +1,13 @@
-.myspaces-container {
-   
+.myspaces-container {   
     justify-content: center;
     align-items: center;
     background-color: #fafafa;
-    height: calc(100vh - 124px);
-    overflow: auto;
+    height: calc(100vh - 94px);
 
 }
 
 .myspaces-card-container {
+    text-align: center;
     display: flex;
     justify-content: center;
     /* max-width: 900px; */
