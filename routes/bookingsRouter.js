@@ -144,9 +144,6 @@ router.delete('/:id', function (req, res, next) {
 
 });
 
-
-export default router;
-
 // GET información protegida de las reservas del usuario
 // @desc ruta protegida perfil de usuario
 router.get("/auth/Myreservations", [authenticate, authError], (req, res) => {
@@ -188,3 +185,6 @@ router.get("/auth/Myreservations", [authenticate, authError], (req, res) => {
 
     }
 })
+
+export default router;
+
