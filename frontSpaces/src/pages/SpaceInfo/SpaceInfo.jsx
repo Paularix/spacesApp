@@ -21,6 +21,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ChairIcon from '@mui/icons-material/Chair';
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
+import FmdGoodIcon from '@mui/icons-material/FmdGood';
 
 const SpaceInfo = () => {
 
@@ -60,7 +61,7 @@ const SpaceInfo = () => {
             <Typography variant="h5" component="h4">
               <strong>Encantador Loft para Reuniones</strong>
             </Typography>
-            <h6 className="text-center mb-4"> <a href="https://www.google.com/maps/place/Barcelona/" target="_blank">Barcelona, España</a></h6>
+            <h6 className="text-center mb-4"> <a href="https://www.google.com/maps/place/Barcelona/" target="_blank"><FmdGoodIcon fontSize='small'/>Barcelona, España</a></h6>
           </div>
           <div className="carousel-wrapper">
             <Slider className="carousel-slider" {...settings}>
