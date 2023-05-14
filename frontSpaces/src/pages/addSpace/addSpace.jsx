@@ -17,16 +17,61 @@ import GlobalContext from "../../context/GlobalContext";
 import { useNavigate } from 'react-router-dom';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FormHelperText from '@mui/material/FormHelperText';
+//import Calendar from '../../components/Calendar/Calendar'
+import '../../Components/Calendar/Calendar.css';
+import Calendar from 'react-calendar'
 
 
+
+const yyyymmdd = (date) => `${date.getFullYear()}-${('00' + (date.getMonth() + 1)).slice(-2)}-${('00' + (date.getDate())).slice(-2)}`;
+
+//dayX és 0 per diumenge, 1 dilluns i anar fent
+function getDaysXOfYear(dayX, year) {
+  const firstDayOfYear = new Date(year + '-1-1')
+  const dayInMillis = 86400000; // number of milliseconds in a day
+  let dayToCheck = new Date(firstDayOfYear.getTime())
+  const dates = [];
+  let t = 0;
+
+  while (dayToCheck.getFullYear() === year) {
+    if (dayToCheck.getDay() === dayX) {
+      dates.push(yyyymmdd(dayToCheck))
+    }
+    t++;
+    dayToCheck = new Date(firstDayOfYear.getTime() + t * dayInMillis);
+  }
+
+  const ThirteenWeeksFromToday = dates.filter(date => {
+    const today = new Date().getTime()
+    const day = new Date(date).getTime()
+    while (day > today) {
+      return date
+    }
+  })
+
+  return ThirteenWeeksFromToday.slice(0, 13);
+}
+
+
+function fourMonthsFromNow(year) {
+  let month = new Date().getMonth() + 1;
+  const months = [
+    [`${year}-0${month++}`, `${year}-0${month++}`],
+    [`${year}-0${month++}`, `${year}-0${month++}`]
+  ]
+
+  return months
+}
 
 const addSpace = () => {
   const goTo = useNavigate();
-
+  const [year, setYear] = useState((new Date()).getFullYear());
+  const [selectedDates, setSelectedDates] = useState([]);
   const [services, setServices] = useState([])
   const [center, setCenter] = useState([]);
   const [image, setImage] = useState()
   const [send, setSend] = useState(false)
+  const [lockedDays, setLockedDays] = useState([])
   const [newSpace, setNewSpace] = useState({
     name: "",
     description: "",
@@ -55,42 +100,60 @@ const addSpace = () => {
     switch (field) {
       case "name":
         if (!value) {
-          errors.push("Por favor, intruduce un nombre para tu espacio.")
+          if (!errors.includes("Por favor, intruduce un nombre para tu espacio.")) {
+            errors.push("Por favor, intruduce un nombre para tu espacio.")
+          }
         }
         break
       case "description":
         if (!value) {
-          errors.push("Por favor, intruduce una descripción para tu espacio.")
+          if (!errors.includes("Por favor, intruduce una descripción para tu espacio.")) {
+            errors.push("Por favor, intruduce una descripción para tu espacio.")
+          }
         }
         break
       case "capacity":
         if (value == 0) {
-          errors.push("El aforo no puede ser cero.");
+          if (!errors.includes("El aforo no puede ser cero.")) {
+            errors.push("El aforo no puede ser cero.");
+          }
         }
         break
       case "price":
         if (value == 0) {
-          errors.push("El precio no puede ser 0");
+          if (!errors.includes("El precio no puede ser 0.")) {
+            errors.push("El precio no puede ser 0.");
+
+          }
         }
         break
       case "address":
         if (!value) {
-          errors.push("Por favor, intruduce una dirección para tu espacio.")
+          if (!errors.includes("Por favor, intruduce una dirección para tu espacio.")) {
+            errors.push("Por favor, intruduce una dirección para tu espacio.")
+          }
         }
         break
       case "services":
         if (value.length == 0) {
-          errors.push("¿De verdad no tienes ninguno de los servicios de la lista?");
+          if (!errors.includes("¿De verdad no tienes ninguno de los servicios de la lista?")) {
+            errors.push("¿De verdad no tienes ninguno de los servicios de la lista?");
+          }
         }
         break
       case "approximateCoords":
         if (value.length == 0) {
-          errors.push("Indicanos en el mapa una ubicación aproximada para poder mostrarla al ofertar el espacio.");
+          if (!errors.includes("Indicanos en el mapa una ubicación aproximada para poder mostrarla al ofertar el espacio.")) {
+            errors.push("Indicanos en el mapa una ubicación aproximada para poder mostrarla al ofertar el espacio.");
+          }
+
         }
         break
       case "rules":
         if (!value) {
-          errors.push("¿De verdad no hay ninguna regla?");
+          if (!errors.includes("¿De verdad no hay ninguna regla?")) {
+            errors.push("¿De verdad no hay ninguna regla?");
+          }
         }
         break
 
@@ -110,7 +173,7 @@ const addSpace = () => {
 
 
 
-  const { user, setUser, error, setError } = useContext(GlobalContext)
+  const { user, setUser, error, setError, date, setDate } = useContext(GlobalContext)
 
 
   function getLocation() {
@@ -124,6 +187,43 @@ const addSpace = () => {
     setCenter([lat, long]);
   }
 
+  function removeDuplicates(arr) {
+    return Array.from(new Set(arr));
+  }
+
+  function handleClickDay(date) {
+    const dateStr = yyyymmdd(date)
+    let addDates = false
+
+    if (selectedDates.indexOf(dateStr) === -1) {
+      addDates = true;
+    }
+    if (addDates) {
+      console.log("add date")
+      setSelectedDates(removeDuplicates([...selectedDates, dateStr]))
+    } else {
+      console.log("remove date")
+      let dates = [...selectedDates]
+      dates = dates.filter(day => day != dateStr)
+      console.log(dates)
+      setSelectedDates(dates)
+    }
+  }
+
+
+
+
+
+  function tileClassName({ date, view }) {
+    if (view === 'month') {
+      const dateStr = yyyymmdd(date)
+      if (selectedDates.includes(dateStr)) {
+        //console.log(dateStr)
+        return "highlighted-date";
+      }
+    }
+    return null
+  }
 
   useEffect(() => {
     if (user.token) {
@@ -168,6 +268,7 @@ const addSpace = () => {
         const data = new FormData()
         data.append('file', image)
         data.append('newSpace', JSON.stringify(newSpace))
+        data.append('selectedDates', JSON.stringify(selectedDates))
 
         const options = {
           method: 'POST',
@@ -278,7 +379,22 @@ const addSpace = () => {
 
 
   const validateAndSend = () => {
-    setSend(true)
+
+    setNewSpace((prevState) => ({
+      ...prevState,
+      errors: {
+
+        [prevState.errors.name]: [],
+        description: [],
+        capacity: [],
+        price: [],
+        address: [],
+        rules: [],
+        services: [],
+        approximateCoords: [],
+      }
+    }))
+
     validate("name", newSpace.name)
     validate("description", newSpace.description)
     validate("rules", newSpace.rules)
@@ -287,7 +403,39 @@ const addSpace = () => {
     validate("address", newSpace.address)
     validate("services", newSpace.services)
     validate("approximateCoords", newSpace.approximateCoords)
+    setSend(true)
+
   }
+
+  const blockDayOfTheWeek = (d) => {
+    if (lockedDays.includes(d)) {
+      console.log("desmarcar dia semana")
+      let day = ['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].indexOf(d) + 1;
+      if (day === 7) {
+        day = 0;
+      }
+      const days = getDaysXOfYear(day, year);
+      let dates = [...selectedDates]
+      dates = dates.filter(date => !days.includes(date))
+      setSelectedDates(dates)
+      setLockedDays([...lockedDays.filter(day => day != d)])
+    } else {
+      console.log("marcar dia semana")
+
+      let day = ['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].indexOf(d) + 1;
+      if (day === 7) {
+        day = 0;
+      }
+      const days = getDaysXOfYear(day, year);
+      let dates = [...selectedDates]
+      dates = [...dates, ...days]
+      setSelectedDates(dates)
+      setLockedDays([...lockedDays, d])
+    }
+
+  }
+
+
 
 
 
@@ -298,6 +446,7 @@ const addSpace = () => {
         <Grid item xs={5.5}>
         </Grid>
         <Grid item xs={6.5} sx={{
+          marginTop: 2,
           display: 'flex',
           justifyContent: 'center',
         }}>
@@ -309,7 +458,7 @@ const addSpace = () => {
         </Grid>
 
 
-        <Grid item xs={5.5}>
+        <Grid item xs={5.5} >
 
           {
             center.length > 0
@@ -318,8 +467,8 @@ const addSpace = () => {
                   <Typography variant="h1" sx={{
                     fontSize: 18,
                     textAlign: 'center',
-                    marginTop: 28,
-                    marginBottom: 3
+                    marginBottom: 3,
+                    marginLeft: 4,
                   }}>
                     Selecciona una dirección aproximada:
                   </Typography>
@@ -338,7 +487,10 @@ const addSpace = () => {
                   {newSpace.errors.approximateCoords
                     ? (newSpace.errors.approximateCoords.map((error, index) => (
                       <FormHelperText sx={{
-                        marginLeft: 1.78,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginLeft: 4,
+                        marginTop: 3,
                         color: '#ba000d'
                       }}
                         key={index}>
@@ -350,27 +502,87 @@ const addSpace = () => {
                 </>
               )
               : (
-                <Box sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  marginTop: 52
-                }}>
+                <Box className="loading-box">
+                
                   <CircularProgress />
                 </Box>
               )
           }
+          <Typography variant="h1" sx={{
+            fontSize: 18,
+            textAlign: 'center',
+            marginTop: 5,
+            marginBottom: 3
+          }}>
+            Configura la disponibilidad de los próximos 90 días bloqueando los días que no quieras habilitar reservas:
+          </Typography>
+          {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
+            color: '#7879F1',
+            borderColor: '#7879F1',
+            fontSize: 10,
+            padding: 0.33,
+            margin: 1,
+            '&:hover': {
+              color: '#7879F1',
+              borderColor: '#7879F1',
+              boxShadow: 'none',
+            },
+          }} onClick={() => blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
 
+
+          {
+            fourMonthsFromNow(year).map((q, idx) => (
+              <Grid item sx={{
+                margin: 3,
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+                className="calendar-space-container"
+                key={idx}
+              >
+                {q.map((month, idx) => (
+                  <Grid item sx={{
+                    paddingLeft: 3,
+                    display: 'flex',
+                    marginLeft: 1,
+                    flexDirection: 'row'
+                  }}
+                    key={idx}
+
+                  >
+                    <Calendar
+                      onChange={setDate}
+                      minDetail="month"
+                      value={date}
+                      onClickDay={handleClickDay}
+                      tileClassName={tileClassName}
+                      activeStartDate={new Date(month + '-01')}
+                      showNeighboringMonth={false}
+                      nextLabel=''
+                      prevLabel=''
+                      prev2Label=''
+                      next2Label=''
+                    />
+                  </Grid>
+
+                ))
+                }
+              </Grid>
+            ))
+          }
         </Grid>
+
         <Grid item xs={6.5} sx={{
           display: 'flex',
           justifyContent: 'center'
         }}>
+
           <Card sx={{
             marginLeft: 4,
             marginRight: 4,
-            marginTop: 2,
+            marginTop: 5.8,
           }}>
+
             <CardContent>
               <Grid item sx={{
                 marginTop: 2,
@@ -438,7 +650,7 @@ const addSpace = () => {
                   size="small"
 
                 />
-                
+
                 <TextField
                   error={newSpace.errors.address.length == 0 ? false : true}
                   helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."
@@ -559,8 +771,8 @@ const addSpace = () => {
                 <Button variant="contained" component="label" sx={{
                   background: '#7879F1',
                   marginLeft: 1.78,
-                  marginTop: 1,
                   marginRight: 1.78,
+                  marginTop: 8,
                   boxShadow: 'none',
                   justifyItems: 'center',
                   '&:hover': {

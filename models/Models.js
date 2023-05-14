@@ -46,6 +46,7 @@ Bookings.belongsTo(Users, { foreignKey: 'rid_booker_user' })
 const Dates = sequelize.define('Dates', {
     date: dataTypes.DATE,
     available: dataTypes.STRING, 
+    spaces_id_space: dataTypes.INTEGER
 }, { tableName: 'dates', timestamps: false });
 
 

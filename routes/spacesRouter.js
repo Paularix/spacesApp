@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import jsonwebtoken from 'jsonwebtoken';
 import { sequelize } from "../loadSequelize.js";
-import { Services, Spaces } from '../models/Models.js';
+import { Services, Spaces, Dates } from '../models/Models.js';
 import { authenticate, authError } from './middleware.js';
 
 import { SpaceServices } from '../models/Models.js';
@@ -116,10 +116,7 @@ router.post("/auth", [authenticate, authError], (req, res) => {
                 const token = req.headers.authorization || ''
                 const decoded = jsonwebtoken.decode(token)
                 const newSpace = JSON.parse(req.body.newSpace)
-
-                console.log(newSpace.approximateCoords[0])
-                console.log(newSpace.approximateCoords[1])
-
+                const selectedDates = JSON.parse(req.body.selectedDates)
 
                 const spaceToBeSaved = {
                     name: newSpace.name,
@@ -134,7 +131,6 @@ router.post("/auth", [authenticate, authError], (req, res) => {
                     long: newSpace.approximateCoords[1],
                 }
                 
-                console.log(spaceToBeSaved)
 
                 Spaces.create(spaceToBeSaved)
                 .then(item => {
@@ -143,6 +139,20 @@ router.post("/auth", [authenticate, authError], (req, res) => {
                             space_picture: req.file.filename
                         })
                     }
+                    return item
+                })
+                .then(item => {
+                    for (let date of selectedDates) {
+                        console.log(item.id)
+
+                        Dates.create({
+                            date: date,
+                            available: false,
+                            spaces_id_space: item.id
+                        }).then(date => console.log("Date created:", date))
+                        .catch(err => console.log(err))
+                    }
+
                     return item
                 })
                 .then(item => {
