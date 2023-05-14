@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
@@ -17,6 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Menu from '@mui/material/Menu';
+import GlobalContext from '../../context/GlobalContext'
 
 
 const yyyymmdd = (dateString) => {
@@ -27,6 +28,7 @@ const yyyymmdd = (dateString) => {
 
 export const Landing = () => {
   const [location, setLocation] = useState("")
+  const {date, queryLocation, setQueryLocation } = useContext(GlobalContext)
   const landingButton = {
     marginTop: '25px',
     fontSize: '18px',
@@ -60,6 +62,8 @@ export const Landing = () => {
       .then(res => console.log(res))
       .catch(err => console.log(err))
   }
+
+
 
   return (
 

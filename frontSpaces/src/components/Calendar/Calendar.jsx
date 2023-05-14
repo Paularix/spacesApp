@@ -10,7 +10,6 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import { Grid } from '@mui/material'
 import './Calendar.css';
-import GlobalContext from '../../context/GlobalContext'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
@@ -25,7 +24,6 @@ const yyyymmdd = (dateString) => {
 export default () => {
 
 
-    const { date, setDate } = useContext(GlobalContext)
 
     const {date, setDate} = useContext(GlobalContext);
     const [selectedDates, setSelectedDates] = useState("");

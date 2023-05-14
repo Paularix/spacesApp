@@ -36,7 +36,7 @@ function App() {
     phone: '',
 })
 
-const [date, setDate]  = useState(new Date())
+const [queryLocation, setQueryLocation] = useState("")
 
 
 const [error, setError]  = useState("")
@@ -61,6 +61,7 @@ const context = {
   user, setUser, 
   error, setError, 
   date, setDate,
+  queryLocation, setQueryLocation,
   logout 
 }
 
