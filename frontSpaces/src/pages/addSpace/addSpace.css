@@ -4,30 +4,39 @@
 }
 
 .leaflet-container {
-    margin-left: 15px;
+
+    margin-left: 150px;    
     border-radius: 5px;
-    width: 100%;
-    height: 50vh;
+    width: 60%;
+    height: 35vh;
 }
 
 .space-field.space-name {
-    margin-top: 6px;
+    margin-top: 12px;
     margin-bottom: 6px;
     margin-right: 14px;
     margin-left: 14px;
 }
 
 .space-field.space-description {
-    margin-top: 6px;
+    margin-top: 12px;
     margin-bottom: 6px;
     margin-right: 14px;
     margin-left: 14px;
 }
 
 .space-field.space-address {
-    margin-top: 6px;
+    margin-top: 12px;
     margin-bottom: 6px;
     margin-right: 14px;
     margin-left: 14px;
 }
 
+.loading-box{
+    margin-left: 150px;
+    height: 400px;
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -101,42 +101,60 @@ const addSpace = () => {
     switch (field) {
       case "name":
         if (!value) {
-          errors.push("Por favor, intruduce un nombre para tu espacio.")
+          if (!errors.includes("Por favor, intruduce un nombre para tu espacio.")) {
+            errors.push("Por favor, intruduce un nombre para tu espacio.")
+          }
         }
         break
       case "description":
         if (!value) {
-          errors.push("Por favor, intruduce una descripción para tu espacio.")
+          if (!errors.includes("Por favor, intruduce una descripción para tu espacio.")) {
+            errors.push("Por favor, intruduce una descripción para tu espacio.")
+          }
         }
         break
       case "capacity":
         if (value == 0) {
-          errors.push("El aforo no puede ser cero.");
+          if (!errors.includes("El aforo no puede ser cero.")) {
+            errors.push("El aforo no puede ser cero.");
+          }
         }
         break
       case "price":
         if (value == 0) {
-          errors.push("El precio no puede ser 0");
+          if (!errors.includes("El precio no puede ser 0.")) {
+            errors.push("El precio no puede ser 0.");
+
+          }
         }
         break
       case "address":
         if (!value) {
-          errors.push("Por favor, intruduce una dirección para tu espacio.")
+          if (!errors.includes("Por favor, intruduce una dirección para tu espacio.")) {
+            errors.push("Por favor, intruduce una dirección para tu espacio.")
+          }
         }
         break
       case "services":
         if (value.length == 0) {
-          errors.push("¿De verdad no tienes ninguno de los servicios de la lista?");
+          if (!errors.includes("¿De verdad no tienes ninguno de los servicios de la lista?")) {
+            errors.push("¿De verdad no tienes ninguno de los servicios de la lista?");
+          }
         }
         break
       case "approximateCoords":
         if (value.length == 0) {
-          errors.push("Indicanos en el mapa una ubicación aproximada para poder mostrarla al ofertar el espacio.");
+          if (!errors.includes("Indicanos en el mapa una ubicación aproximada para poder mostrarla al ofertar el espacio.")) {
+            errors.push("Indicanos en el mapa una ubicación aproximada para poder mostrarla al ofertar el espacio.");
+          }
+
         }
         break
       case "rules":
         if (!value) {
-          errors.push("¿De verdad no hay ninguna regla?");
+          if (!errors.includes("¿De verdad no hay ninguna regla?")) {
+            errors.push("¿De verdad no hay ninguna regla?");
+          }
         }
         break
 
@@ -362,6 +380,22 @@ const addSpace = () => {
 
 
   const validateAndSend = () => {
+
+    setNewSpace((prevState) => ({
+      ...prevState,
+      errors: {
+
+        [prevState.errors.name]: [],
+        description: [],
+        capacity: [],
+        price: [],
+        address: [],
+        rules: [],
+        services: [],
+        approximateCoords: [],
+      }
+    }))
+
     validate("name", newSpace.name)
     validate("description", newSpace.description)
     validate("rules", newSpace.rules)
@@ -385,7 +419,7 @@ const addSpace = () => {
       let dates = [...selectedDates]
       dates = dates.filter(date => !days.includes(date))
       setSelectedDates(dates)
-      setLockedDays([...lockedDays.filter(day => day != d) ])
+      setLockedDays([...lockedDays.filter(day => day != d)])
     } else {
       console.log("marcar dia semana")
 
@@ -425,7 +459,7 @@ const addSpace = () => {
         </Grid>
 
 
-        <Grid item xs={5.5}>
+        <Grid item xs={5.5} >
 
           {
             center.length > 0
@@ -465,12 +499,7 @@ const addSpace = () => {
                 </>
               )
               : (
-                <Box sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  marginTop: 52
-                }}>
+                <Box className="loading-box">
                   <CircularProgress />
                 </Box>
               )
@@ -481,7 +510,7 @@ const addSpace = () => {
             marginTop: 5,
             marginBottom: 3
           }}>
-            Configura la disponibilidad de los próximos 90 días:
+            Configura la disponibilidad de los próximos 90 días bloqueando los días que no quieras habilitar reservas:
           </Typography>
           {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
             color: '#7879F1',
@@ -509,12 +538,12 @@ const addSpace = () => {
               >
                 {q.map((month, idx) => (
                   <Grid item sx={{
-                    paddingLeft: 2.4,
+                    paddingLeft: 3,
                     display: 'flex',
                     marginLeft: 1,
                     flexDirection: 'row'
                   }}
-                  key={idx}
+                    key={idx}
 
                   >
                     <Calendar
@@ -545,8 +574,6 @@ const addSpace = () => {
         }}>
 
           <Card sx={{
-            width: '70%',
-            height: 1110,
             marginLeft: 4,
             marginRight: 4,
             marginTop: 5.8,
@@ -740,8 +767,8 @@ const addSpace = () => {
                 <Button variant="contained" component="label" sx={{
                   background: '#7879F1',
                   marginLeft: 1.78,
-                  marginTop: 1,
                   marginRight: 1.78,
+                  marginTop: 8,
                   boxShadow: 'none',
                   justifyItems: 'center',
                   '&:hover': {
