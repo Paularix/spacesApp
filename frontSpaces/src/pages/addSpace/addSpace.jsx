@@ -468,7 +468,8 @@ const addSpace = () => {
                   <Typography variant="h1" sx={{
                     fontSize: 18,
                     textAlign: 'center',
-                    marginBottom: 3
+                    marginBottom: 3,
+                    marginLeft: 4,
                   }}>
                     Selecciona una dirección aproximada:
                   </Typography>
@@ -487,7 +488,10 @@ const addSpace = () => {
                   {newSpace.errors.approximateCoords
                     ? (newSpace.errors.approximateCoords.map((error, index) => (
                       <FormHelperText sx={{
-                        marginLeft: 1.78,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginLeft: 4,
+                        marginTop: 3,
                         color: '#ba000d'
                       }}
                         key={index}>
@@ -500,6 +504,7 @@ const addSpace = () => {
               )
               : (
                 <Box className="loading-box">
+                
                   <CircularProgress />
                 </Box>
               )
