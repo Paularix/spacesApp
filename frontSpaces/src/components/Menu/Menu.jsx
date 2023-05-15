@@ -22,6 +22,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import jwt_decode from 'jwt-decode'
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
+import LoupeIcon from '@mui/icons-material/Loupe';
 
 const pages = [];
 
@@ -68,7 +69,7 @@ function ResponsiveAppBar() {
     }
 
     const menuItem = {
-        width: '160px'
+        width: '240px'
     }
 
     const goLanding = () => {
@@ -167,7 +168,7 @@ function ResponsiveAppBar() {
                                             >
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
                                                     <AccountCircleIcon />
-                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Profile</Typography>
+                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Perfil</Typography>
                                                 </MenuItem>
                                             </Link>
                                             <Divider />
@@ -180,7 +181,7 @@ function ResponsiveAppBar() {
                                             >
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
                                                     <ApartmentIcon />
-                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">My spaces</Typography>
+                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Mis Espacios</Typography>
                                                 </MenuItem>
                                             </Link>
                                             <Link
@@ -192,7 +193,19 @@ function ResponsiveAppBar() {
                                             >
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
                                                     <DomainAddIcon />
-                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Add Space</Typography>
+                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Subir un espacio</Typography>
+                                                </MenuItem>
+                                            </Link>
+                                            <Link
+                                                style={{
+                                                    textDecoration: 'none',
+                                                    color: 'black'
+                                                }}
+                                                to="/bookingMGMT"
+                                            >
+                                                <MenuItem style={menuItem} onClick={toggleUserMenu}>
+                                                    <LoupeIcon />
+                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Gestionar mis reservas</Typography>
                                                 </MenuItem>
                                             </Link>
                                             <Divider />
