@@ -55,14 +55,14 @@ export const Landing = () => {
   const search = () => {
 
     console.log(queryLocation, date)
-    // const query = `http://localhost:3080/api/spaces/find/?location=${location}&from=${yyyymmdd(date[0])}&to=${yyyymmdd(date[1])}`
-    // const options = {
-    //   method: 'GET',
-    // }
-    // fetch(query, options)
-    //   .then(res => res.json())
-    //   .then(res => console.log(res))
-    //   .catch(err => console.log(err))
+     const query = `http://localhost:3080/api/spaces/find/?location=${queryLocation}&from=${yyyymmdd(date[0])}&to=${yyyymmdd(date[1])}`
+     const options = {
+       method: 'GET',
+     }
+     fetch(query, options)
+       .then(res => res.json())
+       .then(res => console.log(res))
+       .catch(err => console.log(err))
   }
 
 
@@ -97,7 +97,7 @@ export const Landing = () => {
                 onChange={(e) => setQueryLocation(e.target.value)}
               >
                 <MenuItem value={"Barcelona"}>Barcelona</MenuItem>
-                <MenuItem value={"L'Hospitaled del Llobregat"}>L'Hospitaled del Llobregat</MenuItem>
+                <MenuItem value={"Hospitaled"}>L'Hospitaled del Llobregat</MenuItem>
                 <MenuItem value={"Terrassa"}>Terrassa</MenuItem>
               </Select>
               

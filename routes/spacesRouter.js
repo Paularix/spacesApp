@@ -4,12 +4,37 @@ import jsonwebtoken from 'jsonwebtoken';
 import { sequelize } from "../loadSequelize.js";
 import { Services, Spaces, Dates } from '../models/Models.js';
 import { authenticate, authError } from './middleware.js';
-
+import { Op } from 'sequelize';
 import { SpaceServices } from '../models/Models.js';
+import {yyyymmdd} from '../config/helpers.js'
 
 Spaces.belongsToMany(Services, { through: "SpaceServices", foreignKey: "rid_space" })
+Spaces.hasMany(Dates, { foreignKey: "spaces_id_space" })
 
 const router = express.Router();
+
+const locations = {
+    Barcelona : {
+        maxLatLimit: 41.3947,
+        minLatLimit: 41.1292,
+        minLonLimit: 2.1024,
+        maxLonLimit: 2.2661
+    },
+    Hospitalet : {
+        maxLatLimit: 41.347364,
+        minLatLimit: 41.335025,
+        minLonLimit: 2.085028,
+        maxLonLimit: 2.151676
+    },
+    Terrassa : {
+        maxLatLimit: 41.573957,
+        minLatLimit: 41.335025,
+        minLonLimit: 2.018239,
+        maxLonLimit: 2.018564
+    }
+}
+
+
 
 
 const storage = multer.diskStorage({
@@ -22,6 +47,64 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage }).single('file');
+
+// GET spaces
+// @desc obtener todos los spaces de BD que cumplan con la query por fecha y localización
+router.get('/find', function (req, res, next) {
+
+    sequelize.sync().then(() => {
+        
+        Spaces.findAll({
+            where: {
+                lat: {
+                    [Op.between]: [locations[req.query.location].minLatLimit, locations[req.query.location].maxLatLimit]
+                },
+                long: {
+                    [Op.between]: [locations[req.query.location].minLonLimit, locations[req.query.location].maxLonLimit]
+                },
+                status: "public",          
+            },
+            include: [{
+                model: Dates,
+                attributes: ['date'],
+            }]  
+        })
+            .then((spaces) => {
+
+                const dateFrom = new Date(req.query.from).getTime()
+                const dateTo = new Date(req.query.to).getTime()
+
+                let results = []
+
+                for (let space of spaces) {
+                    // Unica date
+                    
+                    let conflictDates = space.Dates.filter(date => (new Date(date.date).getTime() >= dateFrom) && (dateTo >= new Date(date.date).getTime()))
+                    console.log(conflictDates)
+                    if (conflictDates.length == 0) {
+                        results.push(space)
+                    } 
+                }              
+
+                res.json({
+                    ok: true,
+                    data: results 
+                })
+            })
+            .catch(error => res.json({
+                ok: false,
+                error: error.message
+            }))
+
+    }).catch((error) => {
+        res.json({
+            ok: false,
+            error: error
+        })
+    });
+
+});
+
 
 // GET spaces
 // @desc obtener todos los spaces de BD
@@ -130,60 +213,60 @@ router.post("/auth", [authenticate, authError], (req, res) => {
                     lat: newSpace.approximateCoords[0],
                     long: newSpace.approximateCoords[1],
                 }
-                
+
 
                 Spaces.create(spaceToBeSaved)
-                .then(item => {
-                    if (req.file) {
-                        item.update({
-                            space_picture: req.file.filename
-                        })
-                    }
-                    return item
-                })
-                .then(item => {
-                    for (let date of selectedDates) {
-                        console.log(item.id)
-
-                        Dates.create({
-                            date: date,
-                            available: false,
-                            spaces_id_space: item.id
-                        }).then(date => console.log("Date created:", date))
-                        .catch(err => console.log(err))
-                    }
-
-                    return item
-                })
-                .then(item => {
-                    for (let service of newSpace.services) {
-                        SpaceServices.create({
-                            rid_space: item.id,
-                            rid_service: service
-                        })
-                    }
-                    return item
-                })
-                .then((item) => {
-                    return res.json({ 
-                        ok: true, 
-                        data: item 
+                    .then(item => {
+                        if (req.file) {
+                            item.update({
+                                space_picture: req.file.filename
+                            })
+                        }
+                        return item
                     })
-                })
-                .catch((error) => {
-                        return res.json({ 
-                            ok: false, 
-                            error: error.message 
+                    .then(item => {
+                        for (let date of selectedDates) {
+                            console.log(item.id)
+
+                            Dates.create({
+                                date: date,
+                                available: false,
+                                spaces_id_space: item.id
+                            }).then(date => console.log("Date created:", date))
+                                .catch(err => console.log(err))
+                        }
+
+                        return item
+                    })
+                    .then(item => {
+                        for (let service of newSpace.services) {
+                            SpaceServices.create({
+                                rid_space: item.id,
+                                rid_service: service
+                            })
+                        }
+                        return item
+                    })
+                    .then((item) => {
+                        return res.json({
+                            ok: true,
+                            data: item
                         })
-                })
+                    })
+                    .catch((error) => {
+                        return res.json({
+                            ok: false,
+                            error: error.message
+                        })
+                    })
 
             })
-            .catch((error) => {
-                return res.json({
-                    ok: false,
-                    error: error.message
-                })
-            });
+                .catch((error) => {
+                    return res.json({
+                        ok: false,
+                        error: error.message
+                    })
+                });
 
             //return res.status(200).send(req.file)
         }
