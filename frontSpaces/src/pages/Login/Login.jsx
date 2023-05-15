@@ -119,7 +119,7 @@ export const Login = () => {
                         <Typography sx={{
                             color: 'red',
                         }} className='register-title register-sub'>
-                            {user.error}
+                            {`${user?.error}`}
                         </Typography >
                         }
 

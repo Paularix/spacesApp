@@ -71,7 +71,7 @@ const SpaceCard = ({ space }) => {
         </CardActions>
       </Card>
     </Link>
-  );
+ );
   
   
 };

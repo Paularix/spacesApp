@@ -1,0 +1,21 @@
+
+.card-reservation-container {
+    font-size: 14px;
+    color: #717171;
+    font-family: Poppins, Arial, Helvetica, sans-serif;
+    width: 380px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+.card-reservation {
+    display: flex;
+    line-height: 150%;
+   
+}
+
+.card-reservation-dates.card-reservation-dates-text {
+    font-size: 12px;
+}

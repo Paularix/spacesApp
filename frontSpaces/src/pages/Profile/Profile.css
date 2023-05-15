@@ -1,5 +1,4 @@
 .profile-form {
-	align-items: center;
 	display: flex;
 	flex-direction: column;
 }
@@ -56,7 +55,7 @@
 .profile-image-button.img-button{
 	position: absolute;
 	width: 120px;
-    right: 135px;
+	left: 50px;
     bottom: -19px;
     background: white;
     color: black;
@@ -66,7 +65,7 @@
 	position: absolute;
 	width: 120px;
     height: 32px;
-    right: 135px;
+	left: 50px;
     bottom: -19px;
     opacity: 0;
     cursor: pointer;

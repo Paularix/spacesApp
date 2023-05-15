@@ -1,9 +1,9 @@
 
 import { dataTypes, sequelize } from "../loadSequelize.js";
 
-export const seq = sequelize;
+const seq = sequelize;
 
-export const Users = sequelize.define('Users', {
+const Users = sequelize.define('Users', {
     first_name: dataTypes.STRING,
     last_names: dataTypes.STRING,
     email: dataTypes.STRING,
@@ -14,7 +14,7 @@ export const Users = sequelize.define('Users', {
 }, { tableName: 'users', timestamps: false });
 
 
-export const Spaces = sequelize.define('Spaces', {
+const Spaces = sequelize.define('Spaces', {
     name: dataTypes.STRING,
     address: dataTypes.STRING,
     capacity: dataTypes.STRING,
@@ -29,7 +29,7 @@ export const Spaces = sequelize.define('Spaces', {
 }, { tableName: 'spaces', timestamps: false });
 
 
-export const Bookings = sequelize.define('Bookings', {
+const Bookings = sequelize.define('Bookings', {
     date_from: dataTypes.DATE,
     date_to: dataTypes.DATE,
     status: dataTypes.INTEGER,
@@ -39,26 +39,39 @@ export const Bookings = sequelize.define('Bookings', {
     rid_space: dataTypes.INTEGER,
 }, { tableName: 'bookings', timestamps: false });
 
+Bookings.belongsTo(Spaces, { foreignKey: 'rid_space' })
 
-export const Dates = sequelize.define('Dates', {
+Bookings.belongsTo(Users, { foreignKey: 'rid_booker_user' })
+
+const Dates = sequelize.define('Dates', {
     date: dataTypes.DATE,
     available: dataTypes.STRING, 
+    spaces_id_space: dataTypes.INTEGER
 }, { tableName: 'dates', timestamps: false });
 
 
-export const Preferences = sequelize.define('Preferences', {
+const Preferences = sequelize.define('Preferences', {
     preference_name: dataTypes.STRING,
 }, { tableName: 'preferences', timestamps: false });
 
 
-export const Services = sequelize.define('Services', {
+const Services = sequelize.define('Services', {
     name: dataTypes.STRING,
 }, { tableName: 'services', timestamps: false });
 
-export const SpaceServices = sequelize.define('SpaceServices', {
+const SpaceServices = sequelize.define('SpaceServices', {
     rid_space: dataTypes.INTEGER,
     rid_service: dataTypes.INTEGER
     
 }, { tableName: 'space_services', timestamps: false });
 
-
+export {
+    seq,
+    Users,
+    Bookings,
+    Spaces,
+    Dates,
+    Preferences,
+    Services,
+    SpaceServices
+}
