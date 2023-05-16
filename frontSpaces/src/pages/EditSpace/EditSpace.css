@@ -1,0 +1,42 @@
+.add-space-container {
+    background-color: #fafafa;
+    padding: 15px;
+}
+
+.leaflet-container {
+
+    margin-left: 150px;    
+    border-radius: 5px;
+    width: 60%;
+    height: 35vh;
+}
+
+.space-field.space-name {
+    margin-top: 12px;
+    margin-bottom: 6px;
+    margin-right: 14px;
+    margin-left: 14px;
+}
+
+.space-field.space-description {
+    margin-top: 12px;
+    margin-bottom: 6px;
+    margin-right: 14px;
+    margin-left: 14px;
+}
+
+.space-field.space-address {
+    margin-top: 12px;
+    margin-bottom: 6px;
+    margin-right: 14px;
+    margin-left: 14px;
+}
+
+.loading-box{
+    margin-left: 150px;
+    height: 400px;
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

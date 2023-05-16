@@ -23,8 +23,7 @@ import MySpaces from './pages/MySpaces/MySpaces'
 import MyReservations from './pages/MyReservations/MyReservations'
 import AddSpace from './pages/addSpace/addSpace'
 import Bookings from './pages/Bookings/Bookings'
-import BookingMGMT from './pages/BookingMGMT/BookingMGMT';
-
+import EditSpace from './pages/EditSpace/EditSpace'
 
 function App() {
 
@@ -86,6 +85,8 @@ const context = {
           <Route path="/MyReservations" element={<MyReservations/>}/>
           <Route path="/bookings" element={<Bookings/>}/>
           <Route path="/addSpace" element={<AddSpace />} />
+          <Route path="/editSpace" element={<EditSpace />} />
+
           <Route path="/error" element={<Error />} />
         </Routes>
         <Footer />

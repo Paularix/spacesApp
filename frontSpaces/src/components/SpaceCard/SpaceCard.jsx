@@ -11,7 +11,8 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Button from '@mui/material/Button';
 import './SpaceCard.css'
 import noImage from '../images/no_image.jpg'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import EditIcon from '@mui/icons-material/Edit'
 
 
 const ExpandMore = styled((props) => {
@@ -38,8 +39,8 @@ const SpaceCard = ({ space }) => {
         className='spacecard-img'
         component="img"
         height="194"
-         image={space.space_picture ?
-           ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
+        image={space.space_picture ?
+          ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
         alt="space picture"
       />
       <CardContent>
@@ -64,9 +65,46 @@ const SpaceCard = ({ space }) => {
             <b>{space.price} €</b> / dia
           </Typography>
         </div>
-        <div> <Button size="small" onClick={shareViaWhatsApp}>Share via WhatsApp</Button>
+        <div> <Button size="small"
+          variant="outlined"
+          onClick={shareViaWhatsApp}
+          sx={{
+            color: '#7879F1',
+            borderColor: '#7879F1',
+            marginLeft: 1.78,
+            marginTop: 1,
+            marginRight: 1.78,
+            boxShadow: 'none',
+            justifyItems: 'center',
+            '&:hover': {
+              color: '#7879F1',
+              borderColor: '#7879F1',
+              boxShadow: 'none',
+            }
+          }}>
+          Share via WhatsApp</Button>
           <Link to="/spaceInfo" size="small">Info</Link>
         </div>
+        <Link to="/editSpace" size="small">
+          <Button size="small"
+            variant="outlined"
+            sx={{
+              color: '#7879F1',
+              borderColor: '#7879F1',
+              marginLeft: 1.78,
+              marginTop: 1,
+              marginRight: 1.78,
+              boxShadow: 'none',
+              justifyItems: 'center',
+              '&:hover': {
+                color: '#7879F1',
+                borderColor: '#7879F1',
+                boxShadow: 'none',
+              }
+            }}>
+            <EditIcon></EditIcon>
+          </Button>
+        </Link>
         {/* <div className="add-to-favorites">
           <IconButton>
             <FavoriteIcon />
