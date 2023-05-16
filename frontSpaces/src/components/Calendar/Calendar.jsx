@@ -8,6 +8,8 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import { Grid } from '@mui/material'
 import './Calendar.css';
+import { parseISODate } from '../../utils/parseDate';
+
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
@@ -22,7 +24,7 @@ const yyyymmdd = (dateString) => {
 
 
 
-export default () => {
+export default ({ disableDates }) => {
 
     const {date, setDate} = useContext(GlobalContext);
     const [selectedDates, setSelectedDates] = useState("");
@@ -60,6 +62,11 @@ export default () => {
                         onChange={setDate}
                         value={date}
                         selectRange={true}
+                        tileDisabled={disableDates ? disableDates : () => false}
+                        // tileDisabled={({date}) => {
+                        //     console.log(date, parseISODate(date))
+                        //     return parseISODate(date)==='2023-05-21'
+                        // }}
                     />
                     {date.length > 0 ? (
                         <p className='text-center'>

@@ -1,35 +1,11 @@
 import express from 'express';
 import multer from 'multer';
 import {sequelize} from "../loadSequelize.js";
-import {Bookings, Spaces, Users} from '../models/Models.js';
+import {Bookings, Dates, Spaces, Users} from '../models/Models.js';
 import {authError} from './middleware.js'
 import {authenticate} from './middleware.js'
 import jsonwebtoken from 'jsonwebtoken';
 const router = express.Router();
-
-// POST, creació d'un amb status 0 (requested) 
-// @desc sube un booking a BD pendiende de aceptar
-router.post('/', [authenticate, authError],function (req, res, next) {
-   console.log(req.body)
-   res.status(200).json({
-        ok: true,
-        data: req.body
-   })
-   
-    // sequelize.sync().then(() => {
-
-    //     Bookings.create(req.body)
-    //         .then((item) => res.json({ ok: true, data: item }))
-    //         .catch((error) => res.json({ ok: false, error: error.message }))
-
-
-    // }).catch((error) => {
-    //     res.json({
-    //         ok: false,
-    //         error: error.message
-    //     })
-    // });
-});
 
 
 // GET bookings
@@ -82,12 +58,35 @@ router.get('/:id', function (req, res, next) {
 
 
 // POST, creació d'un nou bookings
-router.post('/', function (req, res, next) {
+router.post('/', [authenticate, authError], function (req, res, next) {
     sequelize.sync().then(() => {
-
-        Bookings.create(req.body)
-            .then((item) => res.json({ ok: true, data: item }))
-            .catch((error) => res.json({ ok: false, error: error.message }))
+        const token = req.headers.authorization || ''
+        const decoded = jsonwebtoken.decode(token)
+        const newBooking = {
+            ...req.body,
+            rid_booker_user: Number(decoded.id)
+        }
+        Bookings.create(newBooking)
+            .then((item) => {
+                const diffTime = Math.abs(item.date_from - item.date_to);
+                const cantDates = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const initialDate = new Date(item.date_from)
+                for (let i=0; i<=cantDates; i++) {
+                    const newDate = new Date(initialDate)
+                    newDate.setDate(newDate.getDate() + i)
+                    const dateObj = {
+                        date: newDate.toISOString().split('T')[0],
+                        available: 1,
+                        spaces_id_space: req.body.rid_space
+                    }
+                    Dates.create(dateObj)
+                }
+                return res.json({ ok: true, data: item })
+            })
+            .catch((error) => {
+                console.log(error);
+                res.json({ ok: false, error: error.message })
+            })
 
 
     }).catch((error) => {

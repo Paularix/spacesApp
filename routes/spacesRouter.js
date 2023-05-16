@@ -5,7 +5,7 @@ import { sequelize } from "../loadSequelize.js";
 import { Services, Spaces } from '../models/Models.js';
 import { authenticate, authError } from './middleware.js';
 
-import { SpaceServices } from '../models/Models.js';
+import { SpaceServices, Users, Dates } from '../models/Models.js';
 
 Spaces.belongsToMany(Services, { through: "SpaceServices", foreignKey: "rid_space" })
 
@@ -52,17 +52,30 @@ router.get('/', function (req, res, next) {
 router.get('/:id', function (req, res, next) {
     sequelize.sync().then(() => {
 
-        Spaces.findOne({ where: { id: req.params.id } })
+        Spaces.findOne({
+            where: { id: req.params.id },
+            include: [{
+                model: Users,
+                required: true
+            }, {
+                model: Dates,
+                as: 'Dates'
+            }]
+        })
             .then(al => res.json({
                 ok: true,
                 data: al
             }))
-            .catch(error => res.json({
-                ok: false,
-                error: error
-            }))
+            .catch(error => {
+                console.log(error)
+                res.json({
+                    ok: false,
+                    error: error
+                })}
+            )
 
     }).catch((error) => {
+        console.log(error)
         res.json({
             ok: false,
             error: error

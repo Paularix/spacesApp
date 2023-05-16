@@ -22,7 +22,7 @@ import SpaceInfo from './pages/SpaceInfo/SpaceInfo'
 import MySpaces from './pages/MySpaces/MySpaces'
 import MyReservations from './pages/MyReservations/MyReservations'
 import AddSpace from './pages/addSpace/addSpace'
-
+import Confirmation from './pages/Confirmation/Confirmation'
 
 function App() {
 
@@ -72,10 +72,11 @@ const context = {
           <Route path="/register" element={<Register />}/>
           <Route path="/profile" element={<Profile />}/>
           <Route path="/Home" element={<Home />}/>
-          <Route path="/spaceInfo" element={<SpaceInfo />}/>
+          <Route path="/spaceInfo/:spaceId" element={<SpaceInfo />}/>
           <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/MyReservations" element={<MyReservations/>}/>
           <Route path="/addSpace" element={<AddSpace />} />
+          <Route path="/Confirmation" element={<Confirmation />} />
           <Route path="/error" element={<Error />} />
 
         </Routes>

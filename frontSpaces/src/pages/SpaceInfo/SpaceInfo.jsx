@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -22,16 +22,23 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import ChairIcon from '@mui/icons-material/Chair';
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import GlobalContext from '../../context/GlobalContext'
+import { parseSmallDate, parseISODate } from '../../utils/parseDate';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { API_URL } from "../../apiconfig";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
+
 
 const SpaceInfo = () => {
 
-  // const [dateRange, setDateRange] = useState({
-  //   startDate: moment(),
-  //   endDate: moment(),
-  //   focusedInput: null,
-  // });
+  const goTo = useNavigate();
 
-  const [date, setDate] = useState(new Date())
   const settings = {
     dots: true,
     infinite: true,
@@ -40,8 +47,115 @@ const SpaceInfo = () => {
     slidesToScroll: 1
   };
 
-
+  const { date, setDate, user } = useContext(GlobalContext);
   const [showCalendar, setShowCalendar] = useState(null);
+  const [space, setSpace] = useState(null)
+  const [message, setMessage] = useState('')
+  const [searchParams] = useSearchParams();
+  const { spaceId } = useParams();
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleClickReservate = () => {
+    if (user.token)
+      setOpenModal(true);
+    else
+      goTo('/login')
+  };
+
+  const handleCloseReservate = () => {
+
+    setOpenModal(false);
+
+  };
+
+  useEffect(() => {
+    if (spaceId)
+      loadData()
+  }, [spaceId])
+  
+  const cantDays = useMemo(() => {
+    const diffTime = Math.abs(date[1] - date[0]);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  }, [date])
+
+  function loadData() {
+    const route = `spaces/${spaceId}`;
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': user.token
+        }
+    };
+    fetch(API_URL + route, options)
+        .then(result => result.json())
+        .then(response => {
+          if (response.ok === true) {
+            setSpace(response.data);
+          } else {
+            setError(response.error)
+          }
+        })
+        .catch(error => setError(error))
+}
+
+function submit(e) {
+  e.preventDefault();
+  handleCloseReservate()
+  console.log("entra post",e);
+  const options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'authorization': user.token
+      },
+      body: JSON.stringify({
+          date_from: date[0],
+          date_to: date[1],
+          status: 0,
+          payment_method: "cash",
+          rid_space: spaceId,
+          message: message,
+      })
+  };
+
+  fetch(API_URL + "bookings", options)
+  .then(res => res.json())
+  .then(res => console.log(res))
+  .then(res=> {
+      goTo('/confirmation')
+  })
+  .catch(error => {
+      console.log(error)
+  })
+
+}
+
+  const datesToDisable = ({ date }) => {
+    const dates = space?.Dates
+    if (dates && dates.length) {
+      const simpleDates = dates.map(d => d.date)
+      return simpleDates.indexOf(parseISODate(date)) !== -1
+    }
+    return false
+  }
+
+  useEffect(() => {
+    const from = searchParams.get('from')
+    const to = searchParams.get('to')
+    if (from && to) {
+      setDate([
+        new Date(from),
+        new Date(to)
+      ])
+    } else if (!date[0] && !date[1]) {
+      setDate([
+        new Date(),
+        new Date()
+      ])
+    }
+  }, [searchParams])
 
   const handleClick = (event) => {
     setShowCalendar(event.currentTarget);
@@ -59,7 +173,7 @@ const SpaceInfo = () => {
         <div className="col-md-6 col-lg-5">
           <div className='spaceInfo-title'>
             <Typography variant="h5" component="h4">
-              <strong>Encantador Loft para Reuniones</strong>
+              <strong>{space?.name}</strong>
             </Typography>
             <h6 className="text-center mb-4"> <a href="https://www.google.com/maps/place/Barcelona/" target="_blank"><FmdGoodIcon fontSize='small'/>Barcelona, España</a></h6>
           </div>
@@ -84,7 +198,7 @@ const SpaceInfo = () => {
           <Grid item xs={7}>
             <div className='spaceInfo-grid-part1'>
               <div className='spaceInfo-title2'>
-                <Typography className='spaceInfo-title-typography' variant="h5" component="h4">Espacio apto para músicos. Anfitrión: Valentina</Typography>
+                <Typography className='spaceInfo-title-typography' variant="h5" component="h4">Anfitrión: {space?.User?.first_name}</Typography>
                 <h6 className='spaceInfo-title-personIcon'><PersonIcon className='spaceInfo-personIcon' /> 18 Personas</h6>
               </div>
               <div className="description-wrapper">
@@ -96,20 +210,22 @@ const SpaceInfo = () => {
                     <div className='spaceInfo-host-card'>
                       <Card className='spaceInfo-host-picture' sx={{ maxWidth: 300 }}>
                         <img className='spaceInfo-image' src="https://www.caritas.org.mx/wp-content/uploads/2019/02/cualidades-persona-humanitaria.jpg" alt="" />
-                        <h2><strong>Valentina</strong></h2>
+                        <h2><strong>{space?.User?.first_name}</strong></h2>
                         <h6>Anfitrión</h6>
                       </Card>
                     </div>
-
                     <div className='spaceInfo-host-description'><DescriptionIcon /> <strong>Descripción: </strong>
-                      Soy escritora, escritora y tengo un doctorado en cine y teología de King 's College London. Fui director de una escuela de cine durante 13 años y ahora tengo un negocio de consultoría en la industria del cine. Me encanta comer la comida increíble de mi marido David, sobre todo en compañía. Me encanta viajar y soy aventurero </div>
+                      {space?.User?.bio}
+                    </div>
                   </div>
                 </div>
                 <Divider />
                 <div>
                   <Typography mt={2} variant="h6" component="h2"><strong>Información sobre este espacio</strong></Typography>
                   <div className='spaceInfo-space-description'>
-                    <div>*descripcion*Sala polivalente situado en Gràcia. ​Cocina completa, televisión 65', equipo de sonido alta fidelidad, wifi, work-shops, clases privadas, presentaciones comerciales, coworking, reuniones de trabajo, estudio de grabación y fotográfico; cine, música y televisión (ideal para ver retransmisiones deportivas), reuniones de trabajo. Un espacio versátil y acogedor, es un local discreto, moderno y con encanto</div>
+                    <div>
+                      {space?.description}
+                    </div>
                   </div>
                 </div>
                 <Divider />
@@ -153,7 +269,8 @@ const SpaceInfo = () => {
                         <CalendarTodayRoundedIcon onClick={handleClick} />
                       </InputAdornment>
                     }
-                    label="Password"
+                    label="¿Qué día?"
+                    value={`${parseSmallDate(date[0])} - ${parseSmallDate(date[1])}`}
                   />
                 </FormControl>
                 <Popover
@@ -166,25 +283,29 @@ const SpaceInfo = () => {
                     horizontal: 'left',
                   }}
                 >
-                  <Calendar date={date} setDate={setDate} />
+                  <Calendar disableDates={datesToDisable} />
                 </Popover>
                 <div className='spaceInfo-card-pay'>
-                  <Button variant="contained" size="medium">
-                    Reservar
+                  <Button variant="contained" size="medium" onClick={handleClickReservate}>
+                    { user.token ? 'Reservar' : 'Identificarse para reservar' }
                   </Button>
                   <Typography m={2} variant="body2" style={{ opacity: 0.5 }} align="center">
                     No se te cobrara nada aún.
                   </Typography>
                   <div>
                     <Typography variant="body2" color="opacity">
-                      <span className='spaceInfo-card-info'> 80 € x 5 dias</span> <span className='spaceInfo-card-price'> 400 €</span>
+                      <span className='spaceInfo-card-info'> {space?.price} € x {cantDays} dias</span> <span className='spaceInfo-card-price'> {space?.price * cantDays} €</span>
                     </Typography>
                     <Typography variant="body2" color="opacity">
-                      <span className='spaceInfo-card-info'>Comisión de servicio de FlexSpace</span><span className='spaceInfo-card-price'> 59 €</span>
+                      <span className='spaceInfo-card-info'>Comisión de servicio de FlexSpace </span><span className='spaceInfo-card-price'>
+                        {Math.round(space?.price * cantDays * 0.02)} €
+                      </span>
                     </Typography>
                     <Divider />
                     <Typography variant="body2" color="opacity">
-                      <strong><span className='spaceInfo-card-info'>Total</span><span className='spaceInfo-card-price'>400 €</span></strong>
+                      <strong><span className='spaceInfo-card-info'>Total</span><span className='spaceInfo-card-price'>
+                        {Math.round(space?.price * cantDays * 0.02) + space?.price * cantDays} €
+                      </span></strong>
                     </Typography>
                   </div>
                 </div>
@@ -201,17 +322,44 @@ const SpaceInfo = () => {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Typography variant="subtitle2"><strong>Normas del espacio</strong></Typography>
-              <div>*reglas*Respecto el aforo dependiendo del evento puede variar. Sentados en mesa de trabajo es de 12 a 15 personas. Para otro tipo de reuniones puede ser sobre 20 personas.</div>
+              <div>
+                {space?.rules}
+              </div>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="subtitle2"><strong>Política de cancelación</strong></Typography>
-              <div>Cancelación gratuita antes del 24 may..
-                Consulta la política de cancelación completa del anfitrión, que se aplicará incluso si cancelas por haber contraído la COVID-19 o por cualquier problema relacionado con el coronavirus
+              <div>Cancelación gratuita hasta 24hs antes de iniciada la reserva.
+                Las cancelaciones de reservas enviadas menos de 24 horas antes de la hora de inicio del evento no son reembolsables.
+                Consulta la política de cancelación completa del anfitrión, que se aplicará incluso si cancelas por haber contraído la COVID-19 o por cualquier problema relacionado con el coronavirus.
               </div>
             </Grid>
           </Grid>
         </div>
       </div>
+      <Dialog open={openModal} onClose={handleCloseReservate}>
+        <DialogTitle> Enviar tu solicitud al anfitrión</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+          Explícale tu actividad lo más detalladamente posible al anfitrión
+         
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Mensaje"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseReservate}>Cancelar</Button>
+          <Button onClick={submit}>Reservar</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

@@ -14,6 +14,13 @@ const Users = sequelize.define('Users', {
 }, { tableName: 'users', timestamps: false });
 
 
+const Dates = sequelize.define('Dates', {
+    date: dataTypes.DATE,
+    available: dataTypes.STRING,
+    spaces_id_space: dataTypes.INTEGER,
+}, { tableName: 'dates', timestamps: false });
+
+
 const Spaces = sequelize.define('Spaces', {
     name: dataTypes.STRING,
     address: dataTypes.STRING,
@@ -27,6 +34,9 @@ const Spaces = sequelize.define('Spaces', {
     long:dataTypes.FLOAT,
     status: dataTypes.STRING,
 }, { tableName: 'spaces', timestamps: false });
+
+Spaces.belongsTo(Users, { foreignKey: 'rid_host_user' })
+Spaces.hasMany(Dates, {as : 'Dates', foreignKey : 'spaces_id_space'})
 
 
 const Bookings = sequelize.define('Bookings', {
@@ -42,11 +52,6 @@ const Bookings = sequelize.define('Bookings', {
 Bookings.belongsTo(Spaces, { foreignKey: 'rid_space' })
 
 Bookings.belongsTo(Users, { foreignKey: 'rid_booker_user' })
-
-const Dates = sequelize.define('Dates', {
-    date: dataTypes.DATE,
-    available: dataTypes.STRING, 
-}, { tableName: 'dates', timestamps: false });
 
 
 const Preferences = sequelize.define('Preferences', {
