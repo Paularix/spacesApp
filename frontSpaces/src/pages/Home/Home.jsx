@@ -1,12 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import './Home.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import SpaceCard from '../../components/SpaceCard/SpaceCard';
-import { useContext } from 'react';
 import GlobalContext from '../../context/GlobalContext';
 
 
-const { date, queryLocation } = useContext(GlobalContext);
 
 // const spaces = [
 //   { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
@@ -35,7 +33,7 @@ const UserMarker = ({ userLocation }) => {
 
 export const Home = () => {
   const mapRef = useRef();
-
+  const { date, queryLocation } = useContext(GlobalContext);
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
 
