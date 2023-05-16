@@ -28,12 +28,18 @@
   font-weight: 700 !important;
 }
 
-.spaceInfo-card-info{
-  text-align: left;
+.spaceInfo-card-pay{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+/* .spaceInfo-card-info{
+  float: left;
+} */
 
 .spaceInfo-card-price{
-  text-align: right;
+  float: right;
+  margin-left: 10px;
 }
 .spaceInfo-title {
   margin-top: 10px;

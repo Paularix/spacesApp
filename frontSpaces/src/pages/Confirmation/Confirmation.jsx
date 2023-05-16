@@ -30,17 +30,15 @@ const Confirmation = () => {
 
     return (
         <div className='confirmation-container'>
-            <div>
+            <div className='confirmation-content'>
             <Typography align="center" variant="h6" className='confirmation-title'>¡Solicitud enviada!</Typography>
             <Typography align="center" className='confirmation-subtitle' m={2}variant="body2" color="text.secondary">
                 Hemos enviado tu consulta. 
                 Muy pronto tendrás noticias del anfitrión del espacio
             </Typography>
-            <Card className='confirmation-card' sx={{ maxWidth: 345 }}>
+            <div className='confirmation-card'>
+            <Card  sx={{ maxWidth: 345 }}>
                 <CardContent>
-                    {/* <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
-                    </IconButton> */}
                     <Typography  mt={2}variant="body2" color="text.secondary">
                        <AssignmentIcon/> El anfitrión está revisando tu propuesta. 
                     </Typography>
@@ -60,6 +58,8 @@ const Confirmation = () => {
                     </IconButton>
                 </CardActions> */}
             </Card>
+            </div>
+            
 
             </div>
            

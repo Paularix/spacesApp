@@ -1,6 +1,7 @@
 
 
 .confirmation-container{
+    position: relative;
     height: calc(100vh - 110px);
     display: flex;
     justify-content: center;
@@ -8,6 +9,9 @@
     line-height: 1.8;
     padding: 0px;
     background-color: #f5f5f5;
+    align-items: center;
+    padding: 0;
+    margin: 0;
 }
 
 .confirmation-subtitle{ 
@@ -17,5 +21,4 @@
 .confirmation-card{
     display: flex;
     justify-content: center;
-    align-items: center
 }

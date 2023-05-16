@@ -47,7 +47,7 @@ const SpaceInfo = () => {
     slidesToScroll: 1
   };
 
-  const { date, setDate, user } = useContext(GlobalContext);
+  const { date, setDate, user, error, setError } = useContext(GlobalContext);
   const [showCalendar, setShowCalendar] = useState(null);
   const [space, setSpace] = useState(null)
   const [message, setMessage] = useState('')
@@ -85,7 +85,7 @@ const SpaceInfo = () => {
     if (spaceId)
       loadData()
   }, [spaceId])
-  
+
   const cantDays = useMemo(() => {
     const diffTime = Math.abs(date[1] - date[0]);
     const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -95,54 +95,54 @@ const SpaceInfo = () => {
   function loadData() {
     const route = `spaces/${spaceId}`;
     const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'authorization': user.token
-        }
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': user.token
+      }
     };
     fetch(API_URL + route, options)
-        .then(result => result.json())
-        .then(response => {
-          if (response.ok === true) {
-            setSpace(response.data);
-          } else {
-            setError(response.error)
-          }
-        })
-        .catch(error => setError(error))
-}
+      .then(result => result.json())
+      .then(response => {
+        if (response.ok === true) {
+          setSpace(response.data);
+        } else {
+          setError(response.error)
+        }
+      })
+      .catch(error => setError(error))
+  }
 
-function submit(e) {
-  e.preventDefault();
-  handleCloseReservate()
-  const options = {
+  function submit(e) {
+    e.preventDefault();
+    handleCloseReservate()
+    const options = {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
-          'authorization': user.token
+        'Content-Type': 'application/json',
+        'authorization': user.token
       },
       body: JSON.stringify({
-          date_from: date[0],
-          date_to: date[1],
-          status: 0,
-          payment_method: "cash",
-          rid_space: spaceId,
-          message: message,
+        date_from: date[0],
+        date_to: date[1],
+        status: 0,
+        payment_method: "cash",
+        rid_space: spaceId,
+        message: message,
       })
-  };
+    };
 
-  fetch(API_URL + "bookings", options)
-  .then(res => res.json())
-  .then(res => console.log(res))
-  .then(res=> {
-      goTo('/confirmation')
-  })
-  .catch(error => {
-      console.log(error)
-  })
+    fetch(API_URL + "bookings", options)
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .then(res => {
+        goTo('/confirmation')
+      })
+      .catch(error => {
+        console.log(error)
+      })
 
-}
+  }
 
   const datesToDisable = ({ date }) => {
     const dates = space?.Dates
@@ -206,7 +206,7 @@ function submit(e) {
             <Typography variant="h5" component="h4">
               <strong>{space?.name}</strong>
             </Typography>
-            <h6 className="text-center mb-4"> <a href="https://www.google.com/maps/place/Barcelona/" target="_blank"><FmdGoodIcon fontSize='small'/>Barcelona, España</a></h6>
+            <h6 className="text-center mb-4"> <a href="https://www.google.com/maps/place/Barcelona/" target="_blank"><FmdGoodIcon fontSize='small' />Barcelona, España</a></h6>
           </div>
           <div className="carousel-wrapper">
             <Slider className="carousel-slider" {...settings}>
@@ -265,20 +265,20 @@ function submit(e) {
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
                       <Typography variant="subtitle1" component="h2"><OutdoorGrillIcon fontSize="small" /> Comodidades</Typography>
+                      {space?.Services?.map((service, index) => (
+                        <ul className='spaceInfo-features-list'>
+                          <li key={index}>{service.name}</li>
+                        </ul>
+                      ))}
+                    </Grid>
+                    {/* <Grid item xs={6}>
+                    <Typography variant="subtitle1" component="h2"><ChairIcon fontSize="small" /> Zonas</Typography>
                       <ul className='spaceInfo-features-list'>
                         <li> Microondas</li>
                         <li> Sillas</li>
                         <li> Wi-Fi</li>
                       </ul>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="subtitle1" component="h2"><ChairIcon fontSize="small" /> Zonas</Typography>
-                      {services?.map((service, index) => (
-                        <ul className='spaceInfo-features-list'>
-                            <li key={index} service={service} />
-                        </ul>
-                      ))}
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </div>
               </div>
@@ -287,10 +287,10 @@ function submit(e) {
           <Grid item xs={5}>
             <Card className='spaceInfo-card' sx={{ maxWidth: 345 }}>
               <CardContent>
-                <Typography variant="h5" component="div">
+                <Typography m={2} variant="h5" component="div">
                   <strong>25 €</strong> día
                 </Typography>
-                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">¿Qué día?</InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-password"
@@ -317,23 +317,23 @@ function submit(e) {
                   <Calendar disableDates={datesToDisable} />
                 </Popover>
                 <div className='spaceInfo-card-pay'>
-                  <Button variant="contained" size="medium" onClick={handleClickReservate}>
-                    { user.token ? 'Reservar' : 'Identificarse para reservar' }
+                  <Button style={{ width: '80%' }} mt={2} variant="contained" size="medium" onClick={handleClickReservate}>
+                    {user.token ? 'Reservar' : 'Identificarse para reservar'}
                   </Button>
                   <Typography m={2} variant="body2" style={{ opacity: 0.5 }} align="center">
                     No se te cobrara nada aún.
                   </Typography>
-                  <div>
-                    <Typography variant="body2" color="opacity">
-                      <span className='spaceInfo-card-info'> {space?.price} € x {cantDays} dias</span> <span className='spaceInfo-card-price'> {space?.price * cantDays} €</span>
+                  <div className='spaceInfo-card-typography'>
+                    <Typography mt={2} variant="body2" color="opacity">
+                      <span className='spaceInfo-card-info'>{space?.price} € x {cantDays} dias</span> <span align="left" className='spaceInfo-card-price'> {space?.price * cantDays} €</span>
                     </Typography>
-                    <Typography variant="body2" color="opacity">
-                      <span className='spaceInfo-card-info'>Comisión de servicio de FlexSpace </span><span className='spaceInfo-card-price'>
+                    <Typography mt={2} variant="body2" color="opacity">
+                      <span className='spaceInfo-card-info'>Comisión de servicio de FlexSpace  </span><span className='spaceInfo-card-price'>
                         {Math.round(space?.price * cantDays * 0.02)} €
                       </span>
                     </Typography>
                     <Divider />
-                    <Typography variant="body2" color="opacity">
+                    <Typography mt={2} variant="body2" color="opacity">
                       <strong><span className='spaceInfo-card-info'>Total</span><span className='spaceInfo-card-price'>
                         {Math.round(space?.price * cantDays * 0.02) + space?.price * cantDays} €
                       </span></strong>
@@ -368,26 +368,29 @@ function submit(e) {
         <DialogTitle> Enviar tu solicitud al anfitrión</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          Explícale tu actividad lo más detalladamente posible al anfitrión
-         
+            Explícale tu actividad lo más detalladamente posible al anfitrión
           </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Mensaje"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-          />
+          <form onSubmit={submit}>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Mensaje"
+              type="text"
+              fullWidth
+              variant="standard"
+              required
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+            />
+            <DialogActions>
+              <Button onClick={handleCloseReservate}>Cancelar</Button>
+              <Button type='submit'>Reservar</Button>
+            </DialogActions>
+          </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseReservate}>Cancelar</Button>
-          <Button onClick={submit}>Reservar</Button>
-        </DialogActions>
       </Dialog>
+
       <Dialog
         open={openAlert}
         onClose={handleCloseAlert}
@@ -407,8 +410,9 @@ function submit(e) {
             Aceptar
           </Button>
         </DialogActions>
+
       </Dialog>
-    </div>
+    </div >
   );
 };
 
