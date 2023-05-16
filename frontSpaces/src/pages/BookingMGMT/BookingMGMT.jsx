@@ -8,6 +8,7 @@ import CardReservations from '../../components/CardReservationMGMT/CardReservati
 import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
 
+
 export const BookingMGMT = () => {
 
     const { user, setError, bookings, setBookings, refresh, setRefresh } = useContext(GlobalContext)
