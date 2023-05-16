@@ -60,6 +60,8 @@ router.get('/:id', function (req, res, next) {
             }, {
                 model: Dates,
                 as: 'Dates'
+            }, {
+                model: Services
             }]
         })
             .then(al => res.json({

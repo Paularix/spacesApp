@@ -4,6 +4,7 @@ import {sequelize} from "../loadSequelize.js";
 import {Bookings, Dates, Spaces, Users} from '../models/Models.js';
 import {authError} from './middleware.js'
 import {authenticate} from './middleware.js'
+import { parseISODate } from '../utils/parseDate.js'
 import jsonwebtoken from 'jsonwebtoken';
 const router = express.Router();
 
@@ -71,11 +72,11 @@ router.post('/', [authenticate, authError], function (req, res, next) {
                 const diffTime = Math.abs(item.date_from - item.date_to);
                 const cantDates = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 const initialDate = new Date(item.date_from)
-                for (let i=0; i<=cantDates; i++) {
+                for (let i=0; i<cantDates; i++) {
                     const newDate = new Date(initialDate)
                     newDate.setDate(newDate.getDate() + i)
                     const dateObj = {
-                        date: newDate.toISOString().split('T')[0],
+                        date: parseISODate(newDate),
                         available: 1,
                         spaces_id_space: req.body.rid_space
                     }
