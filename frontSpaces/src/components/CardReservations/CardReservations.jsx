@@ -28,7 +28,7 @@ export default function CardReservations({ booking }) {
                             <b>{booking?.Space?.name}</b>
                         </Typography>
                         <Typography component="div" variant="subtitle4">
-                            : {booking?.User?.first_name}
+                            Anfitrion: {booking?.User?.first_name}
                         </Typography>
                         <Typography className="card-reservation-dates card-reservation-dates-text" variant="body2" color="text.secondary" component="div">
                             {parseDate(booking.date_from)} -   {parseDate(booking.date_to)}

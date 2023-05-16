@@ -22,6 +22,7 @@ import SpaceInfo from './pages/SpaceInfo/SpaceInfo'
 import MySpaces from './pages/MySpaces/MySpaces'
 import MyReservations from './pages/MyReservations/MyReservations'
 import AddSpace from './pages/addSpace/addSpace'
+import Bookings from './pages/Bookings/Bookings'
 import BookingMGMT from './pages/BookingMGMT/BookingMGMT';
 
 
@@ -83,7 +84,7 @@ const context = {
           <Route path="/spaceInfo" element={<SpaceInfo />}/>
           <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/MyReservations" element={<MyReservations/>}/>
-          <Route path="/BookingMGMT" element={<BookingMGMT/>}/>
+          <Route path="/bookings" element={<Bookings/>}/>
           <Route path="/addSpace" element={<AddSpace />} />
           <Route path="/error" element={<Error />} />
         </Routes>

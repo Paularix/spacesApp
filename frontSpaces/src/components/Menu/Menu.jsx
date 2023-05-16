@@ -201,7 +201,7 @@ function ResponsiveAppBar() {
                                                     textDecoration: 'none',
                                                     color: 'black'
                                                 }}
-                                                to="/bookingMGMT"
+                                                to="/bookings"
                                             >
                                                 <MenuItem style={menuItem} onClick={toggleUserMenu}>
                                                     <LoupeIcon />

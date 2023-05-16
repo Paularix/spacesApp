@@ -18,6 +18,7 @@ import InputLabel from '@mui/material/InputLabel';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Menu from '@mui/material/Menu';
 import GlobalContext from '../../context/GlobalContext'
+import Select from '@mui/material/Select';
 
 
 const yyyymmdd = (dateString) => {
@@ -27,8 +28,7 @@ const yyyymmdd = (dateString) => {
 
 
 export const Landing = () => {
-  const [location, setLocation] = useState("")
-  const {date, queryLocation, setQueryLocation } = useContext(GlobalContext)
+  const { date, queryLocation, setQueryLocation } = useContext(GlobalContext)
   const landingButton = {
     marginTop: '25px',
     fontSize: '18px',
@@ -53,14 +53,16 @@ export const Landing = () => {
 
   // FETCH a open street map para cargar la ciudad citada
   const search = () => {
-    const query = `http://localhost:3080/api/spaces/find/?location=${location}&from=${yyyymmdd(date[0])}&to=${yyyymmdd(date[1])}`
-    const options = {
-      method: 'GET',
-    }
-    fetch(query, options)
-      .then(res => res.json())
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
+
+    console.log(queryLocation, date)
+     const query = `http://localhost:3080/api/spaces/find/?location=${queryLocation}&from=${yyyymmdd(date[0])}&to=${yyyymmdd(date[1])}`
+     const options = {
+       method: 'GET',
+     }
+     fetch(query, options)
+       .then(res => res.json())
+       .then(res => console.log(res))
+       .catch(err => console.log(err))
   }
 
 
@@ -83,42 +85,60 @@ export const Landing = () => {
           <h2 className='header'>¿Dónde quieres buscar?</h2>
 
           <div className='landing-inputs'>
-
-              <NativeSelect
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                size="small"
-                id="input-location"
+            <FormControl sx={{ m: 1, minWidth: 120, width: 300 }} size="small">
+              <InputLabel id="demo-simple-select-label">Ciudad</InputLabel>
+              <Select
+                
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={queryLocation}
                 label="Ciudad"
-                variant="filled"
-                inputProps={{
-                  style: {
-                    border: '1px solid',
-                    borderRadius: 3,
-                    padding: 7,
-                    marginTop: 8,
-                    paddingLeft: 12,
-                    width: 120,
-                    '&:hover':{
-                      color: 'red'
-                    }
-                  }
-                }}
+                size="small"
+                onChange={(e) => setQueryLocation(e.target.value)}
               >
-                  <option>
-                    <MenuItem>Barcelona</MenuItem>
-                  </option>
-                  <option>
-                    <MenuItem>Terrassa</MenuItem>
-                  </option>
-                  <option>
-                    <MenuItem>L'Hospitalet</MenuItem>
-                  </option>
+                <MenuItem value={"Barcelona"}>Barcelona</MenuItem>
+                <MenuItem value={"Hospitaled"}>L'Hospitaled del Llobregat</MenuItem>
+                <MenuItem value={"Terrassa"}>Terrassa</MenuItem>
+              </Select>
+              
+            </FormControl>
 
-              </NativeSelect>
+            {/* <NativeSelect
+              value={queryLocation}
+              onChange={(e) => setQueryLocation(e.target.value)}
+              size="small"
+              id="input-location"
+              placeholder="Ciudad"
+              variant="filled"
+              inputProps={{
+                style: {
+                  border: '1px solid',
+                  borderRadius: 3,
+                  padding: 7,
+                  marginTop: 8,
+                  paddingLeft: 12,
+                  width: 120,
+                  '&:hover': {
+                    color: 'red'
+                  }
+                }
+              }}
+            >
+              <option>
+                <MenuItem>Barcelona</MenuItem>
+              </option>
+              <option>
+                <MenuItem>Terrassa</MenuItem>
+              </option>
+              <option>
+                <MenuItem>L'Hospitalet</MenuItem>
+              </option>
+
+            </NativeSelect> */}
 
             <Button variant="outlined" sx={{
               marginLeft: 3,
+              marginTop: 1,
               marginBottom: 0.5,
               borderColor: '#000000',
               boxShadow: 'none',
@@ -146,7 +166,7 @@ export const Landing = () => {
                 horizontal: 'left',
               }}
             >
-              <Calendar/>
+              <Calendar />
             </Popover>
 
 
