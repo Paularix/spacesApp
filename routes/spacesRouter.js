@@ -153,6 +153,7 @@ router.get('/:id', function (req, res, next) {
     });
 });
 
+
 // GET información protegida de los espacios del usuario
 // @desc ruta protegida perfil de usuario
 router.get("/auth/mySpaces", [authenticate, authError], (req, res) => {
@@ -183,6 +184,41 @@ router.get("/auth/mySpaces", [authenticate, authError], (req, res) => {
 
     }
 })
+
+// GET de un solo spaces
+router.get('/auth/edit/:id', [authenticate, authError], function (req, res, next) {
+    console.log("edit")
+    sequelize.sync().then(() => {
+
+        Spaces.findOne({ 
+            where: { 
+                id: req.params.id 
+            },
+            include: [{
+                model: SpaceServices,
+                model: Services,
+            }, {
+                model: Dates
+            }]  
+            
+        })
+            .then(al => {
+                res.json({
+                ok: true,
+                data: al
+            })})
+            .catch(error => res.json({
+                ok: false,
+                error: error
+            }))
+
+    }).catch((error) => {
+        res.json({
+            ok: false,
+            error: error
+        })
+    });
+});
 
 // POST subir espacio
 // @desc ruta protegida para subir espacio 

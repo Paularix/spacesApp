@@ -70,6 +70,7 @@ const editSpace = () => {
   const [center, setCenter] = useState([]);
   const [image, setImage] = useState()
   const [send, setSend] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [lockedDays, setLockedDays] = useState([])
   const [newSpace, setNewSpace] = useState({
     name: "",
@@ -92,6 +93,8 @@ const editSpace = () => {
       approximateCoords: [],
     }
   })
+  const { user, setUser, error, setError, date, setDate, fetchSpaceId, setFetchSpaceId } = useContext(GlobalContext)
+
   const validate = (field, value) => {
 
     let errors = [...newSpace.errors[field]];
@@ -169,17 +172,12 @@ const editSpace = () => {
     }))
   }
 
-
-
-
-  const { user, setUser, error, setError, date, setDate } = useContext(GlobalContext)
-
-
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(coords);
     }
   }
+
   function coords(position) {
     const lat = position.coords.latitude;
     const long = position.coords.longitude;
@@ -209,9 +207,59 @@ const editSpace = () => {
     }
   }
 
+  const getSpace = (id) => {
+    fetch(API_URL + "spaces/auth/edit/" + fetchSpaceId, {
+      headers: {
+        authorization: user.token
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.ok == true) {
+
+          let spaceServices = []
+          for (let service of res.data.Services) {
+            spaceServices.push(service.name)
+          }
+
+          let fetchedSelectedDates = []
+          for (let date of res.data.Dates) {
+            console.log(date.date)
+            fetchedSelectedDates.push(date.date)
+          }
+          setNewSpace({
+            name: res.data.name,
+            description: res.data.description,
+            capacity: res.data.capacity,
+            price: res.data.price,
+            address: res.data.address,
+            rules: res.data.rules,
+            status: res.data.status,
+            approximateCoords: [Number(res.data.lat), Number(res.data.long)],
+            services: spaceServices,
+            errors: {
+              ...newSpace.errors
+            }
+          })
+          setCenter([Number(res.data.lat), Number(res.data.long)])
+          setSelectedDates(fetchedSelectedDates)
+        } else {
+          setError(res.err)
+          goTo("/error")
+        }
+
+      })
+      .then(res => {
+        setLoading(false)
+      })
+      .catch(err => {
+        console.log(err.message)
+        setError(err.message)
+        goTo("/error")
+      })
 
 
-
+  }
 
   function tileClassName({ date, view }) {
     if (view === 'month') {
@@ -246,13 +294,15 @@ const editSpace = () => {
           goTo("/error")
         })
 
+      getSpace(fetchSpaceId)
+      getLocation()
 
-      getLocation();
     } else {
       setError("Not authentified.")
       goTo("/error")
     }
   }, [])
+
 
   useEffect(() => {
     if (send == true) {
@@ -329,7 +379,6 @@ const editSpace = () => {
     }
   }
 
-
   function HandleMapEvents() {
     const map = useMapEvents({
       click: (e) => {
@@ -358,8 +407,6 @@ const editSpace = () => {
     return null
   }
 
-
-
   const handleChange = (e) => {
     setNewSpace((prev) => ({ ...prev, [e.target.name]: e.target.value }))
     setNewSpace((prevState) => ({
@@ -371,11 +418,9 @@ const editSpace = () => {
     }))
   };
 
-
   const savePhoto = (e) => {
     setImage(e.target.files[0])
   }
-
 
   const validateAndSend = () => {
 
@@ -434,362 +479,364 @@ const editSpace = () => {
 
   }
 
-
-
-
-
   return (
     <div className='add-space-container'>
-
-      <Grid container spacing={1}>
-        <Grid item xs={5.5}>
-        </Grid>
-        <Grid item xs={6.5} sx={{
-          marginTop: 2,
-          display: 'flex',
-          justifyContent: 'center',
-        }}>
-          <Typography variant="h1" sx={{
-            fontSize: 32,
-          }}>
-            Añade un espacio
-          </Typography>
-        </Grid>
-
-
-        <Grid item xs={5.5} >
-
-          {
-            center.length > 0
-              ? (
-                <>
-                  <Typography variant="h1" sx={{
-                    fontSize: 18,
-                    textAlign: 'center',
-                    marginBottom: 3,
-                    marginLeft: 4,
-                  }}>
-                    Selecciona una dirección aproximada:
-                  </Typography>
-                  <MapContainer center={center} zoom={13}>
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <HandleMapEvents />
-                    {
-                      newSpace.approximateCoords.length > 0
-                        ? (
-                          <Marker position={newSpace.approximateCoords}>
-                          </Marker>
-                        )
-                        : (' ')
-                    }
-                  </MapContainer>
-                  {newSpace.errors.approximateCoords
-                    ? (newSpace.errors.approximateCoords.map((error, index) => (
-                      <FormHelperText sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        marginLeft: 4,
-                        marginTop: 3,
-                        color: '#ba000d'
-                      }}
-                        key={index}>
-                        {error}
-                      </FormHelperText>
-                    )))
-                    : (' ')
-                  }
-                </>
-              )
-              : (
-                <Box className="loading-box">
-                
-                  <CircularProgress />
-                </Box>
-              )
-          }
-          <Typography variant="h1" sx={{
-            fontSize: 18,
-            textAlign: 'center',
-            marginTop: 5,
-            marginBottom: 3
-          }}>
-            Configura la disponibilidad de los próximos 90 días bloqueando los días que no quieras habilitar reservas:
-          </Typography>
-          {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
-            color: '#7879F1',
-            borderColor: '#7879F1',
-            fontSize: 10,
-            padding: 0.33,
-            margin: 1,
-            '&:hover': {
-              color: '#7879F1',
-              borderColor: '#7879F1',
-              boxShadow: 'none',
-            },
-          }} onClick={() => blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
-
-
-          {
-            fourMonthsFromNow(year).map((q, idx) => (
-              <Grid item sx={{
-                margin: 3,
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-                className="calendar-space-container"
-                key={idx}
-              >
-                {q.map((month, idx) => (
-                  <Grid item sx={{
-                    paddingLeft: 3,
-                    display: 'flex',
-                    marginLeft: 1,
-                    flexDirection: 'row'
-                  }}
-                    key={idx}
-
-                  >
-                    <Calendar
-                      onChange={setDate}
-                      minDetail="month"
-                      value={date}
-                      onClickDay={handleClickDay}
-                      tileClassName={tileClassName}
-                      activeStartDate={new Date(month + '-01')}
-                      showNeighboringMonth={false}
-                      nextLabel=''
-                      prevLabel=''
-                      prev2Label=''
-                      next2Label=''
-                    />
-                  </Grid>
-
-                ))
-                }
+      {
+        loading
+          ? (<CircularProgress />)
+          : (
+            <Grid container spacing={1}>
+              <Grid item xs={5.5}>
               </Grid>
-            ))
-          }
-        </Grid>
-
-        <Grid item xs={6.5} sx={{
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-
-          <Card sx={{
-            marginLeft: 4,
-            marginRight: 4,
-            marginTop: 5.8,
-          }}>
-
-            <CardContent>
-              <Grid item sx={{
+              <Grid item xs={6.5} sx={{
                 marginTop: 2,
                 display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
               }}>
-                <TextField
-                  error={newSpace.errors.name.length == 0 ? false : true}
-                  helperText={newSpace.errors.name.length == 0 ? ' ' : newSpace.errors.name}
-                  name="name"
-                  className="space-field space-name"
-                  label="Dinos el nombre del espacio"
-                  value={newSpace.name}
-                  onChange={(e) => handleChange(e)}
-                  size="small"
-                />
-                <TextField
-                  error={newSpace.errors.description.length == 0 ? false : true}
-                  helperText={newSpace.errors.description.length == 0 ? ' ' : newSpace.errors.description}
-                  className="space-field space-description"
-                  id="outlined-multiline-static"
-                  label="Descripción: Dinos algo... ¿qué se suele organizar en él?"
-                  value={newSpace.description}
-                  onChange={(e) => handleChange(e)}
-                  name="description"
-                  multiline
-                  rows={4}
-                />
+                <Typography variant="h1" sx={{
+                  fontSize: 32,
+                }}>
+                  Añade un espacio
+                </Typography>
+              </Grid>
 
-                <TextField
-                  error={newSpace.errors.rules.length == 0 ? false : true}
-                  helperText={newSpace.errors.rules.length == 0 ? ' ' : newSpace.errors.rules}
-                  className="space-field space-description"
-                  id="outlined-multiline-static"
-                  label="¡Reglas! ¿Fumar? ¿Ruido? ¿Horario? ¿Limpieza?"
-                  value={newSpace.rules}
-                  onChange={(e) => handleChange(e)}
-                  name="rules"
-                  multiline
-                  rows={4}
-                />
 
-                <TextField
-                  error={newSpace.errors.capacity.length == 0 ? false : true}
-                  helperText={newSpace.errors.capacity.length == 0 ? ' ' : newSpace.errors.capacity}
-                  className="space-field space-name"
-                  label="Aforo"
-                  type="number"
-                  value={newSpace.capacity}
-                  onChange={(e) => handleChange(e)}
-                  name="capacity"
-                  size="small"
-                />
+              <Grid item xs={5.5} >
 
-                <TextField
-                  error={newSpace.errors.price.length == 0 ? false : true}
-                  helperText={newSpace.errors.price.length == 0 ? ' ' : newSpace.errors.price}
-                  className="space-field space-name"
-                  label="Precio por dia"
-                  value={newSpace.price}
-                  onChange={(e) => handleChange(e)}
-                  name="price"
-                  type="number"
-                  size="small"
+                {
+                  center.length > 0
+                    ? (
+                      <>
+                        <Typography variant="h1" sx={{
+                          fontSize: 18,
+                          textAlign: 'center',
+                          marginBottom: 3,
+                          marginLeft: 4,
+                        }}>
+                          Selecciona una dirección aproximada:
+                        </Typography>
+                        <MapContainer center={center} zoom={13}>
+                          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                          <HandleMapEvents />
+                          {
+                            newSpace.approximateCoords.length > 0
+                              ? (
+                                <Marker position={newSpace.approximateCoords}>
+                                </Marker>
+                              )
+                              : (' ')
+                          }
+                        </MapContainer>
+                        {newSpace.errors.approximateCoords
+                          ? (newSpace.errors.approximateCoords.map((error, index) => (
+                            <FormHelperText sx={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              marginLeft: 4,
+                              marginTop: 3,
+                              color: '#ba000d'
+                            }}
+                              key={index}>
+                              {error}
+                            </FormHelperText>
+                          )))
+                          : (' ')
+                        }
+                      </>
+                    )
+                    : (
+                      <Box className="loading-box">
 
-                />
-
-                <TextField
-                  error={newSpace.errors.address.length == 0 ? false : true}
-                  helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."
-                  className="space-field space-address"
-                  label="Dirección"
-                  value={newSpace.address}
-                  onChange={(e) => handleChange(e)}
-                  name="address"
-                  size="small"
-                  padding="none"
-                  sx={{
-                    padding: 0,
-                  }}
-                />
-
-                {newSpace.errors.address
-                  ? (newSpace.errors.address.map((error, index) => (
-                    <FormHelperText sx={{
-                      marginLeft: 3.55,
-                      color: '#ba000d'
-                    }}
-                      key={index}>
-                      {error}
-                    </FormHelperText>
-                  )))
-                  : (' ')
+                        <CircularProgress />
+                      </Box>
+                    )
                 }
-
-
-
-
-                <Button variant="outlined" component="label" sx={{
+                <Typography variant="h1" sx={{
+                  fontSize: 18,
+                  textAlign: 'center',
+                  marginTop: 5,
+                  marginBottom: 3
+                }}>
+                  Configura la disponibilidad de los próximos 90 días bloqueando los días que no quieras habilitar reservas:
+                </Typography>
+                {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
                   color: '#7879F1',
                   borderColor: '#7879F1',
-                  marginLeft: 1.78,
-                  marginTop: 1,
-                  marginRight: 1.78,
-                  boxShadow: 'none',
-                  justifyItems: 'center',
+                  fontSize: 10,
+                  padding: 0.33,
+                  margin: 1,
                   '&:hover': {
                     color: '#7879F1',
                     borderColor: '#7879F1',
                     boxShadow: 'none',
                   },
-                }}>
-                  Imagen del espacio
-                  <input hidden accept="image/*" multiple type="file" onChange={(e) => savePhoto(e)} />
-                </Button>
-                {image
-                  ? (
-                    <Grid item xs={12} sx={{
-                      height: 16,
-                      width: 500
-                    }}>
+                }} onClick={() => blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
 
-                      <AttachFileIcon sx={{
-                        fontSize: 16,
-                        marginTop: 2,
-                        marginRight: 0.8,
-                      }}>
-                      </AttachFileIcon>
-                      <Typography variant="p" sx={{
-                        fontSize: 16,
-                        textAlign: 'justify',
-                        marginBottom: 1
-                      }}>
-                        {image.name}
-                      </Typography>
-                    </Grid>
-                  )
-                  : (' ')
-                }
 
-                <FormControl sx={{ m: 1.78, marginTop: 3.4, minWidth: 120 }}>
-                  <Typography variant="h6" sx={{
-                    textAlign: 'left'
-                  }}>Servicios:</Typography>
-                  <Box sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-between'
-                  }}>
-                    {
-                      services.map((service, index) => (
-                        <FormControlLabel
-                          key={index}
-                          control={<Checkbox
-                            onChange={(e) => handleServiceCheck(e)}
-                          />}
-                          value={service.id}
-                          label={service.name} />
+                {
+                  fourMonthsFromNow(year).map((q, idx) => (
+                    <Grid item sx={{
+                      margin: 3,
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                      className="calendar-space-container"
+                      key={idx}
+                    >
+                      {q.map((month, idx) => (
+                        <Grid item sx={{
+                          paddingLeft: 3,
+                          display: 'flex',
+                          marginLeft: 1,
+                          flexDirection: 'row'
+                        }}
+                          key={idx}
+
+                        >
+                          <Calendar
+                            onChange={setDate}
+                            minDetail="month"
+                            value={date}
+                            onClickDay={handleClickDay}
+                            tileClassName={tileClassName}
+                            activeStartDate={new Date(month + '-01')}
+                            showNeighboringMonth={false}
+                            nextLabel=''
+                            prevLabel=''
+                            prev2Label=''
+                            next2Label=''
+                          />
+                        </Grid>
+
                       ))
-                    }
-                  </Box>
-
-                  {newSpace.errors.services
-                    ? (newSpace.errors.services.map((error, index) => (
-                      <FormHelperText sx={{
-                        marginLeft: 1.78,
-                        color: '#ba000d'
-                      }}
-                        key={index}>
-                        {error}
-                      </FormHelperText>
-                    )))
-                    : (' ')
-                  }
-
-
-                  <PublicPrivateSwitch
-                    newSpace={newSpace}
-                    setNewSpace={setNewSpace}
-                  />
-
-                </FormControl>
-
-
-                <Button variant="contained" component="label" sx={{
-                  background: '#7879F1',
-                  marginLeft: 1.78,
-                  marginRight: 1.78,
-                  marginTop: 8,
-                  boxShadow: 'none',
-                  justifyItems: 'center',
-                  '&:hover': {
-                    background: '#7879F1',
-                    boxShadow: 'none',
-                  },
-                }}
-                  onClick={() => validateAndSend()}
-                >
-                  Guardar
-                </Button>
+                      }
+                    </Grid>
+                  ))
+                }
               </Grid>
-            </CardContent>
-            <CardActions>
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
+
+              <Grid item xs={6.5} sx={{
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+
+                <Card sx={{
+                  marginLeft: 4,
+                  marginRight: 4,
+                  marginTop: 5.8,
+                }}>
+
+                  <CardContent>
+                    <Grid item sx={{
+                      marginTop: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                    }}>
+                      <TextField
+                        error={newSpace.errors.name.length == 0 ? false : true}
+                        helperText={newSpace.errors.name.length == 0 ? ' ' : newSpace.errors.name}
+                        name="name"
+                        className="space-field space-name"
+                        label="Dinos el nombre del espacio"
+                        value={newSpace.name}
+                        onChange={(e) => handleChange(e)}
+                        size="small"
+                      />
+                      <TextField
+                        error={newSpace.errors.description.length == 0 ? false : true}
+                        helperText={newSpace.errors.description.length == 0 ? ' ' : newSpace.errors.description}
+                        className="space-field space-description"
+                        id="outlined-multiline-static"
+                        label="Descripción: Dinos algo... ¿qué se suele organizar en él?"
+                        value={newSpace.description}
+                        onChange={(e) => handleChange(e)}
+                        name="description"
+                        multiline
+                        rows={4}
+                      />
+
+                      <TextField
+                        error={newSpace.errors.rules.length == 0 ? false : true}
+                        helperText={newSpace.errors.rules.length == 0 ? ' ' : newSpace.errors.rules}
+                        className="space-field space-description"
+                        id="outlined-multiline-static"
+                        label="¡Reglas! ¿Fumar? ¿Ruido? ¿Horario? ¿Limpieza?"
+                        value={newSpace.rules}
+                        onChange={(e) => handleChange(e)}
+                        name="rules"
+                        multiline
+                        rows={4}
+                      />
+
+                      <TextField
+                        error={newSpace.errors.capacity.length == 0 ? false : true}
+                        helperText={newSpace.errors.capacity.length == 0 ? ' ' : newSpace.errors.capacity}
+                        className="space-field space-name"
+                        label="Aforo"
+                        type="number"
+                        value={newSpace.capacity}
+                        onChange={(e) => handleChange(e)}
+                        name="capacity"
+                        size="small"
+                      />
+
+                      <TextField
+                        error={newSpace.errors.price.length == 0 ? false : true}
+                        helperText={newSpace.errors.price.length == 0 ? ' ' : newSpace.errors.price}
+                        className="space-field space-name"
+                        label="Precio por dia"
+                        value={newSpace.price}
+                        onChange={(e) => handleChange(e)}
+                        name="price"
+                        type="number"
+                        size="small"
+
+                      />
+
+                      <TextField
+                        error={newSpace.errors.address.length == 0 ? false : true}
+                        helperText="No compartiremos la dirección exacta hasta que no se haya aprobado una reserva."
+                        className="space-field space-address"
+                        label="Dirección"
+                        value={newSpace.address}
+                        onChange={(e) => handleChange(e)}
+                        name="address"
+                        size="small"
+                        padding="none"
+                        sx={{
+                          padding: 0,
+                        }}
+                      />
+
+                      {newSpace.errors.address
+                        ? (newSpace.errors.address.map((error, index) => (
+                          <FormHelperText sx={{
+                            marginLeft: 3.55,
+                            color: '#ba000d'
+                          }}
+                            key={index}>
+                            {error}
+                          </FormHelperText>
+                        )))
+                        : (' ')
+                      }
+
+
+
+
+                      <Button variant="outlined" component="label" sx={{
+                        color: '#7879F1',
+                        borderColor: '#7879F1',
+                        marginLeft: 1.78,
+                        marginTop: 1,
+                        marginRight: 1.78,
+                        boxShadow: 'none',
+                        justifyItems: 'center',
+                        '&:hover': {
+                          color: '#7879F1',
+                          borderColor: '#7879F1',
+                          boxShadow: 'none',
+                        },
+                      }}>
+                        Imagen del espacio
+                        <input hidden accept="image/*" multiple type="file" onChange={(e) => savePhoto(e)} />
+                      </Button>
+                      {image
+                        ? (
+                          <Grid item xs={12} sx={{
+                            height: 16,
+                            width: 500
+                          }}>
+
+                            <AttachFileIcon sx={{
+                              fontSize: 16,
+                              marginTop: 2,
+                              marginRight: 0.8,
+                            }}>
+                            </AttachFileIcon>
+                            <Typography variant="p" sx={{
+                              fontSize: 16,
+                              textAlign: 'justify',
+                              marginBottom: 1
+                            }}>
+                              {image.name}
+                            </Typography>
+                          </Grid>
+                        )
+                        : (' ')
+                      }
+
+                      <FormControl sx={{ m: 1.78, marginTop: 3.4, minWidth: 120 }}>
+                        <Typography variant="h6" sx={{
+                          textAlign: 'left'
+                        }}>Servicios:</Typography>
+                        <Box sx={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          justifyContent: 'space-between'
+                        }}>
+                          {
+                            services.map((service, index) => (
+                              <FormControlLabel
+                                key={index}
+                                control={<Checkbox
+                                  onChange={(e) => handleServiceCheck(e)}
+                                  checked={newSpace.services.includes(service.name) ? true : false}
+                                />}
+                                value={service.id}
+                                label={service.name} />
+                            ))
+                          }
+                        </Box>
+
+                        {newSpace.errors.services
+                          ? (newSpace.errors.services.map((error, index) => (
+                            <FormHelperText sx={{
+                              marginLeft: 1.78,
+                              color: '#ba000d'
+                            }}
+                              key={index}>
+                              {error}
+                            </FormHelperText>
+                          )))
+                          : (' ')
+                        }
+
+
+                        <PublicPrivateSwitch
+                          newSpace={newSpace}
+                          setNewSpace={setNewSpace}
+                        />
+
+                      </FormControl>
+
+
+                      <Button variant="contained" component="label" sx={{
+                        background: '#7879F1',
+                        marginLeft: 1.78,
+                        marginRight: 1.78,
+                        marginTop: 8,
+                        boxShadow: 'none',
+                        justifyItems: 'center',
+                        '&:hover': {
+                          background: '#7879F1',
+                          boxShadow: 'none',
+                        },
+                      }}
+                        onClick={() => validateAndSend()}
+                      >
+                        Guardar
+                      </Button>
+                    </Grid>
+                  </CardContent>
+                  <CardActions>
+                  </CardActions>
+                </Card>
+              </Grid>
+            </Grid>)
+      }
+
     </div >
   )
 }

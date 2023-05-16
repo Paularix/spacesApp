@@ -1,5 +1,5 @@
 import "./SpaceCard.css";
-import * as React from 'react';
+import React, {useContext} from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -11,8 +11,9 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Button from '@mui/material/Button';
 import './SpaceCard.css'
 import noImage from '../images/no_image.jpg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
+import GlobalContext from "../../context/GlobalContext";
 
 
 const ExpandMore = styled((props) => {
@@ -28,10 +29,18 @@ const ExpandMore = styled((props) => {
 
 
 const SpaceCard = ({ space }) => {
+  const {fetchSpaceId, setFetchSpaceId} = useContext(GlobalContext)
+  const goTo = useNavigate()
   const shareViaWhatsApp = () => {
     const whatsappMessage = encodeURIComponent(`Hey! Check out this awesome space: ${window.location.href}`);
     window.location.href = `https://wa.me/?text=${whatsappMessage}`;
   };
+
+  const handleEditSpace = (e, id) => {
+    e.preventDefault()
+    setFetchSpaceId(id)
+    goTo("/editSpace")
+  }
 
   return (
     <Card sx={{ maxWidth: 300, minWidth: 300 }}>
@@ -85,8 +94,8 @@ const SpaceCard = ({ space }) => {
           Share via WhatsApp</Button>
           <Link to="/spaceInfo" size="small">Info</Link>
         </div>
-        <Link to="/editSpace" size="small">
           <Button size="small"
+            onClick={(e) => handleEditSpace(e, space.id)}
             variant="outlined"
             sx={{
               color: '#7879F1',
@@ -104,7 +113,6 @@ const SpaceCard = ({ space }) => {
             }}>
             <EditIcon></EditIcon>
           </Button>
-        </Link>
         {/* <div className="add-to-favorites">
           <IconButton>
             <FavoriteIcon />

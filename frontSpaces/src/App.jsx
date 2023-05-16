@@ -38,7 +38,7 @@ function App() {
 })
 
 const [queryLocation, setQueryLocation] = useState("")
-
+const [fetchSpaceId, setFetchSpaceId] = useState("")
 const [bookings, setBookings] = useState([])
 const [refresh, setRefresh] = useState(false)
 
@@ -67,6 +67,7 @@ const context = {
   queryLocation, setQueryLocation,
   bookings, setBookings,
   refresh, setRefresh,
+  fetchSpaceId, setFetchSpaceId,
   logout 
 }
 
