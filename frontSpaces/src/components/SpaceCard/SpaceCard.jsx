@@ -14,6 +14,7 @@ import noImage from '../images/no_image.jpg'
 import { Link, useNavigate } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
 import GlobalContext from "../../context/GlobalContext";
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
 
 const ExpandMore = styled((props) => {
@@ -38,6 +39,7 @@ const SpaceCard = ({ space }) => {
 
   const handleEditSpace = (e, id) => {
     e.preventDefault()
+    console.log(id)
     setFetchSpaceId(id)
     goTo("/editSpace")
   }

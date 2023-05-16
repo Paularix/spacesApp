@@ -78,7 +78,7 @@ router.get('/auth', [authenticate, authError], function (req, res, next) {
 });
 // GET services
 // @desc obtener todos los services de BD
-router.get('/auth/:spaceId', [authenticate, authError], function (req, res, next) {
+router.get('/auth/edit/:spaceId', [authenticate, authError], function (req, res, next) {
 
     sequelize.sync().then(() => {
 

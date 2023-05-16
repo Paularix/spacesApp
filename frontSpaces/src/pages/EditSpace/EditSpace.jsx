@@ -219,15 +219,15 @@ const editSpace = () => {
 
           let spaceServices = []
           for (let service of res.data.Services) {
-            spaceServices.push(service.name)
+            spaceServices.push(service.id)
           }
 
           let fetchedSelectedDates = []
           for (let date of res.data.Dates) {
-            console.log(date.date)
             fetchedSelectedDates.push(date.date)
           }
           setNewSpace({
+            id: res.data.id,
             name: res.data.name,
             description: res.data.description,
             capacity: res.data.capacity,
@@ -279,7 +279,7 @@ const editSpace = () => {
           'authorization': user.token
         }
       }
-      fetch(API_URL + "services/auth", options)
+      fetch(API_URL + "services", options)
         .then(res => res.json())
         .then(res => {
           if (res.ok == true) {
@@ -320,7 +320,7 @@ const editSpace = () => {
         data.append('selectedDates', JSON.stringify(selectedDates))
 
         const options = {
-          method: 'POST',
+          method: 'PUT',
           body: data,
           headers: {
             'authorization': user.token,
@@ -347,7 +347,7 @@ const editSpace = () => {
 
   const handleServiceCheck = (e) => {
 
-    if (newSpace.services.includes(e.target.value)) {
+    if (newSpace.services.includes(Number(e.target.value))) {
       setNewSpace({
         ...newSpace,
         services: [
@@ -366,7 +366,7 @@ const editSpace = () => {
         ...newSpace,
         services: [
           ...newSpace.services,
-          e.target.value
+         Number(e.target.value)
         ]
       })
       setNewSpace((prevState) => ({
@@ -782,7 +782,7 @@ const editSpace = () => {
                                 key={index}
                                 control={<Checkbox
                                   onChange={(e) => handleServiceCheck(e)}
-                                  checked={newSpace.services.includes(service.name) ? true : false}
+                                  defaultChecked={newSpace.services.includes(service.id) ? true : false}
                                 />}
                                 value={service.id}
                                 label={service.name} />

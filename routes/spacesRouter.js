@@ -187,20 +187,20 @@ router.get("/auth/mySpaces", [authenticate, authError], (req, res) => {
 
 // GET de un solo spaces
 router.get('/auth/edit/:id', [authenticate, authError], function (req, res, next) {
-    console.log("edit")
+    const token = req.headers.authorization || ''
     sequelize.sync().then(() => {
-
+        const decoded = jsonwebtoken.decode(token)
         Spaces.findOne({ 
             where: { 
-                id: req.params.id 
+                id: req.params.id,
+                rid_host_user: decoded.id
             },
             include: [{
                 model: SpaceServices,
-                model: Services,
+                model: Services
             }, {
                 model: Dates
             }]  
-            
         })
             .then(al => {
                 res.json({

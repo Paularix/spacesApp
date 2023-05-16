@@ -77,7 +77,7 @@ export default function PublicPrivateSwitch({ newSpace, setNewSpace }) {
         }}>
             <FormControlLabel
                 onChange={((e) => handlePublicPrivate(e))}
-                control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+                control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked={newSpace.status == "private" ? true : false}/>}
                 label="¿Quieres publicar este espacio?"
             />
 
