@@ -2,13 +2,16 @@ import React, { useRef, useState } from 'react';
 import './Home.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import SpaceCard from '../../components/SpaceCard/SpaceCard';
+import { useContext } from 'react';
+import GlobalContext from '../../context/GlobalContext';
 
 
-const spaces = [
-  { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
-  { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg", space_picture: "" },
-];
-const yourLocation = '.frontSpaces/public/yourLocation.svg'
+const { date, queryLocation } = useContext(GlobalContext);
+
+// const spaces = [
+//   { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
+//   { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg", space_picture: "" },
+// ];
 
 const UserLocation = ({ userLocation }) => {
   const map = useMap();
@@ -27,11 +30,7 @@ const UserMarker = ({ userLocation }) => {
     return null;
   }
 
-  return    <Marker position={userLocation} icon={new L.Icon({ iconUrl: 'https://cdn.mapmarker.io/api/v1/pin?size=50&background=rgb(120,121,241)&text=%20&color=%20&voffset=0&hoffset=0&' })} title="Mi ubicación" />
-
-
-
-
+  return <Marker position={userLocation} icon={new L.Icon({ iconUrl: 'https://cdn.mapmarker.io/api/v1/pin?size=50&background=rgb(120,121,241)&text=%20&color=%20&voffset=0&hoffset=0&' })} title="Mi ubicación" />
 };
 
 export const Home = () => {
@@ -75,6 +74,20 @@ export const Home = () => {
     }
   };
 
+  const filteredSpaces = spaces.filter(space => {
+    // Verifica disponibilidad y coincidencia de ubicación
+    const available = space.available; 
+    const locationMatch = space.location === queryLocation;
+  
+    // Verifica fecha dentro del rango seleccionado
+    const spaceDate = new Date(space.date); 
+    const startDate = new Date(date[0]);
+    const endDate = new Date(date[1]);
+    const withinRange = spaceDate >= startDate && spaceDate <= endDate;
+  
+    return available && locationMatch && withinRange;
+  });
+  
   return (
     <>
       <div className="home-container" style={{ backgroundColor: 'rgba(183, 183, 235, 0.3)' }}>
@@ -105,16 +118,18 @@ export const Home = () => {
         </div>
         <div className='spacebetween'></div>
         <div className="spaces-container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-          {spaces.map(space => (
-            <div key={space.id} style={{ flexBasis: '25%', marginRight: '16px', marginBottom: '46px', marginTop: '24px' }}>
-              <SpaceCard image={space.image} name={space.name} space={space} />
-            </div>
+          {filteredSpaces.map(space => (
+            <Marker key={space.id} position={space.location}>
+              <Popup>
+                <SpaceCard name={space.name} image={space.image} space={space} />
+              </Popup>
+            </Marker>
           ))}
         </div>
       </div>
     </>
   );
-  
+
 
 
 };
