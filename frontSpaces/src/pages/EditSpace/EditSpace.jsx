@@ -314,30 +314,40 @@ const editSpace = () => {
         && newSpace.errors.services.length == 0
         && newSpace.errors.approximateCoords.length == 0
         && newSpace.errors.address.length == 0) {
-        const data = new FormData()
-        data.append('file', image)
-        data.append('newSpace', JSON.stringify(newSpace))
-        data.append('selectedDates', JSON.stringify(selectedDates))
-
+        //const data = new FormData()
+        //data.append('file', image)
+        //console.log(newSpace)
+        //console.log(selectedDates)
+        const body = {
+          newSpace: newSpace,
+          selectedDates: selectedDates
+        }
+        const sendBody = JSON.stringify(body)
+        //data.append('newSpace', JSON.stringify(newSpace))
+        //data.append('selectedDates', JSON.stringify(selectedDates))
+        
         const options = {
           method: 'PUT',
-          body: data,
+          body: sendBody,
           headers: {
-            'authorization': user.token,
+            'content-type': 'application/json',
+            'authorization': user.token
           }
         }
-        fetch(API_URL + "spaces/auth", options)
+        fetch(API_URL + "spaces/auth/edit/" + newSpace.id, options)
           .then(res => res.json())
           .then((res) => {
             if (res.ok == true) {
               goTo("/mySpaces")
             } else {
+              console.log(res.error)
               setError(res.error)
               goTo("/error")
             }
           })
           .catch((err) => {
-            setError(err.error)
+            console.log(err)
+            setError(err)
             goTo("/error")
           })
       }
