@@ -53,13 +53,25 @@ const SpaceInfo = () => {
   const [message, setMessage] = useState('')
   const [searchParams] = useSearchParams();
   const { spaceId } = useParams();
-
+  const [services, setServices] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleOpenAlert = () => {
+    setOpenAlert(true);
+  };
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
 
   const handleClickReservate = () => {
-    if (user.token)
-      setOpenModal(true);
-    else
+    if (user.token) {
+      if (isValidRange())
+        setOpenModal(true);
+      else
+        handleOpenAlert()
+    } else
       goTo('/login')
   };
 
@@ -76,7 +88,8 @@ const SpaceInfo = () => {
   
   const cantDays = useMemo(() => {
     const diffTime = Math.abs(date[1] - date[0]);
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return days !== 0 ? days : 1
   }, [date])
 
   function loadData() {
@@ -103,7 +116,6 @@ const SpaceInfo = () => {
 function submit(e) {
   e.preventDefault();
   handleCloseReservate()
-  console.log("entra post",e);
   const options = {
       method: 'POST',
       headers: {
@@ -134,9 +146,28 @@ function submit(e) {
 
   const datesToDisable = ({ date }) => {
     const dates = space?.Dates
+    const today = new Date()
+    const yesterday = today.setDate(today.getDate() - 1)
+    const in90Days = today.setDate(today.getDate() + 90)
+    if (date.getTime() < yesterday)
+      return true
+    if (date.getTime() > in90Days)
+      return true
     if (dates && dates.length) {
       const simpleDates = dates.map(d => d.date)
       return simpleDates.indexOf(parseISODate(date)) !== -1
+    }
+    return false
+  }
+
+  const isValidRange = () => {
+    const dates = space?.Dates
+    if (dates && dates.length) {
+      const simpleDates = dates.map(d => d.date)
+      const unavailableDates = simpleDates.filter(d =>
+        d >= parseISODate(date[0]) && d <= parseISODate(date[1])
+      )
+      return !unavailableDates.length
     }
     return false
   }
@@ -242,11 +273,11 @@ function submit(e) {
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="subtitle1" component="h2"><ChairIcon fontSize="small" /> Zonas</Typography>
-                      <ul className='spaceInfo-features-list'>
-                        <li> Cocina</li>
-                        <li> Comedor</li>
-                        <li> Parque</li>
-                      </ul>
+                      {services?.map((service, index) => (
+                        <ul className='spaceInfo-features-list'>
+                            <li key={index} service={service} />
+                        </ul>
+                      ))}
                     </Grid>
                   </Grid>
                 </div>
@@ -310,9 +341,6 @@ function submit(e) {
                   </div>
                 </div>
               </CardContent>
-              {/* <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions> */}
             </Card>
           </Grid>
         </Grid>
@@ -358,6 +386,26 @@ function submit(e) {
         <DialogActions>
           <Button onClick={handleCloseReservate}>Cancelar</Button>
           <Button onClick={submit}>Reservar</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={openAlert}
+        onClose={handleCloseAlert}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          No se pudo realizar la reserva
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Alguna de las fechas que ha seleccionado no se encuentran disponibles
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAlert} autoFocus>
+            Aceptar
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
