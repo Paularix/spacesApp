@@ -162,6 +162,7 @@ const SpaceInfo = () => {
 
   const isValidRange = () => {
     const dates = space?.Dates
+    console.log(dates);
     if (dates && dates.length) {
       const simpleDates = dates.map(d => d.date)
       const unavailableDates = simpleDates.filter(d =>
@@ -169,7 +170,7 @@ const SpaceInfo = () => {
       )
       return !unavailableDates.length
     }
-    return false
+    return true
   }
 
   useEffect(() => {
@@ -370,27 +371,23 @@ const SpaceInfo = () => {
           <DialogContentText>
             Explícale tu actividad lo más detalladamente posible al anfitrión
           </DialogContentText>
-          <form onSubmit={submit}>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Mensaje"
-              type="text"
-              fullWidth
-              variant="standard"
-              required
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-            />
-            <DialogActions>
-              <Button onClick={handleCloseReservate}>Cancelar</Button>
-              <Button type='submit'>Reservar</Button>
-            </DialogActions>
-          </form>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Mensaje"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseReservate}>Cancelar</Button>
+          <Button onClick={submit}>Reservar</Button>
+        </DialogActions>
       </Dialog>
-
       <Dialog
         open={openAlert}
         onClose={handleCloseAlert}
@@ -410,9 +407,8 @@ const SpaceInfo = () => {
             Aceptar
           </Button>
         </DialogActions>
-
       </Dialog>
-    </div >
+    </div>
   );
 };
 
