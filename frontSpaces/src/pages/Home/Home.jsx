@@ -6,10 +6,10 @@ import GlobalContext from '../../context/GlobalContext';
 
 
 
-// const spaces = [
-//   { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
-//   { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg", space_picture: "" },
-// ];
+const spaces = [
+  { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
+  { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg", space_picture: "" },
+];
 
 const UserLocation = ({ userLocation }) => {
   const map = useMap();
@@ -72,26 +72,12 @@ export const Home = () => {
     }
   };
 
-  const filteredSpaces = spaces.filter(space => {
-    // Verifica disponibilidad y coincidencia de ubicación
-    const available = space.available; 
-    const locationMatch = space.location === queryLocation;
-  
-    // Verifica fecha dentro del rango seleccionado
-    const spaceDate = new Date(space.date); 
-    const startDate = new Date(date[0]);
-    const endDate = new Date(date[1]);
-    const withinRange = spaceDate >= startDate && spaceDate <= endDate;
-  
-    return available && locationMatch && withinRange;
-  });
-  
   return (
     <>
-      <div className="home-container" style={{ backgroundColor: 'rgba(183, 183, 235, 0.3)' }}>
-        <div className="map-container" style={{ position: 'relative' }}>
+      <div className="home-container" >
+        <div className="map-container" >
           <MapContainer center={[41.391306159158506, 2.179069519042969]} zoom={13} ref={mapRef}>
-            <TileLayer url="https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {spaces.map(space => (
               <Marker key={space.id} position={space.location}>
                 <Popup>
@@ -116,19 +102,12 @@ export const Home = () => {
         </div>
         <div className='spacebetween'></div>
         <div className="spaces-container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-          {filteredSpaces.map(space => (
-            <Marker key={space.id} position={space.location}>
-              <Popup>
-                <SpaceCard name={space.name} image={space.image} space={space} />
-              </Popup>
-            </Marker>
+          {spaces.map(space => (
+            
+            <SpaceCard key={space.id} name={space.name} image={space.image} space={space} />
           ))}
         </div>
       </div>
     </>
   );
-
-
-
 };
-

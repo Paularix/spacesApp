@@ -33,7 +33,7 @@ const SpaceCard = ({ space }) => {
   };
 
   return (
-    <Link to="/spaceInfo" style={{ textDecoration: 'none' }}>
+    <Link to="/spaceInfo" style={{ textDecoration: 'none', padding:"16px" }}>
       <Card sx={{ maxWidth: 300, minWidth: 300 }}>
         <CardMedia
           className='spacecard-img'
