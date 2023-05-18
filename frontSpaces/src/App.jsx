@@ -22,6 +22,7 @@ import SpaceInfo from './pages/SpaceInfo/SpaceInfo'
 import MySpaces from './pages/MySpaces/MySpaces'
 import MyReservations from './pages/MyReservations/MyReservations'
 import AddSpace from './pages/addSpace/addSpace'
+import Confirmation from './pages/Confirmation/Confirmation'
 import Bookings from './pages/Bookings/Bookings'
 import BookingMGMT from './pages/BookingMGMT/BookingMGMT';
 
@@ -64,7 +65,6 @@ const context = {
   newUser, setNewUser, 
   user, setUser, 
   error, setError, 
-  date, setDate,
   queryLocation, setQueryLocation,
   bookings, setBookings,
   refresh, setRefresh,
@@ -81,11 +81,12 @@ const context = {
           <Route path="/register" element={<Register />}/>
           <Route path="/profile" element={<Profile />}/>
           <Route path="/Home" element={<Home />}/>
-          <Route path="/spaceInfo" element={<SpaceInfo />}/>
+          <Route path="/spaceInfo/:spaceId" element={<SpaceInfo />}/>
           <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/MyReservations" element={<MyReservations/>}/>
           <Route path="/bookings" element={<Bookings/>}/>
           <Route path="/addSpace" element={<AddSpace />} />
+          <Route path="/Confirmation" element={<Confirmation />} />
           <Route path="/error" element={<Error />} />
         </Routes>
         <Footer />
