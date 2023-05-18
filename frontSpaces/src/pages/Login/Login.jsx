@@ -27,7 +27,7 @@ export const Login = () => {
 
     useEffect(() => {
         if (user.token) {
-            goTo("/home")
+            goTo("/")
         } 
     }, [user])
 
