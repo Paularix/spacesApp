@@ -6,10 +6,10 @@ import GlobalContext from '../../context/GlobalContext';
 
 
 
-// const spaces = [
-//   { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
-//   { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg", space_picture: "" },
-// ];
+const spaces = [
+  { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], space_picture: "" },
+  { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], space_picture: "" },
+];
 
 const UserLocation = ({ userLocation }) => {
   const map = useMap();
