@@ -443,8 +443,10 @@ const addSpace = () => {
     <div className='add-space-container'>
 
       <Grid container spacing={1}>
+
         <Grid item xs={5.5}>
         </Grid>
+
         <Grid item xs={6.5} sx={{
           marginTop: 2,
           display: 'flex',
@@ -456,7 +458,6 @@ const addSpace = () => {
             Añade un espacio
           </Typography>
         </Grid>
-
 
         <Grid item xs={5.5} >
 
@@ -503,7 +504,7 @@ const addSpace = () => {
               )
               : (
                 <Box className="loading-box">
-                
+
                   <CircularProgress />
                 </Box>
               )
@@ -516,18 +517,25 @@ const addSpace = () => {
           }}>
             Configura la disponibilidad de los próximos 90 días bloqueando los días que no quieras habilitar reservas:
           </Typography>
-          {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
-            color: '#7879F1',
-            borderColor: '#7879F1',
-            fontSize: 10,
-            padding: 0.33,
-            margin: 1,
-            '&:hover': {
-              color: '#7879F1',
+          <Box sx={{
+            marginLeft: 15
+          }}>
+
+            {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
+              background: lockedDays.includes(el) ? '#7879F1' : '#FFFFFF',
+              color: lockedDays.includes(el) ? '#FFFFFF' : '#7879F1',
               borderColor: '#7879F1',
-              boxShadow: 'none',
-            },
-          }} onClick={() => blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
+              fontSize: 10,
+              padding: 0.33,
+              margin: 1,
+              '&:hover': {
+                color: '#7879F1',
+                borderColor: '#7879F1',
+                boxShadow: 'none',
+              },
+            }} onClick={() => blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
+
+          </Box>
 
 
           {
@@ -573,6 +581,7 @@ const addSpace = () => {
         </Grid>
 
         <Grid item xs={6.5} sx={{
+          height: 1200,
           display: 'flex',
           justifyContent: 'center'
         }}>
@@ -772,7 +781,7 @@ const addSpace = () => {
                   background: '#7879F1',
                   marginLeft: 1.78,
                   marginRight: 1.78,
-                  marginTop: 8,
+                  marginTop: 4,
                   boxShadow: 'none',
                   justifyItems: 'center',
                   '&:hover': {

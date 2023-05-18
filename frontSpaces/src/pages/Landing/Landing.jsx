@@ -170,11 +170,15 @@ export const Landing = () => {
             </Popover>
 
 
-            <div>
-              <Link to="/Home" style={{ textDecoration: 'none', color: 'black' }}>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+              <Link to="/Home" style={{ textDecoration: 'none', color: 'black' }} >
                 <Chip style={landingButton} onClick={() => search()} label="Search" />
               </Link>
-            </div>
+            </Box>
           </div>
         </Box>
 

@@ -49,7 +49,7 @@ function ResponsiveAppBar() {
 
     const menuProfileImage = {
         width: '40px',
-        borderRadius:'20px'
+        borderRadius: '20px'
     }
 
     const openUserMenu = (event) => {
@@ -77,163 +77,164 @@ function ResponsiveAppBar() {
     }
     return (
         <div>
-        <AppBar position="static" elevation={0} style={{ backgroundColor: '#ffffff' }}>
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    <Typography
-                        onClick={() => goLanding()}
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        sx={{
-                            display: { xs: 'none', md: 'flex' },
-                            letterSpacing: '.3rem',
-                            color: 'black',
-                            fontSize: '32px',
-                            textDecoration: 'none',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        <span className='colored'>S</span> pace  <span className='colored'>A</span>pp
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <AppBar position="static" elevation={0} style={{ backgroundColor: '#ffffff' }}>
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                        <Typography
+                            onClick={() => goLanding()}
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            sx={{
+                                display: { xs: 'none', md: 'flex' },
+                                letterSpacing: '.3rem',
+                                color: 'black',
+                                fontSize: '32px',
+                                textDecoration: 'none',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <span className='colored'>Flex</span>Space
 
-                    </Box>
-                    <Typography
-                        onClick={() => goLanding()}
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        sx={{
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            letterSpacing: '.3rem',
-                            fontSize: '32px',
-                            color: 'black',
-                            textDecoration: 'none',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        <span className='colored'>S</span> pace  <span className='colored'>A</span>pp
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        </Typography>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 
-                    </Box>
+                        </Box>
+                        <Typography
+                            onClick={() => goLanding()}
+                            variant="h5"
+                            noWrap
+                            component="a"
+                            sx={{
+                                display: { xs: 'flex', md: 'none' },
+                                flexGrow: 1,
+                                letterSpacing: '.3rem',
+                                fontSize: '32px',
+                                color: 'black',
+                                textDecoration: 'none',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <span className='colored'>Flex</span>Space
+                        </Typography>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 
-                    <Box sx={{ flexGrow: 0 }}>
+                        </Box>
 
-                        {
-                            user.token
-                                ? (
-                                    <>
+                        <Box sx={{ flexGrow: 0 }}>
 
-                                        <Tooltip title="Open settings">
-                                            <IconButton onClick={openUserMenu} sx={{ p: 0 }}>
-                                               { 
-                                               user.profile_picture 
-                                               ? (<img
-                                                    style={menuProfileImage}
-                                                    src={("http://localhost:3080/" + user.profile_picture)}
-                                                    alt=""
-                                                />) 
-                                                :(
-                                                    <Avatar style={menuProfileImage}></Avatar>
-                                                )
-                                                }
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Menu
-                                            sx={{
-                                                mt: '45px',
-                                            }}
-                                            id="menu-appbar"
-                                            anchorEl={anchorElUser}
-                                            anchorOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            keepMounted
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            open={Boolean(anchorElUser)}
-                                            onClick={toggleUserMenu}
-                                        >
-                                            <Link
-                                                style={{
-                                                    textDecoration: 'none',
-                                                    color: 'black'
+                            {
+                                user.token
+                                    ? (
+                                        <>
+
+                                            <Tooltip title="Open settings">
+                                                <IconButton onClick={openUserMenu} sx={{ p: 0 }}>
+                                                    {
+                                                        user.profile_picture
+                                                            ? (<img
+                                                                style={menuProfileImage}
+                                                                src={("http://localhost:3080/" + user.profile_picture)}
+                                                                alt=""
+                                                            />)
+                                                            : (
+                                                                <Avatar style={menuProfileImage}></Avatar>
+                                                            )
+                                                    }
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Menu
+                                                sx={{
+                                                    mt: '45px',
                                                 }}
-                                                to="/profile"
-                                            >
-                                                <MenuItem style={menuItem} onClick={toggleUserMenu}>
-                                                    <AccountCircleIcon />
-                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Perfil</Typography>
-                                                </MenuItem>
-                                            </Link>
-                                            <Divider />
-                                            <Link
-                                                style={{
-                                                    textDecoration: 'none',
-                                                    color: 'black'
+                                                id="menu-appbar"
+                                                anchorEl={anchorElUser}
+                                                anchorOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
                                                 }}
-                                                to="/mySpaces"
-                                            >
-                                                <MenuItem style={menuItem} onClick={toggleUserMenu}>
-                                                    <ApartmentIcon />
-                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Mis Espacios</Typography>
-                                                </MenuItem>
-                                            </Link>
-                                            <Link
-                                                style={{
-                                                    textDecoration: 'none',
-                                                    color: 'black'
+                                                keepMounted
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
                                                 }}
-                                                to="/AddSpace"
+                                                open={Boolean(anchorElUser)}
+                                                onClick={toggleUserMenu}
                                             >
-                                                <MenuItem style={menuItem} onClick={toggleUserMenu}>
-                                                    <DomainAddIcon />
-                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Subir un espacio</Typography>
+                                                <Link
+                                                    style={{
+                                                        textDecoration: 'none',
+                                                        color: 'black'
+                                                    }}
+                                                    to="/profile"
+                                                >
+                                                    <MenuItem style={menuItem} onClick={toggleUserMenu}>
+                                                        <AccountCircleIcon />
+                                                        <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Perfil</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                <Divider />
+                                                <Link
+                                                    style={{
+                                                        textDecoration: 'none',
+                                                        color: 'black'
+                                                    }}
+                                                    to="/mySpaces"
+                                                >
+                                                    <MenuItem style={menuItem} onClick={toggleUserMenu}>
+                                                        <ApartmentIcon />
+                                                        <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Mis Espacios</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                <Link
+                                                    style={{
+                                                        textDecoration: 'none',
+                                                        color: 'black'
+                                                    }}
+                                                    to="/AddSpace"
+                                                >
+                                                    <MenuItem style={menuItem} onClick={toggleUserMenu}>
+                                                        <DomainAddIcon />
+                                                        <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Subir un espacio</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                <Link
+                                                    style={{
+                                                        textDecoration: 'none',
+                                                        color: 'black'
+                                                    }}
+                                                    to="/bookings"
+                                                >
+                                                    <MenuItem style={menuItem} onClick={toggleUserMenu}>
+                                                        <LoupeIcon />
+                                                        <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Gestionar mis reservas</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                <Divider />
+                                                <MenuItem style={menuItem} onClick={logout}>
+                                                    <LogoutIcon />
+                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Logout</Typography>
                                                 </MenuItem>
+                                            </Menu>
+                                        </>
+                                    )
+                                    : (
+                                        <>
+                                            <Link to="/login" style={{ textDecoration: 'none' }}>
+                                                <Button variant="contained" style={authButton}>Login</Button>
                                             </Link>
-                                            <Link
-                                                style={{
-                                                    textDecoration: 'none',
-                                                    color: 'black'
-                                                }}
-                                                to="/bookings"
-                                            >
-                                                <MenuItem style={menuItem} onClick={toggleUserMenu}>
-                                                    <LoupeIcon />
-                                                    <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Gestionar mis reservas</Typography>
-                                                </MenuItem>
-                                            </Link>
-                                            <Divider />
-                                            <MenuItem style={menuItem} onClick={logout}>
-                                                <LogoutIcon />
-                                                <Typography style={{ margin: "5px 10px 5px 10px" }} textAlign="center">Logout</Typography>
-                                            </MenuItem>
-                                        </Menu>
-                                    </>
-                                )
-                                : (
-                                    <>
-                                        <Link to="/login" style={{ textDecoration: 'none' }}>
-                                            <Button variant="contained" style={authButton}>Login</Button>
-                                        </Link>
 
-                                        <Link to="/register" style={{ textDecoration: 'none' }}>
-                                            <Button variant="contained" style={authButton}>Register</Button>
-                                        </Link>
-                                    </>
-                                )
-                        }
-                    </Box>
-                </Toolbar>
-            </Container>
-        </AppBar>
-        <Divider />
+                                            <Link to="/register" style={{ textDecoration: 'none' }}>
+                                                <Button variant="contained" style={authButton}>Register</Button>
+                                            </Link>
+                                        </>
+                                    )
+                            }
+                        </Box>
+                    </Toolbar>
+                </Container>
+            </AppBar>
+            <Divider />
         </div>
     );
 }
