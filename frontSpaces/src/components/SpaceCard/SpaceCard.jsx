@@ -42,7 +42,7 @@ const SpaceCard = ({ space }) => {
           height="194"
           image={space.space_picture ?
             ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
-          alt="Paella dish"
+          alt="Picture"
         />
         <CardContent>
           <div>
