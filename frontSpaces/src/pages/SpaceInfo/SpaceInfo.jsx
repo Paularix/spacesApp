@@ -366,27 +366,30 @@ const SpaceInfo = () => {
         </div>
       </div>
       <Dialog open={openModal} onClose={handleCloseReservate}>
-        <DialogTitle> Enviar tu solicitud al anfitrión</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Explícale tu actividad lo más detalladamente posible al anfitrión
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Mensaje"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseReservate}>Cancelar</Button>
-          <Button onClick={submit}>Reservar</Button>
-        </DialogActions>
+        <form onSubmit={submit}>
+          <DialogTitle> Enviar tu solicitud al anfitrión</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Explícale tu actividad lo más detalladamente posible al anfitrión
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Mensaje"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={message}
+              required
+              onChange={e => setMessage(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseReservate}>Cancelar</Button>
+            <Button type='submit'>Reservar</Button>
+          </DialogActions>
+        </form>
       </Dialog>
       <Dialog
         open={openAlert}
