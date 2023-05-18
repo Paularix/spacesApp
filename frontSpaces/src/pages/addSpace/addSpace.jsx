@@ -581,7 +581,7 @@ const addSpace = () => {
         </Grid>
 
         <Grid item xs={6.5} sx={{
-          height: 1200,
+          height: 1300,
           display: 'flex',
           justifyContent: 'center'
         }}>

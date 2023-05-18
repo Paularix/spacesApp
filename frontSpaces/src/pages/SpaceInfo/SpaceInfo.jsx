@@ -289,7 +289,7 @@ const SpaceInfo = () => {
             <Card className='spaceInfo-card' sx={{ maxWidth: 345 }}>
               <CardContent>
                 <Typography m={2} variant="h5" component="div">
-                  <strong>25 €</strong> día
+                  <strong>{space.price} €</strong> día
                 </Typography>
                 <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">¿Qué día?</InputLabel>

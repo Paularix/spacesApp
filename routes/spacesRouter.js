@@ -14,10 +14,10 @@ const router = express.Router();
 
 const locations = {
     Barcelona : {
-        maxLatLimit: 41.3947,
-        minLatLimit: 41.1292,
-        minLonLimit: 2.1024,
-        maxLonLimit: 2.2661
+        maxLatLimit: 41.5,
+        minLatLimit: 41.1,
+        minLonLimit: 2.1,
+        maxLonLimit: 2.3
     },
     Hospitalet : {
         maxLatLimit: 41.347364,
