@@ -3,7 +3,7 @@ import multer from 'multer';
 import jsonwebtoken from 'jsonwebtoken';
 import { sequelize } from "../loadSequelize.js";
 import { authenticate, authError } from './middleware.js';
-import { Services, SpaceServices, Users, Dates } from '../models/Models.js';
+import { Services, SpaceServices, Users, Dates, Spaces } from '../models/Models.js';
 import { Op } from 'sequelize';
 import {yyyymmdd} from '../config/helpers.js'
 
