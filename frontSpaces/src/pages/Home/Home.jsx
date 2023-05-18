@@ -1,15 +1,17 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import './Home.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import SpaceCard from '../../components/SpaceCard/SpaceCard';
 import GlobalContext from '../../context/GlobalContext';
+import { API_URL } from "../../apiconfig";
+import { parseISODate } from '../../utils/parseDate'
 
 
 
-const spaces = [
-  { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
-  { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg", space_picture: "" },
-];
+// const spaces = [
+//   { id: 1, image: "public/vite.svg", name: 'Espacio 1', location: [41.391306159158506, 2.179069519042969], image: "public/vite.svg", space_picture: "" },
+//   { id: 2, image: "public/vite1.svg", name: 'Espacio 2', location: [41.391517, 2.190130], image: "public/vite2.svg", space_picture: "" },
+// ];
 
 const UserLocation = ({ userLocation }) => {
   const map = useMap();
@@ -33,9 +35,40 @@ const UserMarker = ({ userLocation }) => {
 
 export const Home = () => {
   const mapRef = useRef();
-  const { date, queryLocation } = useContext(GlobalContext);
+  const { date, queryLocation, error, setError } = useContext(GlobalContext);
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
+  const [spaces, setSpaces] = useState([])
+
+  const route = 'spaces/find'
+
+  const getSpaces = () => {
+    const options = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+    };
+    const fullRoute = `${API_URL}${route}?${new URLSearchParams({
+        location: queryLocation,
+        from: parseISODate(date[0]),
+        to: parseISODate(date[1])
+    })}`
+    fetch(fullRoute, options)
+      .then(result => result.json())
+      .then(response => {
+          if (response.ok === true) {
+              setSpaces(response.data);
+          } else {
+              setError(response.error)
+          }
+      })
+      .catch(error => setError(error))
+  }
+
+  useEffect(() => {
+    getSpaces()
+  }, [])
 
   const handleLocationPermission = () => {
     if ("geolocation" in navigator) {

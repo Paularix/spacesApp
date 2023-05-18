@@ -91,15 +91,19 @@ router.get('/find', function (req, res, next) {
                     data: results 
                 })
             })
-            .catch(error => res.json({
-                ok: false,
-                error: error.message
-            }))
+            .catch(error => {
+                console.log(error)
+                res.json({
+                    ok: false,
+                    error: error.message
+                })
+            })
 
-    }).catch((error) => {
+    }).catch(error => {
+        console.log(error)
         res.json({
             ok: false,
-            error: error
+            error: error.message
         })
     });
 
