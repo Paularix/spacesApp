@@ -27,14 +27,15 @@ const ExpandMore = styled((props) => {
 
 
 const SpaceCard = ({ space }) => {
-  const shareViaWhatsApp = () => {
+  const shareViaWhatsApp = (e) => {
+    e.preventDefault()
     const whatsappMessage = encodeURIComponent(`Hey! Check out this awesome space: ${window.location.href}`);
     window.location.href = `https://wa.me/?text=${whatsappMessage}`;
   };
 
   return (
-    <Link to="/spaceInfo" style={{ textDecoration: 'none', padding:"16px" }}>
-      <Card sx={{ maxWidth: 300, minWidth: 300 }}>
+    <Link to={`/spaceInfo/${space.id}`} style={{ textDecoration: 'none', padding:"16px" }}>
+      <Card sx={{ maxWidth: 300, minWidth: 300, minHeight: 375 }}>
         <CardMedia
           className='spacecard-img'
           component="img"
