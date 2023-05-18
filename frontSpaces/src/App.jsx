@@ -23,10 +23,14 @@ import MySpaces from './pages/MySpaces/MySpaces'
 import MyReservations from './pages/MyReservations/MyReservations'
 import AddSpace from './pages/addSpace/addSpace'
 import Confirmation from './pages/Confirmation/Confirmation'
+import Bookings from './pages/Bookings/Bookings'
+import BookingMGMT from './pages/BookingMGMT/BookingMGMT';
+
 
 function App() {
 
   const navigate = useNavigate()
+  const [date, setDate] = useState(new Date())
   const [newUser, setNewUser] = useState({
     name: '',
     lastName: '',
@@ -35,8 +39,10 @@ function App() {
     phone: '',
 })
 
-const [date, setDate]  = useState(new Date())
+const [queryLocation, setQueryLocation] = useState("")
 
+const [bookings, setBookings] = useState([])
+const [refresh, setRefresh] = useState(false)
 
 const [error, setError]  = useState("")
 const [user, setUser] = useState({
@@ -59,6 +65,9 @@ const context = {
   newUser, setNewUser, 
   user, setUser, 
   error, setError, 
+  queryLocation, setQueryLocation,
+  bookings, setBookings,
+  refresh, setRefresh,
   logout 
 }
 
@@ -75,10 +84,10 @@ const context = {
           <Route path="/spaceInfo/:spaceId" element={<SpaceInfo />}/>
           <Route path="/MySpaces" element={<MySpaces />}/>
           <Route path="/MyReservations" element={<MyReservations/>}/>
+          <Route path="/bookings" element={<Bookings/>}/>
           <Route path="/addSpace" element={<AddSpace />} />
           <Route path="/Confirmation" element={<Confirmation />} />
           <Route path="/error" element={<Error />} />
-
         </Routes>
         <Footer />
       </div>

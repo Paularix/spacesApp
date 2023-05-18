@@ -95,8 +95,9 @@ router.post('/', [authenticate, authError], function (req, res, next) {
             ok: false,
             error: error.message
         })
-    });
-});
+    })
+
+})
 
 
 // put modificació d'un bookings
@@ -144,9 +145,6 @@ router.delete('/:id', function (req, res, next) {
 
 });
 
-
-export default router;
-
 // GET información protegida de las reservas del usuario
 // @desc ruta protegida perfil de usuario
 router.get("/auth/Myreservations", [authenticate, authError], (req, res) => {
@@ -188,3 +186,151 @@ router.get("/auth/Myreservations", [authenticate, authError], (req, res) => {
 
     }
 })
+
+// GET información protegida de las reservas del usuario
+// @desc ruta protegida perfil de usuario
+router.get("/auth/Myreservations", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        sequelize.sync().then(() => {
+            Bookings.findAll({
+                where: { rid_booker_user: decoded.id },
+                include: [{
+                    model: Spaces,
+                    required: true
+                }, {
+                    model: Users,
+                    required: true
+                }]
+            })
+                .then(bookings => {
+                    res.status(200).json({
+                        ok: true,
+                        data: bookings
+                    })
+                })
+                .catch((error) => {
+                    console.log('FALLA', error)
+                    res.status(400).json({
+                        ok: false,
+                        error
+                    })
+                })
+        })
+            .catch((error) => {
+                console.log('FALLA', error)
+                res.status(400).json({
+                    ok: false,
+                    error
+                })
+            })
+
+    }
+})
+
+
+// GET información protegida de las reservas del usuario
+// @desc ruta protegida perfil de usuario
+router.get("/auth/bookingmgmt", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        sequelize.sync().then(() => {
+            Bookings.findAll({
+                include: [{
+                    model: Spaces,
+                    where: {rid_host_user: decoded.id}  ,
+                    required: true
+                },{
+                    model: Users,
+                    required: true
+                }]
+            })
+                .then(bookings => {
+                    res.status(200).json({
+                        ok: true,
+                        data: bookings
+                    })
+                })
+                .catch((error) => {
+                    console.log('FALLA', error)
+                    res.status(400).json({
+                        ok: false,
+                        error
+                    })
+                })
+        })
+            .catch((error) => {
+                console.log('FALLA', error)
+                res.status(400).json({
+                    ok: false,
+                    error
+                })
+            })
+
+    }
+})
+
+// GET información protegida de las reservas del usuario
+// @desc ruta protegida perfil de usuario
+router.put("/auth/bookingmgmt/accept/:id", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        sequelize.sync().then(() => {
+            Bookings.findOne({ where: { id: req.params.id } })
+                .then(bookings_trobat =>
+                    bookings_trobat.update({status: 1})
+                )
+                .then(bookings_modificat => res.json({
+                    ok: true,
+                    data: bookings_modificat
+                }))
+                .catch(error => res.json({
+                    ok: false,
+                    error: error.message
+                }));
+    
+        }).catch((error) => {
+            res.json({
+                ok: false,
+                error: error.message
+            })
+        });
+
+    }
+})
+
+
+// GET información protegida de las reservas del usuario
+// @desc ruta protegida perfil de usuario
+router.put("/auth/bookingmgmt/reject/:id", [authenticate, authError], (req, res) => {
+    const token = req.headers.authorization || ''
+    if (token) {
+        const decoded = jsonwebtoken.decode(token)
+        sequelize.sync().then(() => {
+            Bookings.findOne({ where: { id: req.params.id } })
+                .then(bookings_trobat =>
+                    bookings_trobat.update({status: 2})
+                )
+                .then(bookings_modificat => res.json({
+                    ok: true,
+                    data: bookings_modificat
+                }))
+                .catch(error => res.json({
+                    ok: false,
+                    error: error.message
+                }));
+    
+        }).catch((error) => {
+            res.json({
+                ok: false,
+                error: error.message
+            })
+        });
+
+    }
+})
+export default router;
+
