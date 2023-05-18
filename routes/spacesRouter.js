@@ -52,7 +52,8 @@ const upload = multer({ storage: storage }).single('file');
 router.get('/find', function (req, res, next) {
 
     sequelize.sync().then(() => {
-        
+        console.log(req.query.location)
+        console.log(locations[req.query.location])
         Spaces.findAll({
             where: {
                 lat: {
@@ -69,7 +70,7 @@ router.get('/find', function (req, res, next) {
             }]  
         })
             .then((spaces) => {
-
+                console.log('spaces', spaces)
                 const dateFrom = new Date(req.query.from).getTime()
                 const dateTo = new Date(req.query.to).getTime()
 
@@ -90,15 +91,19 @@ router.get('/find', function (req, res, next) {
                     data: results 
                 })
             })
-            .catch(error => res.json({
-                ok: false,
-                error: error.message
-            }))
+            .catch(error => {
+                console.log(error)
+                res.json({
+                    ok: false,
+                    error: error.message
+                })
+            })
 
-    }).catch((error) => {
+    }).catch(error => {
+        console.log(error)
         res.json({
             ok: false,
-            error: error
+            error: error.message
         })
     });
 

@@ -3,7 +3,11 @@ width: 100%;}
 
 .leaflet-container{
     width: 100%;
-    height: 60vh;
+    height: 400px;
+}
+
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{
+    height: 450px;
 }
 .body{
     background-color: rgba(183, 183, 235, 0.75);
@@ -16,4 +20,9 @@ width: 100%;}
     width: 100%;
     height: 16px;
     background-color: white;
+}
+.map-container{
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
