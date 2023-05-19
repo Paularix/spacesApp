@@ -314,23 +314,26 @@ const editSpace = () => {
         && newSpace.errors.services.length == 0
         && newSpace.errors.approximateCoords.length == 0
         && newSpace.errors.address.length == 0) {
-        //const data = new FormData()
-        //data.append('file', image)
+        
+        const data = new FormData()
+        data.append('file', image)
         //console.log(newSpace)
         //console.log(selectedDates)
-        const body = {
-          newSpace: newSpace,
-          selectedDates: selectedDates
-        }
-        const sendBody = JSON.stringify(body)
-        //data.append('newSpace', JSON.stringify(newSpace))
-        //data.append('selectedDates', JSON.stringify(selectedDates))
+        //const body = {
+        //  newSpace: newSpace,
+        //  selectedDates: selectedDates
+        // }
+        //const sendBody = JSON.stringify(body)
+        data.append('newSpace', JSON.stringify(newSpace))
+        data.append('selectedDates', JSON.stringify(selectedDates))
+        
+
+
         
         const options = {
           method: 'PUT',
-          body: sendBody,
+          body: data,
           headers: {
-            'content-type': 'application/json',
             'authorization': user.token
           }
         }

@@ -227,147 +227,100 @@ router.get('/auth/edit/:id', [authenticate, authError], function (req, res, next
 router.put('/auth/edit/:id', [authenticate, authError], function (req, res, next) {
     const token = req.headers.authorization || ''
     const decoded = jsonwebtoken.decode(token)
-    console.log("put request")
-    sequelize.sync().then(() => {
-        console.log("sqlz sync")
+    upload(req, res, function (err) {
+        if (err) {
+            console.log("error uploading the file")
+            console.log(err)
+            return res.status(500).send("Error uploading file")
+        } else {
+            sequelize.sync().then(() => {
 
+                const space = JSON.parse(req.body.newSpace)
+                const selectedDates = JSON.parse(req.body.selectedDates)
 
-        //console.log(req.body)
-        //console.log(req.params.id)
+                console.log(space)
+                console.log(selectedDates)
 
-        const space = req.body.newSpace
-        //const selectedDates = JSON.parse(req.body.selectedDates)
-
-        const updateSpace = {
-            id: space.id,
-            name: space.name,
-            address: space.address,
-            description: space.description,
-            rules: space.rules,
-            capacity: space.capacity,
-            price: Number(space.price),
-            rid_host_user: Number(decoded.id),
-            status: space.status,
-            lat: space.approximateCoords[0],
-            long: space.approximateCoords[1],
-        }
-
-
-        Spaces.findOne({
-            where: {
-                id: req.params.id,
-                rid_host_user: decoded.id
-            },
-        })
-            .then(foundSpace => {
-                if (foundSpace) {
-                    foundSpace.update(updateSpace)
-                }
-                return foundSpace
-            })
-            .then((foundSpace) => {
-                Dates.destroy({where: {spaces_id_space: req.params.id}})
-                
-                for (let date of req.body.selectedDates) {
-                    console.log(date)
-                    Dates.create({
-                        date: date,
-                        available: false,
-                        spaces_id_space: foundSpace.id
-                    })
-                    .then(created => console.log("Created:", created ))
-                    .catch(error => console.log(error))
-
+                const updateSpace = {
+                    id: space.id,
+                    name: space.name,
+                    address: space.address,
+                    description: space.description,
+                    rules: space.rules,
+                    capacity: space.capacity,
+                    price: Number(space.price),
+                    rid_host_user: Number(decoded.id),
+                    status: space.status,
+                    lat: space.approximateCoords[0],
+                    long: space.approximateCoords[1],
                 }
 
-                return foundSpace
-            })
-            .then(foundSpace => {
-                for (let service of space.services) {
-                    SpaceServices.create({
-                        rid_space: foundSpace.id,
-                        rid_service: service
-                    })
-                }
-                return foundSpace
-            })
-            .then((foundSpace) => {
-                res.json({
-                    ok: true,
-                    data: foundSpace
+
+                Spaces.findOne({
+                    where: {
+                        id: req.params.id,
+                        rid_host_user: decoded.id
+                    },
                 })
+                    .then(foundSpace => {
+                        if (foundSpace) {
+                            foundSpace.update(updateSpace)
+                        }
+                        if (req.file) {
+                            foundSpace.update({space_picture: req.file.filename})
+                        }
+                        return foundSpace
+                    })
+                    .then((foundSpace) => {
+                        Dates.destroy({where: {spaces_id_space: req.params.id}})
+                        
+                        for (let date of selectedDates) {
+                            console.log(date)
+                            Dates.create({
+                                date: date,
+                                available: false,
+                                spaces_id_space: foundSpace.id
+                            })
+                            .then(created => console.log("Created:", created ))
+                            .catch(error => console.log(error))
+
+                        }
+
+                        return foundSpace
+                    })
+                    .then(foundSpace => {
+                        for (let service of space.services) {
+                            SpaceServices.create({
+                                rid_space: foundSpace.id,
+                                rid_service: service
+                            })
+                        }
+                        return foundSpace
+                    })
+                    .then((foundSpace) => {
+                        res.json({
+                            ok: true,
+                            data: foundSpace
+                        })
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        res.json({
+                            ok: false,
+                            error: error
+                        })
+                    });
+
             })
-            .catch(error => {
-                console.log(error)
+            .catch((error) => {
+                console.log("syncErr", error)
                 res.json({
                     ok: false,
                     error: error
                 })
             });
-
-        // Spaces.findOne({
-        //     where: {
-        //         id: req.params.id
-        //     },
-        // }).then(space => {
-        //     console.log("space lookign for", space)
-
-        //     if (space) {
-        //         console.log(space)
-        //         space.update(updateSpace)
-        //         return space
-        //     }
-        // }).then(space => {
-        //     res.json({
-        //         ok: true,
-        //         data: space
-        //     })
-        // })
-        // .then((space) => {
-        //     space.Dates.destroy()
-        //         .then(() => {
-        //             space.Dates.bulkCreate(selectedDates)
-        //         })
-        //         .then(data => console.log("dates", data))
-        //         .catch(err => console.log(err))
-        //     return space
-        // }
-        // )
-        // .then((space) => {
-        //     space.SpaceServices.destroy()
-        //         .then(() => {
-        //             for (let service of space.Services) {
-        //                 space.SpaceServices.create({
-        //                     rid_space: space.id,
-        //                     rid_service: service
-        //                 })
-        //                 .then(data => console.log("services", data))
-        //                 .catch(err => console.log(err))
-        //             }
-        //         })
-        //     return space
-        // })
-        // .then(space => {
-        //     res.json({
-        //         ok: true,
-        //         data: space
-        //     })
-        // })
-        // .catch(error => {
-        //     console.log(error)
-        //     res.json({
-        //         ok: false,
-        //         error: error
-        //     })
-        // })
-
-    }).catch((error) => {
-        console.log("syncErr", error)
-        res.json({
-            ok: false,
-            error: error
-        })
-    });
+        }
+    })
 });
 
 // POST subir espacio
