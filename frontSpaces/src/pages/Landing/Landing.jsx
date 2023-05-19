@@ -170,11 +170,15 @@ export const Landing = () => {
             </Popover>
 
 
-            <div>
-              <Link to="/Home" style={{ textDecoration: 'none', color: 'black' }}>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+              <Link to="/Home" style={{ textDecoration: 'none', color: 'black' }} >
                 <Chip style={landingButton} onClick={() => search()} label="Search" />
               </Link>
-            </div>
+            </Box>
           </div>
         </Box>
 
@@ -183,30 +187,42 @@ export const Landing = () => {
         </div>
       </div >
 
-      <Box>
+      <Box sx={{
+        marginTop: 8,
+        marginBottom: 4
+      }}>
         <div className="introduction">
-          <div className="introduction-box">
+          <Box sx={{
+            marginLeft: 30,
+            marginRight: 4,
+          }} className="introduction-box">
             <h1> <span className='colored'>B</span>usca</h1>
             <div className='introduction-inner-box'>
               <GpsFixedIcon style={iconStyle}></GpsFixedIcon>
               <p>Espacios cerca con diferentes servicios y posibilidades.</p>
             </div>
-          </div>
-          <div className="introduction-box">
+          </Box>
+          <Box sx={{
+            marginLeft: 4,
+            marginRight: 4,
+          }}  className="introduction-box">
             <h1><span className='colored'>C</span>ontacta</h1>
             <div className='introduction-inner-box'>
               <ForumIcon style={iconStyle}></ForumIcon>
               <p>Con los propietarios y otros organizadores para colaborar.</p>
             </div>
-          </div>
-          <div className="introduction-box">
+          </Box>
+          <Box sx={{
+            marginLeft: 4,
+            marginRight: 32,
+          }} className="introduction-box">
             <h1><span className='colored'>O</span>rganiza</h1>
 
             <div className='introduction-inner-box'>
               <EventAvailableIcon style={iconStyle}></EventAvailableIcon>
               <p>Eventos u otras actividades de forma autogestionada. </p>
             </div>
-          </div>
+          </Box>
         </div>
 
       </Box>

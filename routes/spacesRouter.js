@@ -2,11 +2,13 @@ import express from 'express';
 import multer from 'multer';
 import jsonwebtoken from 'jsonwebtoken';
 import { sequelize } from "../loadSequelize.js";
-import { Services, Spaces, Dates } from '../models/Models.js';
 import { authenticate, authError } from './middleware.js';
+import { Services, SpaceServices, Users, Dates, Spaces } from '../models/Models.js';
 import { Op } from 'sequelize';
+
 import { SpaceServices } from '../models/Models.js';
 import { yyyymmdd } from '../config/helpers.js'
+
 
 Spaces.belongsToMany(Services, { through: "SpaceServices", foreignKey: "rid_space" })
 Spaces.hasMany(Dates, { foreignKey: "spaces_id_space" })
@@ -14,6 +16,7 @@ Spaces.hasMany(Dates, { foreignKey: "spaces_id_space" })
 const router = express.Router();
 
 const locations = {
+
     Barcelona: {
         maxLatLimit: 41.3947,
         minLatLimit: 41.1292,
@@ -53,7 +56,6 @@ const upload = multer({ storage: storage }).single('file');
 router.get('/find', function (req, res, next) {
 
     sequelize.sync().then(() => {
-
         Spaces.findAll({
             where: {
                 lat: {
@@ -70,7 +72,7 @@ router.get('/find', function (req, res, next) {
             }]
         })
             .then((spaces) => {
-
+                console.log('spaces', spaces)
                 const dateFrom = new Date(req.query.from).getTime()
                 const dateTo = new Date(req.query.to).getTime()
 
@@ -91,15 +93,19 @@ router.get('/find', function (req, res, next) {
                     data: results
                 })
             })
-            .catch(error => res.json({
-                ok: false,
-                error: error.message
-            }))
+            .catch(error => {
+                console.log(error)
+                res.json({
+                    ok: false,
+                    error: error.message
+                })
+            })
 
-    }).catch((error) => {
+    }).catch(error => {
+        console.log(error)
         res.json({
             ok: false,
-            error: error
+            error: error.message
         })
     });
 
@@ -135,17 +141,32 @@ router.get('/', function (req, res, next) {
 router.get('/:id', function (req, res, next) {
     sequelize.sync().then(() => {
 
-        Spaces.findOne({ where: { id: req.params.id } })
+        Spaces.findOne({
+            where: { id: req.params.id },
+            include: [{
+                model: Users,
+                required: true
+            }, {
+                model: Dates,
+                as: 'Dates'
+            }, {
+                model: Services
+            }]
+        })
             .then(al => res.json({
                 ok: true,
                 data: al
             }))
-            .catch(error => res.json({
-                ok: false,
-                error: error
-            }))
+            .catch(error => {
+                console.log(error)
+                res.json({
+                    ok: false,
+                    error: error
+                })}
+            )
 
     }).catch((error) => {
+        console.log(error)
         res.json({
             ok: false,
             error: error

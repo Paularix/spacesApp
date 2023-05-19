@@ -8,7 +8,7 @@ import { useState, useEffect, useContext } from "react";
 import GlobalContext from "../../context/GlobalContext"
 import './MySpaces.css'
 import { API_URL } from "../../apiconfig";
-
+import { Link } from 'react-router-dom'
 import SpaceCard from '../../components/SpaceCard/SpaceCard';
 
 export const MySpaces = () => {
@@ -63,7 +63,9 @@ export const MySpaces = () => {
                                 Comienza a planear tu próxima evento
                             </Typography>
                         </CardContent>
-                        <Button className='myspaces-button myspaces-banner-button' variant="contained">Sube tu espacio</Button>
+                        <Link to={`/addSpace`}>
+                         <Button className='myspaces-button myspaces-banner-button' variant="contained">Sube tu espacio</Button>
+                        </Link>
                     </Card>
                 </div> :
                 <div>
