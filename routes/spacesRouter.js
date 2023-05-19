@@ -6,10 +6,6 @@ import { authenticate, authError } from './middleware.js';
 import { Services, SpaceServices, Users, Dates, Spaces } from '../models/Models.js';
 import { Op } from 'sequelize';
 
-import { SpaceServices } from '../models/Models.js';
-import { yyyymmdd } from '../config/helpers.js'
-
-
 Spaces.belongsToMany(Services, { through: "SpaceServices", foreignKey: "rid_space" })
 Spaces.hasMany(Dates, { foreignKey: "spaces_id_space" })
 

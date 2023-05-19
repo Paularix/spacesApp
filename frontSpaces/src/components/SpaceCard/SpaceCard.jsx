@@ -1,5 +1,5 @@
 import "./SpaceCard.css";
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -11,6 +11,7 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Button from '@mui/material/Button';
 import './SpaceCard.css'
 import noImage from '../images/no_image.jpg'
+import { Box } from "@mui/system";
 
 import { Link, useNavigate } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
@@ -33,7 +34,7 @@ const ExpandMore = styled((props) => {
 
 const SpaceCard = ({ space }) => {
 
-  const {fetchSpaceId, setFetchSpaceId} = useContext(GlobalContext)
+  const { fetchSpaceId, setFetchSpaceId } = useContext(GlobalContext)
   const goTo = useNavigate()
 
   const shareViaWhatsApp = (e) => {
@@ -50,7 +51,7 @@ const SpaceCard = ({ space }) => {
   }
 
   return (
-    <Link to={`/spaceInfo/${space.id}`} style={{ textDecoration: 'none', padding:"16px" }}>
+    <Link to={`/spaceInfo/${space.id}`} style={{ textDecoration: 'none', padding: "16px" }}>
       <Card sx={{ maxWidth: 300, minWidth: 300, minHeight: 375 }}>
         <CardMedia
           className='spacecard-img'
@@ -60,15 +61,40 @@ const SpaceCard = ({ space }) => {
             ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
           alt="Picture"
         />
-        <CardContent>
+        <CardContent sx={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}>
           <div>
-            <Typography variant="h6" className='spacecard-typo-title' style={{ textDecoration: 'none' }}>
+            <Typography variant="h6" className='spacecard-typo-title' sx={{ textDecoration: 'none', width: 210,}}>
               {space.name}
             </Typography>
-            <Typography variant="subtitle2" className='spacecard-typo'>
+            <Typography variant="subtitle2" className='spacecard-typo' sx={{ textDecoration: 'none', width: 210,}}>
               {space.address}
             </Typography>
           </div>
+          
+            <Button size="small"
+              onClick={(e) => handleEditSpace(e, space.id)}
+              variant="outlined"
+              sx={{
+                color: '#7879F1',
+                border: 'none',
+                marginTop: 1,
+                height: 25,
+                boxShadow: 'none',
+                justifyItems: 'center',
+                '&:hover': {
+                  border: 'none',
+                  color: '#7879F1',
+                  borderColor: '#7879F1',
+                  boxShadow: 'none',
+                }
+              }}>
+              <EditIcon></EditIcon>
+            </Button>
+
+
         </CardContent>
         <CardActions className="spacecard-icons">
           <div className='spacecard-icon-person'>
@@ -83,12 +109,25 @@ const SpaceCard = ({ space }) => {
             </Typography>
           </div>
           <div>
-            <Button size="small" onClick={shareViaWhatsApp}>Share</Button>
+            <Button size="small" onClick={shareViaWhatsApp} sx={{
+                color: '#7879F1',
+                border: 'none',
+                marginTop: 1,
+                height: 25,
+                boxShadow: 'none',
+                justifyItems: 'center',
+                '&:hover': {
+                  border: 'none',
+                  color: '#7879F1',
+                  borderColor: '#7879F1',
+                  boxShadow: 'none',
+                }
+              }}>Share</Button>
           </div>
         </CardActions>
       </Card>
     </Link>
- );
-  
+  );
+
 };
 export default SpaceCard;
