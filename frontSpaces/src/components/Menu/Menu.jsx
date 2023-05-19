@@ -94,6 +94,10 @@ function ResponsiveAppBar() {
                                 cursor: 'pointer'
                             }}
                         >
+                            <img style={{
+                                height: 50,
+                                width: 50,
+                            }} src="./src/components/images/FlexSpace.png" alt="" />
                             <span className='colored'>Flex</span>Space
 
                         </Typography>
@@ -115,6 +119,10 @@ function ResponsiveAppBar() {
                                 cursor: 'pointer'
                             }}
                         >
+                            <img style={{
+                                height: 40,
+                                width: 40,
+                            }} src="./src/components/images/FlexSpace.png" alt="" />
                             <span className='colored'>Flex</span>Space
                         </Typography>
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

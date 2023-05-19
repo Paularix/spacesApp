@@ -210,10 +210,6 @@ const addSpace = () => {
     }
   }
 
-
-
-
-
   function tileClassName({ date, view }) {
     if (view === 'month') {
       const dateStr = yyyymmdd(date)
