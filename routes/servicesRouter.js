@@ -56,14 +56,12 @@ router.get('/auth', [authenticate, authError], function (req, res, next) {
 
         Services.findAll()
             .then(services => {
-                console.log(services)
                 res.json({
                     ok: true,
                     data: services
                 })
             })
             .catch(error => {
-                console.log(error)
                 res.json({
                     ok: false,
                     error: error
@@ -71,7 +69,42 @@ router.get('/auth', [authenticate, authError], function (req, res, next) {
             })
 
     }).catch((error) => {
-        console.log(error)
+        res.json({
+            ok: false,
+            error: error
+        })
+    });
+
+});
+// GET services
+// @desc obtener todos los services de BD
+router.get('/auth/edit/:spaceId', [authenticate, authError], function (req, res, next) {
+
+    sequelize.sync().then(() => {
+
+        SpaceServices.findAll({
+            where : {
+                rid_space: req.params.spaceId
+            },
+            include: [{
+                model: Services,
+            }] 
+        })
+            .then(spaceServices => {
+                console.log(spaceServices)
+                res.json({
+                    ok: true,
+                    data: spaceServices
+                })
+            })
+            .catch(error => {
+                res.json({
+                    ok: false,
+                    error: error
+                })
+            })
+
+    }).catch((error) => {
         res.json({
             ok: false,
             error: error

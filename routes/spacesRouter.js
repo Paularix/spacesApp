@@ -5,7 +5,10 @@ import { sequelize } from "../loadSequelize.js";
 import { authenticate, authError } from './middleware.js';
 import { Services, SpaceServices, Users, Dates, Spaces } from '../models/Models.js';
 import { Op } from 'sequelize';
-import {yyyymmdd} from '../config/helpers.js'
+
+import { SpaceServices } from '../models/Models.js';
+import { yyyymmdd } from '../config/helpers.js'
+
 
 Spaces.belongsToMany(Services, { through: "SpaceServices", foreignKey: "rid_space" })
 Spaces.hasMany(Dates, { foreignKey: "spaces_id_space" })
@@ -13,19 +16,20 @@ Spaces.hasMany(Dates, { foreignKey: "spaces_id_space" })
 const router = express.Router();
 
 const locations = {
-    Barcelona : {
-        maxLatLimit: 41.5,
-        minLatLimit: 41.1,
-        minLonLimit: 2.1,
-        maxLonLimit: 2.3
+
+    Barcelona: {
+        maxLatLimit: 41.3947,
+        minLatLimit: 41.1292,
+        minLonLimit: 2.1024,
+        maxLonLimit: 2.2661
     },
-    Hospitalet : {
+    Hospitalet: {
         maxLatLimit: 41.347364,
         minLatLimit: 41.335025,
         minLonLimit: 2.085028,
         maxLonLimit: 2.151676
     },
-    Terrassa : {
+    Terrassa: {
         maxLatLimit: 41.573957,
         minLatLimit: 41.335025,
         minLonLimit: 2.018239,
@@ -52,8 +56,6 @@ const upload = multer({ storage: storage }).single('file');
 router.get('/find', function (req, res, next) {
 
     sequelize.sync().then(() => {
-        console.log(req.query.location)
-        console.log(locations[req.query.location])
         Spaces.findAll({
             where: {
                 lat: {
@@ -62,12 +64,12 @@ router.get('/find', function (req, res, next) {
                 long: {
                     [Op.between]: [locations[req.query.location].minLonLimit, locations[req.query.location].maxLonLimit]
                 },
-                status: "public",          
+                status: "public",
             },
             include: [{
                 model: Dates,
                 attributes: ['date'],
-            }]  
+            }]
         })
             .then((spaces) => {
                 console.log('spaces', spaces)
@@ -78,17 +80,17 @@ router.get('/find', function (req, res, next) {
 
                 for (let space of spaces) {
                     // Unica date
-                    
+
                     let conflictDates = space.Dates.filter(date => (new Date(date.date).getTime() >= dateFrom) && (dateTo >= new Date(date.date).getTime()))
                     console.log(conflictDates)
                     if (conflictDates.length == 0) {
                         results.push(space)
-                    } 
-                }              
+                    }
+                }
 
                 res.json({
                     ok: true,
-                    data: results 
+                    data: results
                 })
             })
             .catch(error => {
@@ -172,6 +174,7 @@ router.get('/:id', function (req, res, next) {
     });
 });
 
+
 // GET información protegida de los espacios del usuario
 // @desc ruta protegida perfil de usuario
 router.get("/auth/mySpaces", [authenticate, authError], (req, res) => {
@@ -202,6 +205,144 @@ router.get("/auth/mySpaces", [authenticate, authError], (req, res) => {
 
     }
 })
+
+// GET de un solo spaces
+// @desc información del espacio que se desea editar
+router.get('/auth/edit/:id', [authenticate, authError], function (req, res, next) {
+    const token = req.headers.authorization || ''
+    sequelize.sync().then(() => {
+        const decoded = jsonwebtoken.decode(token)
+        Spaces.findOne({
+            where: {
+                id: req.params.id,
+                rid_host_user: decoded.id
+            },
+            include: [{
+                model: SpaceServices,
+                model: Services
+            }, {
+                model: Dates
+            }]
+        })
+            .then(al => {
+                res.json({
+                    ok: true,
+                    data: al
+                })
+            })
+            .catch(error => res.json({
+                ok: false,
+                error: error
+            }))
+
+    }).catch((error) => {
+        res.json({
+            ok: false,
+            error: error
+        })
+    });
+});
+
+// PUT de un solo spaces
+// @desc actualizar información del espacio que se desea editar
+router.put('/auth/edit/:id', [authenticate, authError], function (req, res, next) {
+    const token = req.headers.authorization || ''
+    const decoded = jsonwebtoken.decode(token)
+    upload(req, res, function (err) {
+        if (err) {
+            console.log("error uploading the file")
+            console.log(err)
+            return res.status(500).send("Error uploading file")
+        } else {
+            sequelize.sync().then(() => {
+
+                const space = JSON.parse(req.body.newSpace)
+                const selectedDates = JSON.parse(req.body.selectedDates)
+
+                console.log(space)
+                console.log(selectedDates)
+
+                const updateSpace = {
+                    id: space.id,
+                    name: space.name,
+                    address: space.address,
+                    description: space.description,
+                    rules: space.rules,
+                    capacity: space.capacity,
+                    price: Number(space.price),
+                    rid_host_user: Number(decoded.id),
+                    status: space.status,
+                    lat: space.approximateCoords[0],
+                    long: space.approximateCoords[1],
+                }
+
+
+                Spaces.findOne({
+                    where: {
+                        id: req.params.id,
+                        rid_host_user: decoded.id
+                    },
+                })
+                    .then(foundSpace => {
+                        if (foundSpace) {
+                            foundSpace.update(updateSpace)
+                        }
+                        if (req.file) {
+                            foundSpace.update({space_picture: req.file.filename})
+                        }
+                        return foundSpace
+                    })
+                    .then((foundSpace) => {
+                        Dates.destroy({where: {spaces_id_space: req.params.id}})
+                        
+                        for (let date of selectedDates) {
+                            console.log(date)
+                            Dates.create({
+                                date: date,
+                                available: false,
+                                spaces_id_space: foundSpace.id
+                            })
+                            .then(created => console.log("Created:", created ))
+                            .catch(error => console.log(error))
+
+                        }
+
+                        return foundSpace
+                    })
+                    .then(foundSpace => {
+                        for (let service of space.services) {
+                            SpaceServices.create({
+                                rid_space: foundSpace.id,
+                                rid_service: service
+                            })
+                        }
+                        return foundSpace
+                    })
+                    .then((foundSpace) => {
+                        res.json({
+                            ok: true,
+                            data: foundSpace
+                        })
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        res.json({
+                            ok: false,
+                            error: error
+                        })
+                    });
+
+            })
+            .catch((error) => {
+                console.log("syncErr", error)
+                res.json({
+                    ok: false,
+                    error: error
+                })
+            });
+        }
+    })
+});
 
 // POST subir espacio
 // @desc ruta protegida para subir espacio 

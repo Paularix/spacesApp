@@ -1,5 +1,5 @@
 import "./SpaceCard.css";
-import * as React from 'react';
+import React, {useContext} from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -11,7 +11,12 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Button from '@mui/material/Button';
 import './SpaceCard.css'
 import noImage from '../images/no_image.jpg'
-import { Link } from 'react-router-dom'
+
+import { Link, useNavigate } from 'react-router-dom'
+import EditIcon from '@mui/icons-material/Edit'
+import GlobalContext from "../../context/GlobalContext";
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
+
 
 
 const ExpandMore = styled((props) => {
@@ -27,11 +32,22 @@ const ExpandMore = styled((props) => {
 
 
 const SpaceCard = ({ space }) => {
+
+  const {fetchSpaceId, setFetchSpaceId} = useContext(GlobalContext)
+  const goTo = useNavigate()
+
   const shareViaWhatsApp = (e) => {
     e.preventDefault()
     const whatsappMessage = encodeURIComponent(`Hey! Check out this awesome space: ${window.location.href}`);
     window.location.href = `https://wa.me/?text=${whatsappMessage}`;
   };
+
+  const handleEditSpace = (e, id) => {
+    e.preventDefault()
+    console.log(id)
+    setFetchSpaceId(id)
+    goTo("/editSpace")
+  }
 
   return (
     <Link to={`/spaceInfo/${space.id}`} style={{ textDecoration: 'none', padding:"16px" }}>
@@ -73,7 +89,6 @@ const SpaceCard = ({ space }) => {
       </Card>
     </Link>
  );
-  
   
 };
 export default SpaceCard;

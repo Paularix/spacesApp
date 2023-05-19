@@ -24,8 +24,7 @@ import MyReservations from './pages/MyReservations/MyReservations'
 import AddSpace from './pages/addSpace/addSpace'
 import Confirmation from './pages/Confirmation/Confirmation'
 import Bookings from './pages/Bookings/Bookings'
-import BookingMGMT from './pages/BookingMGMT/BookingMGMT';
-
+import EditSpace from './pages/EditSpace/EditSpace'
 
 function App() {
 
@@ -40,7 +39,7 @@ function App() {
 })
 
 const [queryLocation, setQueryLocation] = useState("")
-
+const [fetchSpaceId, setFetchSpaceId] = useState("")
 const [bookings, setBookings] = useState([])
 const [refresh, setRefresh] = useState(false)
 
@@ -68,6 +67,7 @@ const context = {
   queryLocation, setQueryLocation,
   bookings, setBookings,
   refresh, setRefresh,
+  fetchSpaceId, setFetchSpaceId,
   logout 
 }
 
@@ -86,6 +86,7 @@ const context = {
           <Route path="/MyReservations" element={<MyReservations/>}/>
           <Route path="/bookings" element={<Bookings/>}/>
           <Route path="/addSpace" element={<AddSpace />} />
+          <Route path="/editSpace" element={<EditSpace />} />
           <Route path="/Confirmation" element={<Confirmation />} />
           <Route path="/error" element={<Error />} />
         </Routes>

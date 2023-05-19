@@ -17,7 +17,6 @@ export const MySpaces = () => {
     const [spaces, setSpaces] = useState([]);
 
     useEffect(() => {
-        console.log(user)
         if (user.token)
             loadData();
     }, [user])
