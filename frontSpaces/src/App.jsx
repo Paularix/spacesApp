@@ -29,7 +29,10 @@ import EditSpace from './pages/EditSpace/EditSpace'
 function App() {
 
   const navigate = useNavigate()
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState([
+    new Date(),
+    new Date(),
+  ])
   const [newUser, setNewUser] = useState({
     name: '',
     lastName: '',

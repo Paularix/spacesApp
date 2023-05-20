@@ -12,7 +12,12 @@ Spaces.hasMany(Dates, { foreignKey: "spaces_id_space" })
 const router = express.Router();
 
 const locations = {
-
+    greaterMetropolitanArea:{
+        maxLatLimit: 41.65,
+        minLatLimit: 41.1,
+        minLonLimit: 1.75,
+        maxLonLimit: 2.5
+    },
     Barcelona: {
         maxLatLimit: 41.5,
         minLatLimit: 41.1,
@@ -30,6 +35,18 @@ const locations = {
         minLatLimit: 41.335025,
         minLonLimit: 2.018239,
         maxLonLimit: 2.018564
+    },
+    ElPrat:{
+        maxLatLimit:41.34,
+        minLatLimit:41.31,
+        minLonLimit: 2.07,
+        maxLonLimit: 2.107
+    },
+    Mollet: {
+        maxLatLimit: 41.5508,
+        minLatLimit: 41.533,
+        minLonLimit: 2.202,
+        maxLonLimit: 2.226
     }
 }
 
