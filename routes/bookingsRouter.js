@@ -5,7 +5,9 @@ import {Bookings, Dates, Spaces, Users} from '../models/Models.js';
 import {authError} from './middleware.js'
 import {authenticate} from './middleware.js'
 import { parseISODate } from '../utils/parseDate.js'
-import jsonwebtoken from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken'
+import { Op, literal } from 'sequelize' 
+
 const router = express.Router();
 
 
@@ -311,9 +313,24 @@ router.put("/auth/bookingmgmt/reject/:id", [authenticate, authError], (req, res)
         const decoded = jsonwebtoken.decode(token)
         sequelize.sync().then(() => {
             Bookings.findOne({ where: { id: req.params.id } })
-                .then(bookings_trobat =>
-                    bookings_trobat.update({status: 2})
-                )
+                .then(foundBooking =>{
+                    foundBooking.update({status: 2})
+                    return foundBooking
+                })
+                .then((foundBooking) => {
+                    Dates.destroy({
+                        
+                        where: literal(`spaces_id_space = '${Number(foundBooking.rid_space)}' AND UNIX_TIMESTAMP(date) BETWEEN UNIX_TIMESTAMP('${foundBooking.date_from}') AND UNIX_TIMESTAMP('${foundBooking.date_to}')`),
+                          
+                        // where: {
+                            
+                        //     rid_space: foundBooking.rid_space,
+                        //     date: {
+                        //         [Op.between]: [literal(`UNIX_TIMESTAMP('${foundBooking.date_from})`), literal(`UNIX_TIMESTAMP(${foundBooking.date_to}')`)]
+                        //     }
+                        // }
+                    })
+                })
                 .then(bookings_modificat => res.json({
                     ok: true,
                     data: bookings_modificat
