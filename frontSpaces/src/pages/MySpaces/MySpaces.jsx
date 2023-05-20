@@ -75,7 +75,7 @@ export const MySpaces = () => {
                     <div className='myspaces-list-spaces' >
                         {spaces.map((space, index) => (
                             <div className='myspaces-card-spaces'>
-                                <SpaceCard key={index} space={space} />
+                                <SpaceCard key={index} space={space} from={"myspaces"} />
                             </div>
                         ))}
                     </div>

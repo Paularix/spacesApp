@@ -137,7 +137,7 @@ export const Home = () => {
         <div className="spaces-container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
           {spaces.map(space => (
             
-            <SpaceCard key={space.id} name={space.name} image={space.image} space={space} />
+            <SpaceCard key={space.id} name={space.name} image={space.image} from={"home"} space={space} />
           ))}
         </div>
       </div>

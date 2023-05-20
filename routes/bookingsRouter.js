@@ -322,13 +322,7 @@ router.put("/auth/bookingmgmt/reject/:id", [authenticate, authError], (req, res)
                         
                         where: literal(`spaces_id_space = '${Number(foundBooking.rid_space)}' AND UNIX_TIMESTAMP(date) BETWEEN UNIX_TIMESTAMP('${foundBooking.date_from}') AND UNIX_TIMESTAMP('${foundBooking.date_to}')`),
                           
-                        // where: {
-                            
-                        //     rid_space: foundBooking.rid_space,
-                        //     date: {
-                        //         [Op.between]: [literal(`UNIX_TIMESTAMP('${foundBooking.date_from})`), literal(`UNIX_TIMESTAMP(${foundBooking.date_to}')`)]
-                        //     }
-                        // }
+        
                     })
                 })
                 .then(bookings_modificat => res.json({
