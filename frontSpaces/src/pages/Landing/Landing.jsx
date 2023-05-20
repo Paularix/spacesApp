@@ -19,6 +19,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Menu from '@mui/material/Menu';
 import GlobalContext from '../../context/GlobalContext'
 import Select from '@mui/material/Select';
+import { API_URL } from '../../apiconfig';
 
 
 const yyyymmdd = (dateString) => {
@@ -55,7 +56,7 @@ export const Landing = () => {
   const search = () => {
 
     console.log(queryLocation, date)
-     const query = `http://localhost:3080/api/spaces/find/?location=${queryLocation}&from=${yyyymmdd(date[0])}&to=${yyyymmdd(date[1])}`
+     const query = `${API_URL}spaces/find/?location=${queryLocation}&from=${yyyymmdd(date[0])}&to=${yyyymmdd(date[1])}`
      const options = {
        method: 'GET',
      }

@@ -17,6 +17,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
 import GlobalContext from "../../context/GlobalContext";
 import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
+import { API_URL } from '../../apiconfig';
 
 
 
@@ -58,7 +59,7 @@ const SpaceCard = ({ space }) => {
           component="img"
           height="194"
           image={space.space_picture ?
-            ("http://localhost:3080/api/photos/spaces/" + space.space_picture) : (noImage)}
+            (API_URL + "photos/spaces/" + space.space_picture) : (noImage)}
           alt="Picture"
         />
         <CardContent sx={{

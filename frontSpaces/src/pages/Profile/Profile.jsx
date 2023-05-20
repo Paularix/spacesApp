@@ -9,6 +9,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import './Profile.css'
 import avatar from '../images/avatar.png'
 import GlobalContext from "../../context/GlobalContext"
+import { BASE_URL } from '../../apiconfig';
 
 
 
@@ -167,7 +168,7 @@ export const Profile = () => {
           <img
             className='profile-image'
             src={user.profile_picture ?
-              ("http://localhost:3080/" + user.profile_picture) : (avatar)}
+              (BASE_URL + user.profile_picture) : (avatar)}
             alt=""
           />
           <Button className='profile-image-button img-button' size="small"><AddAPhotoIcon />&nbsp;Subir foto</Button>

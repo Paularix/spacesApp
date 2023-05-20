@@ -11,6 +11,13 @@ import datesRouter from './routes/datesRouter.js'
 import preferencesRouter from './routes/preferencesRouter.js'
 import servicesRouter from './routes/servicesRouter.js'
 
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 // dotenv.config()  sirve para poder usar las variables de entorno en el archivo .env  
 dotenv.config()
 
@@ -42,9 +49,17 @@ app.use('/api/services', servicesRouter)
 app.use('/api/photos/users', express.static('photos-profile'));
 app.use('/api/photos/spaces', express.static('photos-spaces'));
 
+//deployment...
+app.use(express.static("./frontSpaces/dist"));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname,  'frontSpaces', 'dist', 'index.html'));
+});
+
+
 
 // Montando la app en el servidor (utilizando la variable de entorno, "process.env")
-const port = process.env.PORT
+// const port = process.env.PORT
+const port = 3080
 app.listen(port, () => {
     console.log(`App listening on port ${port}!`)
 })

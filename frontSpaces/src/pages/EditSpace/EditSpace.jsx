@@ -12,12 +12,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { API_URL } from '../../apiconfig';
 import PublicPrivateSwitch from '../../components/PublicPrivateSwitch/PublicPrivateSwitch';
-import './editSpace.css';
+import './EditSpace.css';
 import GlobalContext from "../../context/GlobalContext";
 import { useNavigate } from 'react-router-dom';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FormHelperText from '@mui/material/FormHelperText';
-import '../../Components/Calendar/Calendar.css';
+import '../../components/Calendar/Calendar.css';
 import Calendar from 'react-calendar'
 
 

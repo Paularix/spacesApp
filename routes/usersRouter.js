@@ -185,6 +185,7 @@ router.post('/login', (req, res) => {
     }
     Users.findOne({ where: { email } })
         .then((user) => {
+            console.log("BUSCANT", email, password)
             if (user && bcrypt.compareSync(password, user.password)) {
                 return user;
             } else {
@@ -192,6 +193,7 @@ router.post('/login', (req, res) => {
             }
         })
         .then(user => {
+            console.log("USUARI ", user)
             response.token = jsonwebtoken.sign(
                 {
                     expiredAt: new Date().getTime() + Number(process.env.EXPIRED_AFTER),

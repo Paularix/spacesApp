@@ -24,6 +24,8 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import LoupeIcon from '@mui/icons-material/Loupe';
 
+import { BASE_URL } from '../../apiconfig';
+
 const pages = [];
 
 function ResponsiveAppBar() {
@@ -97,7 +99,7 @@ function ResponsiveAppBar() {
                             <img style={{
                                 height: 50,
                                 width: 50,
-                            }} src="./src/components/images/FlexSpace.png" alt="" />
+                            }} src="/FlexSpace.png" alt="" />
                             <span className='colored'>Flex</span>Space
 
                         </Typography>
@@ -122,7 +124,7 @@ function ResponsiveAppBar() {
                             <img style={{
                                 height: 40,
                                 width: 40,
-                            }} src="./src/components/images/FlexSpace.png" alt="" />
+                            }} src="/FlexSpace.png" alt="" />
                             <span className='colored'>Flex</span>Space
                         </Typography>
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -142,7 +144,7 @@ function ResponsiveAppBar() {
                                                         user.profile_picture
                                                             ? (<img
                                                                 style={menuProfileImage}
-                                                                src={("http://localhost:3080/" + user.profile_picture)}
+                                                                src={(BASE_URL + user.profile_picture)}
                                                                 alt=""
                                                             />)
                                                             : (
