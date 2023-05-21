@@ -33,7 +33,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
+import noImage from '../../components/images/no_image.jpg'
 
+  //  /images/no_image.jpg';
 
 const SpaceInfo = () => {
 
@@ -241,7 +243,9 @@ const SpaceInfo = () => {
                   <div className='spaceInfo-host'>
                     <div className='spaceInfo-host-card'>
                       <Card className='spaceInfo-host-picture' sx={{ maxWidth: 300 }}>
-                        <img className='spaceInfo-image' src="https://www.caritas.org.mx/wp-content/uploads/2019/02/cualidades-persona-humanitaria.jpg" alt="" />
+                        <img className='spaceInfo-image' src={space?.User?.profile_picture ?  ("http://localhost:3080/api/photos/users/" + space?.User?.profile_picture) : (noImage)}></img>
+  
+           
                         <h2><strong>{space?.User?.first_name}</strong></h2>
                         <h6>Anfitrión</h6>
                       </Card>

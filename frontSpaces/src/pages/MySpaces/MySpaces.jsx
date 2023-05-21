@@ -69,7 +69,7 @@ export const MySpaces = () => {
                     </Card>
                 </div> :
                 <div>
-                    <Typography mt={2} variant="h5" color="text.primary">
+                    <Typography mt={2} variant="h5" color="text.primary" align="center">
                         Mis Espacios
                     </Typography>
                     <div className='myspaces-list-spaces' >

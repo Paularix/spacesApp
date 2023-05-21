@@ -24,6 +24,8 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import LoupeIcon from '@mui/icons-material/Loupe';
 
+import logo from '../images/FlexSpace.png'
+
 const pages = [];
 
 function ResponsiveAppBar() {
@@ -97,7 +99,7 @@ function ResponsiveAppBar() {
                             <img style={{
                                 height: 50,
                                 width: 50,
-                            }} src="./src/components/images/FlexSpace.png" alt="" />
+                            }} src={logo} alt="" />
                             <span className='colored'>Flex</span>Space
 
                         </Typography>
