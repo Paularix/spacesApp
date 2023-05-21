@@ -586,6 +586,7 @@ const addSpace = () => {
                   Imagen del espacio
                   <input hidden accept="image/*" multiple type="file" onChange={(e) => savePhoto(e)} />
                 </Button>
+                
                 {image
                   ? (
                     <Grid item xs={12} sx={{
