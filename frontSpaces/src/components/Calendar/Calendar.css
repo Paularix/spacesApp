@@ -164,8 +164,8 @@
 }
 
 .react-calendar__tile--range {
-    background: #f8f8fa;
-    color: #7879F1;
+    color: white !important;
+    background: #7879F1 !important;
     border-radius: 0;
 }
 
