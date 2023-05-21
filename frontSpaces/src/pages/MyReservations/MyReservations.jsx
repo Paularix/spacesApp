@@ -64,7 +64,7 @@ export const Myreservations = () => {
                     </Card>
                 </div> : */}
             <div>
-                <Typography mt={2} variant="h5" color="text.primary">
+                <Typography mt={2} variant="h5" color="text.primary" align="center">
                     Mis Reservas
                 </Typography>
                 <div className='myreservations-list-spaces' >
@@ -75,7 +75,6 @@ export const Myreservations = () => {
                     ))}
                 </div>
             </div>
-
         </div>
 
     )
