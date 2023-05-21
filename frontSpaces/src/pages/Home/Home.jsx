@@ -96,9 +96,9 @@ export const Home = () => {
   }
 
   useEffect(() => {
-    if (queryLocation.length > 0) {
+    if (queryLocation.length > 0 && queryLocation != "greaterMetropolitanArea") {
       setCenter(Locations[queryLocation].coords)
-    } else if (queryLocation.length == 0) {
+    } else if (queryLocation.length == 0 || queryLocation == "greaterMetropolitanArea") {
       setQueryLocation("greaterMetropolitanArea")
       setCenter(Locations.Barcelona.coords)
       setZoom(10)
