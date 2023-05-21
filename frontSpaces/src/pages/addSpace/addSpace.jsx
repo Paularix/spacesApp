@@ -18,10 +18,20 @@ import { useNavigate } from 'react-router-dom';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FormHelperText from '@mui/material/FormHelperText';
 //import Calendar from '../../components/Calendar/Calendar'
-import '../../Components/Calendar/Calendar.css';
+import '../../Pages/addSpace/Calendar.css';
 import Calendar from 'react-calendar'
+import {useMediaQuery} from '@mui/material';
+import { styled } from '@mui/system';
 
 
+
+const ResponsiveBox = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  [theme.breakpoints.down('md')]: {
+    flexDirection: 'column',
+  },
+}));
 
 const yyyymmdd = (date) => `${date.getFullYear()}-${('00' + (date.getMonth() + 1)).slice(-2)}-${('00' + (date.getDate())).slice(-2)}`;
 
@@ -438,155 +448,27 @@ const addSpace = () => {
   return (
     <div className='add-space-container'>
 
-      <Grid container spacing={1}>
+      <Grid container spacing={1} justifyContent="center" alignItems="center">
 
-        <Grid item xs={5.5}>
-        </Grid>
-
-        <Grid item xs={6.5} sx={{
+        <Grid item xs={12} sx={{
           marginTop: 2,
           display: 'flex',
           justifyContent: 'center',
         }}>
           <Typography variant="h1" sx={{
-            fontSize: 32,
+            fontSize:40,
           }}>
-            Añade un espacio
+            Añade tu espacio
           </Typography>
         </Grid>
 
-        <Grid item xs={5.5} >
-
-          {
-            center.length > 0
-              ? (
-                <>
-                  <Typography variant="h1" sx={{
-                    fontSize: 18,
-                    textAlign: 'center',
-                    marginBottom: 3,
-                    marginLeft: 4,
-                  }}>
-                    Selecciona una dirección aproximada:
-                  </Typography>
-                  <MapContainer center={center} zoom={13}>
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <HandleMapEvents />
-                    {
-                      newSpace.approximateCoords.length > 0
-                        ? (
-                          <Marker position={newSpace.approximateCoords}>
-                          </Marker>
-                        )
-                        : (' ')
-                    }
-                  </MapContainer>
-                  {newSpace.errors.approximateCoords
-                    ? (newSpace.errors.approximateCoords.map((error, index) => (
-                      <FormHelperText sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        marginLeft: 4,
-                        marginTop: 3,
-                        color: '#ba000d'
-                      }}
-                        key={index}>
-                        {error}
-                      </FormHelperText>
-                    )))
-                    : (' ')
-                  }
-                </>
-              )
-              : (
-                <Box className="loading-box">
-
-                  <CircularProgress />
-                </Box>
-              )
-          }
-          <Typography variant="h1" sx={{
-            fontSize: 18,
-            textAlign: 'center',
-            marginTop: 5,
-            marginBottom: 3
-          }}>
-            Configura la disponibilidad de los próximos 90 días bloqueando los días que no quieras habilitar reservas:
-          </Typography>
-          <Box sx={{
-            marginLeft: 15
-          }}>
-
-            {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
-              background: lockedDays.includes(el) ? '#7879F1' : '#FFFFFF',
-              color: lockedDays.includes(el) ? '#FFFFFF' : '#7879F1',
-              borderColor: '#7879F1',
-              fontSize: 10,
-              padding: 0.33,
-              margin: 1,
-              '&:hover': {
-                color: '#7879F1',
-                borderColor: '#7879F1',
-                boxShadow: 'none',
-              },
-            }} onClick={() => blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
-
-          </Box>
-
-
-          {
-            fourMonthsFromNow(year).map((q, idx) => (
-              <Grid item sx={{
-                margin: 3,
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-                className="calendar-space-container"
-                key={idx}
-              >
-                {q.map((month, idx) => (
-                  <Grid item sx={{
-                    paddingLeft: 3,
-                    display: 'flex',
-                    marginLeft: 1,
-                    flexDirection: 'row'
-                  }}
-                    key={idx}
-
-                  >
-                    <Calendar
-                      onChange={setDate}
-                      minDetail="month"
-                      value={date}
-                      onClickDay={handleClickDay}
-                      tileClassName={tileClassName}
-                      activeStartDate={new Date(month + '-01')}
-                      showNeighboringMonth={false}
-                      nextLabel=''
-                      prevLabel=''
-                      prev2Label=''
-                      next2Label=''
-                    />
-                  </Grid>
-
-                ))
-                }
-              </Grid>
-            ))
-          }
-        </Grid>
-
-        <Grid item xs={6.5} sx={{
-          height: 1300,
+        <Grid item xs={12} md={8} lg={5} mt={4} sx={{
           display: 'flex',
           justifyContent: 'center'
         }}>
 
-          <Card sx={{
-            marginLeft: 4,
-            marginRight: 4,
-            marginTop: 5.8,
-          }}>
+
+          <Card>
 
             <CardContent>
               <Grid item sx={{
@@ -772,28 +654,158 @@ const addSpace = () => {
 
                 </FormControl>
 
-
-                <Button variant="contained" component="label" sx={{
-                  background: '#7879F1',
-                  marginLeft: 1.78,
-                  marginRight: 1.78,
-                  marginTop: 4,
-                  boxShadow: 'none',
-                  justifyItems: 'center',
-                  '&:hover': {
-                    background: '#7879F1',
-                    boxShadow: 'none',
-                  },
-                }}
-                  onClick={() => validateAndSend()}
-                >
-                  Guardar
-                </Button>
               </Grid>
             </CardContent>
-            <CardActions>
-            </CardActions>
+            
           </Card>
+        </Grid>
+
+        <Grid item xs={12} lg={7} justifyContent="center" mt={4} >
+
+          {
+            center.length > 0
+              ? (
+                <>
+                  <Typography variant="h1" mt={4} sx={{
+                    fontSize: 18,
+                    textAlign: 'center',
+                    marginBottom: 3,
+                  }}>
+                    Selecciona la localización aproximada:
+                  </Typography>
+
+                  <MapContainer center={center} zoom={13} style={{ 'margin': '0 auto' }}>
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                    <HandleMapEvents />
+                    {
+                      newSpace.approximateCoords.length > 0
+                        ? (
+                          <Marker position={newSpace.approximateCoords}>
+                          </Marker>
+                        )
+                        : (' ')
+                    }
+                  </MapContainer>
+
+
+                  {newSpace.errors.approximateCoords
+                    ? (newSpace.errors.approximateCoords.map((error, index) => (
+                      <FormHelperText sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginLeft: 4,
+                        marginTop: 3,
+                        color: '#ba000d'
+                      }}
+                        key={index}>
+                        {error}
+                      </FormHelperText>
+                    )))
+                    : (' ')
+                  }
+                </>
+              )
+              : (
+                <Box className="loading-box" style={{margin: '0 auto'}}>
+
+                  <CircularProgress />
+                </Box>
+              )
+          }
+          <Typography variant="h1" sx={{
+            fontSize: 18,
+            textAlign: 'center',
+            marginTop: 5,
+            marginLeft: 4,
+            marginRight:4,
+            marginBottom: 3
+          }}>
+            Configura la disponibilidad de los próximos 90 días bloqueando los días que no quieras habilitar reservas:
+          </Typography>
+          <Box style={{
+
+            'display': 'flex',
+            'justify-content': 'center'
+
+          }}>
+
+            {['LU', 'MT', 'MC', 'JV', 'VR', 'SD', 'DG'].map((el, idx) => <Button variant="outlined" sx={{
+              background: lockedDays.includes(el) ? '#7879F1' : '#FFFFFF',
+              color: lockedDays.includes(el) ? '#FFFFFF' : '#7879F1',
+              borderColor: '#7879F1',
+              fontSize: 10,
+              padding: 0.33,
+              margin: 1,
+              '&:hover': {
+                color: '#7879F1',
+                borderColor: '#7879F1',
+                boxShadow: 'none',
+              },
+            }} onClick={() => blockDayOfTheWeek(el)} key={idx}>{el}</Button>)}
+
+          </Box>
+
+
+          {
+            fourMonthsFromNow(year).map((q, idx) => (
+              <ResponsiveBox
+                
+                className="calendar-space-container"
+                sx={{
+                  margin: 1,
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+                key={idx}
+              >
+                {q.map((month, idx) => (
+                  <Grid item sx={{
+                    display: 'flex',
+                    margin: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                  }}
+                    key={idx}
+
+                  >
+                    <Calendar
+                      onChange={setDate}
+                      minDetail="month"
+                      value={date}
+                      onClickDay={handleClickDay}
+                      tileClassName={tileClassName}
+                      activeStartDate={new Date(month + '-01')}
+                      showNeighboringMonth={false}
+                      nextLabel=''
+                      prevLabel=''
+                      prev2Label=''
+                      next2Label=''
+                    />
+                  </Grid>
+
+                ))
+                }
+              </ResponsiveBox>
+            ))
+          }
+        </Grid>
+
+        <Grid item xs={8} lg={4} justifyContent="center" >
+          <Button variant="contained" component="label" sx={{
+            background: '#7879F1',
+            display:'flex',
+            margin: 4,
+            boxShadow: 'none',
+            justifyContent: 'center',
+            '&:hover': {
+              background: '#7879F1',
+              boxShadow: 'none',
+            },
+          }}
+            onClick={() => validateAndSend()}
+          >
+            Guardar
+          </Button>
         </Grid>
       </Grid>
     </div >
