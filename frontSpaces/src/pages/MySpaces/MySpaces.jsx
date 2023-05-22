@@ -69,13 +69,13 @@ export const MySpaces = () => {
                     </Card>
                 </div> :
                 <div>
-                    <Typography mt={2} variant="h5" color="text.primary">
+                    <Typography mt={2} variant="h5" color="text.primary" align="center">
                         Mis Espacios
                     </Typography>
                     <div className='myspaces-list-spaces' >
                         {spaces.map((space, index) => (
                             <div className='myspaces-card-spaces'>
-                                <SpaceCard key={index} space={space} />
+                                <SpaceCard key={index} space={space} from={"myspaces"} />
                             </div>
                         ))}
                     </div>

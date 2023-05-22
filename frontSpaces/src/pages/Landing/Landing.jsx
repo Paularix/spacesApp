@@ -98,7 +98,9 @@ export const Landing = () => {
                 onChange={(e) => setQueryLocation(e.target.value)}
               >
                 <MenuItem value={"Barcelona"}>Barcelona</MenuItem>
-                <MenuItem value={"Hospitaled"}>L'Hospitaled del Llobregat</MenuItem>
+                <MenuItem value={"Hospitalet"}>L'Hospitaled del Llobregat</MenuItem>
+                <MenuItem value={"ElPrat"}>El Prat de Llobregat</MenuItem>
+                <MenuItem value={"Mollet"}>Mollet del Vallès</MenuItem>
                 <MenuItem value={"Terrassa"}>Terrassa</MenuItem>
               </Select>
               

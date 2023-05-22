@@ -33,11 +33,10 @@ const ExpandMore = styled((props) => {
 }));
 
 
-const SpaceCard = ({ space }) => {
+const SpaceCard = ({ space, from }) => {
 
   const { fetchSpaceId, setFetchSpaceId } = useContext(GlobalContext)
   const goTo = useNavigate()
-
   const shareViaWhatsApp = (e) => {
     e.preventDefault()
     const whatsappMessage = encodeURIComponent(`Hey! Check out this awesome space: ${window.location.href}`);
@@ -75,25 +74,28 @@ const SpaceCard = ({ space }) => {
             </Typography>
           </div>
           
-            <Button size="small"
-              onClick={(e) => handleEditSpace(e, space.id)}
-              variant="outlined"
-              sx={{
-                color: '#7879F1',
+          {
+            from == "myspaces"  &&  (<Button size="small"
+            onClick={(e) => handleEditSpace(e, space.id)}
+            variant="outlined"
+            sx={{
+              color: '#7879F1',
+              border: 'none',
+              marginTop: 1,
+              height: 25,
+              boxShadow: 'none',
+              justifyItems: 'center',
+              '&:hover': {
                 border: 'none',
-                marginTop: 1,
-                height: 25,
+                color: '#7879F1',
+                borderColor: '#7879F1',
                 boxShadow: 'none',
-                justifyItems: 'center',
-                '&:hover': {
-                  border: 'none',
-                  color: '#7879F1',
-                  borderColor: '#7879F1',
-                  boxShadow: 'none',
-                }
-              }}>
-              <EditIcon></EditIcon>
-            </Button>
+              }
+            }}>
+            <EditIcon></EditIcon>
+          </Button>)
+          }
+            
 
 
         </CardContent>

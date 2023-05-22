@@ -25,6 +25,7 @@ import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import LoupeIcon from '@mui/icons-material/Loupe';
 
 import { BASE_URL } from '../../apiconfig';
+import logo from '../images/FlexSpace.png'
 
 const pages = [];
 
@@ -99,7 +100,7 @@ function ResponsiveAppBar() {
                             <img style={{
                                 height: 50,
                                 width: 50,
-                            }} src="/FlexSpace.png" alt="" />
+                            }} src={logo} alt="" />
                             <span className='colored'>Flex</span>Space
 
                         </Typography>
